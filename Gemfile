@@ -40,7 +40,7 @@ group :development do
   #gem 'spring'
   gem 'pry-rails'
   gem 'pry-byebug'
-  gem 'capistrano', '~> 3.7.0'
+  gem 'capistrano', '~> 3.7.1'
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-chruby'
   gem 'capistrano-bundler'
