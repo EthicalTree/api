@@ -17,3 +17,4 @@ production:
   host: willys-dbs.co8ijpyn0g2y.us-east-1.rds.amazonaws.com
   user: <%= ENV["AWS_DB_USERNAME"] %>
   password: <%= ENV["AWS_DB_PASSWORD"] %>
+  port: 5432
