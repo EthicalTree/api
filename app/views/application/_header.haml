@@ -1,0 +1,16 @@
+%nav.navbar.navbar-default
+  .navbar-header
+    = link_to root_path, class: 'navbar-brand' do
+      %span.sr-only EthicalTree
+      = image_tag 'logo.png', class: ''
+
+    %button.navbar-toggle.collapsed{'data-toggle': 'collapse', 'data-target': '#nav-menu'}
+      %span.sr-only Toggle navigation
+      %span.icon-bar
+      %span.icon-bar
+      %span.icon-bar
+
+  .collapse.navbar-collapse#nav-menu
+    %ul.nav.navbar-nav#nav-menu
+      %li
+        / link_to 'Signup', signup_url
