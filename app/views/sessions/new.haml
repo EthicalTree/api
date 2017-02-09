@@ -3,7 +3,15 @@
     %h3.text-center Hi! Welcome back :)
 
     .col-sm-12.panel.panel-default.mt
-      .col-sm-12.lmt
+
+      .lmt
+
+      - if @login_error
+        .col-xs-12
+          .alert.alert-danger
+            = @login_error
+
+      .col-sm-12
         = simple_form_for :session do |f|
           = f.input :email, placeholder: 'Enter email...'
           = f.input :password, type: :password, placeholder: 'Enter password...'

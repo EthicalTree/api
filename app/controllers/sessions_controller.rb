@@ -16,7 +16,7 @@ class SessionsController < ApplicationController
         render :confirm_email_sent
       end
     else
-      flash[:login] = 'Invalid email/password'
+      @login_error = 'Invalid email/password'
       render :new
     end
   end
