@@ -1,5 +1,5 @@
 # config valid only for current version of Capistrano
-lock "3.7.1"
+lock "3.7.2"
 
 set :application, "ethicaltree"
 set :repo_url, "git@github.com:applepicke/ethicaltree.git"
