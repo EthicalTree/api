@@ -1,0 +1,17 @@
+.container
+  .col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2.lmt.gmb
+    %h3.text-center Hi! Welcome back :)
+
+    .col-sm-12.panel.panel-default.mt
+      .col-sm-12.lmt
+        = simple_form_for :session do |f|
+          = f.input :email, placeholder: 'Enter email...'
+          = f.input :password, type: :password, placeholder: 'Enter password...'
+
+          .row.mb.lmt
+            .col-sm-6.mb
+              = link_to 'Signup', signup_path, class: 'btn btn-block btn-large btn-default'
+            .col-sm-6
+              = f.submit 'Login', class: 'btn btn-block btn-large btn-primary'
+
+

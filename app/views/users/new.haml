@@ -1,0 +1,22 @@
+.container
+  .col-md-6.col-md-offset-3.col-sm-8.col-sm-offset-2.lmt.gmb
+    %h3.text-center Registration
+
+    .col-sm-12.panel.panel-default.mt
+      .col-sm-12.lmt
+        = simple_form_for @user, url: signup_path do |f|
+          .row
+            .col-sm-6
+              = f.input :first_name, placeholder: 'First name...'
+            .col-sm-6
+              = f.input :last_name, placeholder: 'Last name...'
+
+          = f.input :email, placeholder: 'Enter email...'
+          = f.input :password, type: :password, placeholder: 'Enter password...'
+          = f.input :password_confirmation, type: :password, placeholder: 'Confirm password...', label: 'Confirm password'
+
+          .row.mb.lmt
+            .col-sm-6.mb
+              = link_to 'Cancel', root_path, class: 'btn btn-block btn-large btn-default'
+            .col-sm-6
+              = f.submit 'Create Account', class: 'btn btn-block btn-large btn-primary'

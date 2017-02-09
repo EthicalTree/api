@@ -21,6 +21,8 @@ gem 'haml'
 gem 'aws-sdk', '~> 2'
 gem 'httparty'
 gem 'dotenv-rails'
+gem 'simple_form'
+gem "font-awesome-rails"
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
@@ -33,14 +35,15 @@ group :development, :test do
   gem 'mocha'
   gem 'faker'
   gem 'shoulda'
-  gem 'byebug', platform: :mri
+  gem 'pry'
+  gem 'pry-rails'
+  gem 'byebug'
+  gem 'pry-byebug', require: false
 end
 
 group :development do
   gem 'thin'
-  #gem 'spring'
-  gem 'pry-rails'
-  gem 'pry-byebug'
+  gem 'spring'
   gem 'capistrano', '~> 3.7.1'
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-chruby'
@@ -48,7 +51,7 @@ group :development do
   gem 'capistrano3-unicorn'
   gem 'web-console'
   gem 'listen', '~> 3.0.5'
-  #gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring-watcher-listen', '~> 2.0.0'
 end
 
 group :production do

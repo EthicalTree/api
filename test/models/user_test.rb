@@ -20,7 +20,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "user should be authenticatable" do
-    user = create(:user, password: "password")
+    user = create :user, password: "password", password_confirmation: 'password'
 
     assert_not(user.authenticate("qwerty"))
 
@@ -28,7 +28,7 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "should confirm the user" do
-    user = create(:user)
+    user = create :user, confirmed_at: nil
 
     assert_not(user.confirmed?)
 
