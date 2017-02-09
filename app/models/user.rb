@@ -1,6 +1,8 @@
 class User < ApplicationRecord
   has_secure_password
 
+  before_create :confirmation_token
+
   validates :email, presence: true, email: true, uniqueness: true
   validates :first_name, presence: true
   validates :last_name, presence: true
@@ -15,6 +17,14 @@ class User < ApplicationRecord
 
   def display_name
     "#{first_name} #{last_name}"
+  end
+
+private
+
+  def confirmation_token
+    if self.confirm_token.blank?
+        self.confirm_token = SecureRandom.urlsafe_base64.to_s
+    end
   end
 
 end

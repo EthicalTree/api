@@ -1,0 +1,8 @@
+%p Hi #{@user.display_name},
+%p Thanks for registering for an account on EthicalTree!
+%br
+%p Please confirm your email address by clicking the link below:
+%p= link_to confirm_email_url(@user.confirm_token), confirm_email_url(@user.confirm_token), target: '_blank'
+%br
+%p Sincerely,
+%p The EthicalTree Team

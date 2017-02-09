@@ -6,5 +6,6 @@ FactoryGirl.define do
     password 'awesomepassword1'
     password_confirmation 'awesomepassword1'
     confirmed_at Time.now
+    confirm_token SecureRandom.urlsafe_base64.to_s
   end
 end

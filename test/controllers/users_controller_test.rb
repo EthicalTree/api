@@ -40,6 +40,10 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'correct info should create user' do
+    deliver_later = stub(deliver_later: nil)
+    AccountMailer.stubs(:confirm_email).returns(deliver_later)
+    deliver_later.expects(:deliver_later).once
+
     post :create, params: {
       user: {
         email: 'test@test.com',
@@ -50,7 +54,30 @@ class UsersControllerTest < ActionController::TestCase
       }
     }
 
-    assert User.find_by email: 'test@test.com'
+    user = User.find_by email: 'test@test.com'
+
+    assert user
+    assert_not user.confirmed?
+  end
+
+  test 'confirming with invalid token should fail' do
+    user = create :user, confirmed_at: nil, confirm_token: 'myspecialtoken'
+
+    get :confirm_email, params: { token: 'invalidtoken' }
+    assert_not user.reload.confirmed?
+
+    get :confirm_email, params: { token: 'myspecialtoken' }
+    assert user.reload.confirmed?
+  end
+
+  test 'resend confirm email should actually send the email' do
+    user = create :user, confirm_token: 'abc123', confirmed_at: nil
+
+    deliver_later = stub(deliver_later: nil)
+    AccountMailer.stubs(:confirm_email).returns(deliver_later)
+    deliver_later.expects(:deliver_later).once
+
+    post :resend_email_confirm, params: { token: 'abc123' }
   end
 
 end

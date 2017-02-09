@@ -6,11 +6,11 @@ class SessionsController < ApplicationController
 
   def create
     session = session_params
-    user = User.find_by(email: session[:email]).try(:authenticate, session[:password])
+    @user = User.find_by(email: session[:email]).try(:authenticate, session[:password])
 
-    if user
-      if user.confirmed?
-        view_context.log_in user
+    if @user
+      if @user.confirmed?
+        view_context.log_in @user
         redirect_to root_path
       else
         render :confirm_email_sent
@@ -23,6 +23,7 @@ class SessionsController < ApplicationController
 
   def destroy
     view_context.log_out
+    redirect_to root_path
   end
 private
 

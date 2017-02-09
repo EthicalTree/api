@@ -37,4 +37,16 @@ class UserTest < ActiveSupport::TestCase
     assert(user.confirmed?)
   end
 
+  test "user should generate a confirmation token when created" do
+    user = build :user, confirm_token: nil
+    assert_not user.confirm_token
+    user.save
+    assert user.confirm_token
+  end
+
+  test "user display name should be first and last name combined" do
+    user = build :user, first_name: 'test', last_name: 'test'
+    assert user.display_name == 'test test'
+  end
+
 end
