@@ -10,5 +10,6 @@ Rails.application.routes.draw do
   # Signup
   get :signup, to: 'users#new'
   post :signup, to: 'users#create'
+  post :resend_email_confirm, to: 'users#resend_verification'
 
 end

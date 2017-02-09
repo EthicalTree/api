@@ -6,9 +6,15 @@ class SessionsController < ApplicationController
 
   def create
     session = session_params
+    user = User.find_by(email: session[:email]).try(:authenticate, session[:password])
 
-    if User.find_by(email: session[:email]).try(:authenticate, session[:password]).try(:confirmed?)
-      redirect_to root_path
+    if user
+      if user.confirmed?
+        view_context.log_in user
+        redirect_to root_path
+      else
+        render :confirm_email_sent
+      end
     else
       flash[:login] = 'Invalid email/password'
       render :new
@@ -16,7 +22,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-
+    view_context.log_out
   end
 private
 

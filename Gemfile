@@ -22,7 +22,7 @@ gem 'aws-sdk', '~> 2'
 gem 'httparty'
 gem 'dotenv-rails'
 gem 'simple_form'
-gem "font-awesome-rails"
+gem 'font-awesome-rails'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
@@ -32,6 +32,7 @@ gem 'bcrypt', '~> 3.1.7'
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'factory_girl_rails'
+  gem 'rails-controller-testing'
   gem 'mocha'
   gem 'faker'
   gem 'shoulda'
