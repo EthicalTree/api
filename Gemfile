@@ -23,6 +23,7 @@ gem 'httparty'
 gem 'dotenv-rails'
 gem 'simple_form'
 gem 'font-awesome-rails'
+gem 'delayed_job_active_record'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
