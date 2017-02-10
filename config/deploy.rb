@@ -41,13 +41,6 @@ set :keep_assets, 2
 
 set :migration_role, :app
 
-desc 'Restart application'
-task :restart_app do
-  on roles(:app) do
-    execute "supervisorctl -c /home/applepicke/supervisor.conf restart ethicaltree"
-  end
-end
-
 desc "reload application code"
 task :reload_unicorn do
   invoke 'unicorn:reload'
@@ -62,7 +55,6 @@ end
 
 # after 'deploy:updating', :copy_env
 after :deploy, :reload_unicorn
-after :deploy, :restart_app
 
 
 
