@@ -269,6 +269,7 @@ DEPENDENCIES
   capistrano-rails (~> 1.1)
   capistrano3-unicorn
   coffee-rails (~> 4.2)
+  daemons
   delayed_job_active_record
   dotenv-rails
   exception_notification
