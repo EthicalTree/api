@@ -58,6 +58,16 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "ethical_tree_#{Rails.env}"
   config.action_mailer.perform_caching = false
 
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    address: Rails.application.secrets[:smtp]['host'],
+    port: 587,
+    user_name: Rails.application.secrets[:smtp]['user_name'],
+    password: Rails.application.secrets[:smtp]['password'],
+    authentication: 'plain',
+    enable_starttls_auto: true
+  }
+
   Rails.application.config.middleware.use ExceptionNotification::Rack,
   :email => {
     :email_prefix => "[EthicalTree Errors] ",
