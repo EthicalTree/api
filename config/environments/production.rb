@@ -58,6 +58,13 @@ Rails.application.configure do
   # config.active_job.queue_name_prefix = "ethical_tree_#{Rails.env}"
   config.action_mailer.perform_caching = false
 
+  Rails.application.config.middleware.use ExceptionNotification::Rack,
+  :email => {
+    :email_prefix => "[EthicalTree Errors] ",
+    :sender_address => %{"EthicalTree" <wcurtiscollins@gmail.com>},
+    :exception_recipients => %w{wcurtiscollins@gmail.com}
+  }
+
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
