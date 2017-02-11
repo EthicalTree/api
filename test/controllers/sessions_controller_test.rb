@@ -16,7 +16,7 @@ class SessionsControllerTest < ActionController::TestCase
   test 'if your account is unverified then resend confirmation page should show instead of logging in' do
     user = create :user, email: 'test@test.com', password: 'password', password_confirmation: 'password', confirmed_at: nil
     post :create, params: { session: { email: 'test@test.com', password: 'password' }}
-    assert_template 'sessions/confirm_email_sent'
+    assert_redirected_to pending_confirmation_path(email: 'test@test.com')
   end
 
   test 'logging out should remove the current user from the session' do

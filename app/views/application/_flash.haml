@@ -3,13 +3,15 @@
 
     - %i{notice error info}.each do |kind|
       - if flash[kind].present?
-        - css_kind = 'alert-info' if kind.to_s == 'notice'
+        - css_kind = 'alert-info' if kind.to_s == 'info'
         - css_kind = 'alert-danger' if kind.to_s == 'error'
         .alert-app.alert{class: css_kind}
           = flash[kind].html_safe
           %button{type: 'button', class: 'close', data: {dismiss: 'alert'}} &times;
 
+  - flash.clear
+
   :javascript
     $(function() {
-      setTimeout(function() { $(".alert-app").alert('close'); }, 5000);
+      setTimeout(function() { $(".alert-app").alert('close'); }, 7000);
     });

@@ -1,0 +1,8 @@
+.container
+  %h3 Pending Confirmation
+  %p
+    When you signed up for your account we sent you a verification email. You must click the verification link before you can log in to the site.
+
+  %p
+    = link_to 'Click here', resend_email_confirm_path(email: @user.email), method: 'post'
+    to resend the email.

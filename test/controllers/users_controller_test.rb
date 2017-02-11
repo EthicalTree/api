@@ -71,13 +71,13 @@ class UsersControllerTest < ActionController::TestCase
   end
 
   test 'resend confirm email should actually send the email' do
-    user = create :user, confirm_token: 'abc123', confirmed_at: nil
+    user = create :user, email: 'test@test.com', confirmed_at: nil
 
     deliver_later = stub(deliver_later: nil)
     AccountMailer.stubs(:confirm_email).returns(deliver_later)
     deliver_later.expects(:deliver_later).once
 
-    post :resend_email_confirm, params: { token: 'abc123' }
+    post :resend_email_confirm, params: { email: 'test@test.com' }
   end
 
 end

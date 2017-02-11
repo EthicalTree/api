@@ -9,21 +9,27 @@ class UsersController < ApplicationController
 
     if @user.save
       AccountMailer.confirm_email(@user).deliver_later
-      render 'sessions/confirm_email_sent'
+      render 'confirm_email_sent'
     else
       render :new
     end
   end
 
   def resend_email_confirm
-    @user = User.find_by confirm_token: params[:token]
+    @user = User.find_by email: params[:email], confirmed_at: nil
 
     if @user
       AccountMailer.confirm_email(@user).deliver_later
       flash[:info] = "Confirmation email has been re-sent!"
-      render :confirm_email_sent
+      redirect_to pending_confirmation_path(email: @user.email)
     else
-      redirect_to root_path
+      render_404
+    end
+  end
+
+  def pending_confirmation
+    unless @user = User.find_by(email: params[:email], confirmed_at: nil)
+      render_404
     end
   end
 

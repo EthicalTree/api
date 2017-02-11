@@ -2,6 +2,7 @@ class SessionsController < ApplicationController
 
   def new
     @session = Session.new
+    flash[:info] = "Wow that's great"
   end
 
   def create
@@ -13,7 +14,7 @@ class SessionsController < ApplicationController
         view_context.log_in @user
         redirect_to root_path
       else
-        render :confirm_email_sent
+        redirect_to pending_confirmation_path(email: @user.email)
       end
     else
       @login_error = 'Invalid email/password'
