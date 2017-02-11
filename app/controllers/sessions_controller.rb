@@ -2,7 +2,6 @@ class SessionsController < ApplicationController
 
   def new
     @session = Session.new
-    flash[:info] = "Wow that's great"
   end
 
   def create

@@ -45,7 +45,7 @@ end
 
 group :development do
   gem 'thin'
-  # gem 'spring'
+  gem 'spring'
   gem 'capistrano', '~> 3.7.1'
   gem 'capistrano-rails', '~> 1.1'
   gem 'capistrano-chruby'
@@ -53,7 +53,7 @@ group :development do
   gem 'capistrano3-unicorn'
   gem 'web-console'
   gem 'listen', '~> 3.0.5'
-  # gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'spring-watcher-listen'
 end
 
 group :production do
