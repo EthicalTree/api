@@ -13,5 +13,9 @@ module EthicalTree
     # -- all .rb files in that directory are automatically loaded.
 
     config.active_job.queue_adapter = :delayed_job
+
+    # React settings
+    config.react.camelize_props = true #default false
+    config.react.addons = true # defaults to false
   end
 end

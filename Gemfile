@@ -16,7 +16,7 @@ gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 
 # Extra Libraries
-gem 'bootstrap-sass'
+gem 'bootstrap', '~> 4.0.0.alpha6'
 gem 'haml'
 gem 'aws-sdk', '~> 2'
 gem 'httparty'
@@ -24,6 +24,12 @@ gem 'dotenv-rails'
 gem 'simple_form'
 gem 'font-awesome-rails'
 gem 'delayed_job_active_record'
+gem 'geokit-rails'
+gem 'react-rails'
+
+source 'https://rails-assets.org' do
+  gem 'rails-assets-tether', '>= 1.3.3'
+end
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
