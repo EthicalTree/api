@@ -1,6 +1,9 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  host: 172.17.0.2
+  user: postgres
+  password: root
 
 development:
   <<: *default
@@ -14,7 +17,7 @@ production:
   <<: *default
   database: ethicaltree
   pool: 5
-  host: willys-dbs.co8ijpyn0g2y.us-east-1.rds.amazonaws.com
-  user: <%= ENV["AWS_DB_USERNAME"] %>
-  password: <%= ENV["AWS_DB_PASSWORD"] %>
+  host: localhost
+  user: <%= ENV["DB_USERNAME"] %>
+  password: <%= ENV["DB_PASSWORD"] %>
   port: 5432
