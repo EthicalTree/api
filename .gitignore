@@ -21,3 +21,6 @@
 .byebug_history
 
 .DS_Store
+
+app/assets/javascripts
+node_modules

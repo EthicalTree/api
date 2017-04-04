@@ -1,0 +1,36 @@
+{
+  "name": "ethicaltree",
+  "version": "1.0.0",
+  "description": "This README would normally document whatever steps are necessary to get the application up and running.",
+  "main": "entry.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "start": "webpack --watch -d --config ./webpack.config.js --progress --profile --colors",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/applepicke/ethicaltree.git"
+  },
+  "author": "William Collins",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/applepicke/ethicaltree/issues"
+  },
+  "homepage": "https://github.com/applepicke/ethicaltree#readme",
+  "dependencies": {
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
+    "react-router": "^4.0.0"
+  },
+  "devDependencies": {
+    "babel": "^6.23.0",
+    "babel-core": "^6.24.0",
+    "babel-loader": "^6.4.1",
+    "babel-preset-es2015": "^6.24.0",
+    "babel-preset-react": "^6.23.0",
+    "webpack": "^2.3.3"
+  }
+}
