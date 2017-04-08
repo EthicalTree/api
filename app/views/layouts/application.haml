@@ -4,7 +4,9 @@
     %title EthicalTree
     %meta{name: "viewport", content: 'width=device-width', 'initial-scale': '1.0'}
     = csrf_meta_tags
-    = stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload'
+    = stylesheet_link_tag 'application', media: 'all'
+    = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css'
+    = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css'
 
   %body
     = render 'header'

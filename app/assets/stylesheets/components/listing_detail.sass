@@ -1,0 +1,59 @@
+@import '../variables'
+
+.listing-detail
+  border: 1px solid $color-border
+
+  .title-bar
+    position: relative
+    background-color: $color-inverse
+    height: 50px
+    color: $color-white
+
+    .title
+      display: inline-block
+      font-size: 1.5rem
+      font-weight: $font-light
+      padding: 0.7rem 2.5rem
+
+    .rating
+      float: right
+      margin-right: 13rem
+      font-size: 1.2rem
+      padding: 0.6rem
+
+      .fa
+        margin-left: 6px
+
+    .ethicality
+      position: absolute
+      top: 0
+      right: 2.5rem
+
+      .title
+        text-transform: uppercase
+        background-color: $color-danger
+        padding: 1rem 2rem
+        font-weight: normal
+        font-size: 1rem
+        height: 50px
+        margin: 0
+
+      .qualities
+        border: 1px solid $color-border
+        border-top: none
+        color: $color-inverse
+        text-align: center
+        padding: 0.1rem 0
+
+        .quality
+          margin: 2rem 0
+
+          .fa
+            margin-bottom: 1rem
+            font-size: 2rem
+
+          .name
+            font-weight: $font-bold
+            font-size: 0.7rem
+            text-transform: uppercase
+
