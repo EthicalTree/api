@@ -1,6 +1,7 @@
 import React from 'react';
 import Slider from 'react-slick';
 import Modal from 'react-modal';
+import GoogleMap from 'google-map-react';
 
 class ImageAddModal extends React.Component {
   render() {
@@ -136,12 +137,20 @@ class Bio extends React.Component {
   }
 }
 
-
-
-class LocationMap extends React.Component {
+class ListingMap extends React.Component {
   render() {
+    let center = { lat: -34.397, lng: 150.644 };
+
     return (
-      <div className="location-map">
+      <div className="listing-map">
+        <h3>How to get here</h3>
+        <div className="listing-map-area">
+          <GoogleMap
+            bootstrapURLKeys={{ key: window.ET.keys.gmaps_api_key }}
+            defaultZoom={8}
+            defaultCenter={center}>
+          </GoogleMap>
+        </div>
       </div>
     );
   }
@@ -154,6 +163,8 @@ class ListingInfo extends React.Component {
         <Bio
           title={this.props.title}
           bio={this.props.bio} />
+
+        <ListingMap/>
       </div>
     );
   }

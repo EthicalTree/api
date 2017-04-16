@@ -9,9 +9,11 @@
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css'
 
   %body
+    = render 'keys'
     = render 'header'
     = render 'flash'
     .lmt
       = yield
     = render 'footer'
     = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
+

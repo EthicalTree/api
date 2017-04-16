@@ -7,7 +7,7 @@
     "test": "test"
   },
   "scripts": {
-    "start": "webpack --watch -d --config ./webpack.config.js --progress --profile --colors",
+    "start": "webpack --watch --config ./webpack.config.js --progress --profile --colors",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/applepicke/ethicaltree#readme",
   "dependencies": {
+    "google-map-react": "^0.24.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-modal": "^1.7.3",
