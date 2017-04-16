@@ -52,6 +52,17 @@ class Rating extends React.Component {
   }
 }
 
+class TitleBar extends React.Component {
+  render() {
+    return (
+      <div className="title-bar">
+        <h2 className="title">{this.props.title}</h2>
+        <Rating value={this.props.rating} />
+      </div>
+    );
+  }
+}
+
 class Ethicality extends React.Component {
   render() {
     let qualities = this.props.qualities.map(quality => {
@@ -74,14 +85,42 @@ class Ethicality extends React.Component {
   }
 }
 
-class TitleBar extends React.Component {
+class DailyHours extends React.Component {
   render() {
     return (
-      <div className="title-bar">
-        <h2 className="title">{this.props.title}</h2>
-        <Rating value={this.props.rating} />
-        <Ethicality qualities={this.props.qualities} />
+      <div className="daily-hours">
+        <p>{this.props.day}</p>
+        <p>{this.props.hours}</p>
       </div>
+    );
+  }
+}
+
+class OperatingHours extends React.Component {
+  render() {
+    let hours = this.props.hours.map(hours => {
+      return (
+        <DailyHours key={hours.day} day={hours.day} hours={hours.hours} />
+      );
+    });
+
+    return (
+      <div className="operating-hours">
+        <h3 className="title">Operating Hours</h3>
+        {hours}
+      </div>
+    );
+  }
+}
+
+
+class AsideInfo extends React.Component {
+  render() {
+    return (
+      <aside>
+        <Ethicality qualities={this.props.qualities} />
+        <OperatingHours hours={this.props.hours} />
+      </aside>
     );
   }
 }
@@ -90,28 +129,14 @@ class Bio extends React.Component {
   render() {
     return (
       <div className="bio">
+        <h3>About {this.props.title}</h3>
+        <p>{this.props.bio}</p>
       </div>
     );
   }
 }
 
-class DailyHours extends React.Component {
-  render() {
-    return (
-      <div className="daily-hours">
-      </div>
-    );
-  }
-}
 
-class OperatingHours extends React.Component {
-  render() {
-    return (
-      <div className="operating-hours">
-      </div>
-    );
-  }
-}
 
 class LocationMap extends React.Component {
   render() {
@@ -122,6 +147,17 @@ class LocationMap extends React.Component {
   }
 }
 
+class ListingInfo extends React.Component {
+  render() {
+    return (
+      <div className="listing-info">
+        <Bio
+          title={this.props.title}
+          bio={this.props.bio} />
+      </div>
+    );
+  }
+}
 
 export default class ListingDetailApp extends React.Component {
 
@@ -136,14 +172,32 @@ export default class ListingDetailApp extends React.Component {
       name: 'Vegan'
     }];
 
+    let title = "Willy's Kitchen";
+    let bio = "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat";
+
+    let hours = [{
+      day: 'Monday',
+      hours: '12pm - 2pm'
+    }, {
+      day: 'Tuesday',
+      hours: '12pm - 5pm'
+    }];
+
     return (
       <div className="listing-detail">
         <ListingImages images={images} />
         <TitleBar
-          qualities={qualities}
           rating="4.5"
-          title="Willy's Kitchen" />
+          title={title} />
 
+        <AsideInfo
+          qualities={qualities}
+          hours={hours}
+          />
+
+        <ListingInfo
+          bio={bio}
+          title={title} />
         <div style={{ height: '500px' }}/>
       </div>
     );

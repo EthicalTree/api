@@ -6,7 +6,7 @@
   .title-bar
     position: relative
     background-color: $color-inverse
-    height: 50px
+    height: 3rem
     color: $color-white
 
     .title
@@ -24,22 +24,28 @@
       .fa
         margin-left: 6px
 
-    .ethicality
-      position: absolute
-      top: 0
-      right: 2.5rem
+  aside
+    position: relative
+    margin-top: -3rem
+    right: 2.5rem
+    width: 150px
+    float: right
 
-      .title
-        text-transform: uppercase
-        background-color: $color-danger
-        padding: 1rem 2rem
-        font-weight: normal
-        font-size: 1rem
-        height: 50px
-        margin: 0
+    .title
+      text-transform: uppercase
+      background-color: $color-danger
+      padding: 1rem 2rem
+      font-weight: normal
+      font-size: 1rem
+      margin: 0
+      color: $color-white
+      height: 3rem
+      text-align: center
+
+    .ethicality
 
       .qualities
-        border: 1px solid $color-border
+        border: 1px solid $color-inverse
         border-top: none
         color: $color-inverse
         text-align: center
@@ -56,4 +62,35 @@
             font-weight: $font-bold
             font-size: 0.7rem
             text-transform: uppercase
+
+    .operating-hours
+      margin: 4rem 0
+      border: 1px solid $color-inverse
+
+      .title
+        background-color: $color-success
+        height: 4rem
+
+      .daily-hours
+        text-align: center
+        margin: 1rem 1.5rem 0.5rem
+        border-bottom: 1px solid $color-inverse
+
+        &:last-child
+          border-bottom: none
+
+
+
+  .listing-info
+    padding: 2rem
+    margin-right: 13rem
+
+    h3
+      font-size: 2.5rem
+      margin-top: 1.5rem
+
+    p
+      line-height: 2
+      margin-top: 2rem
+      font-size: 17px
 
