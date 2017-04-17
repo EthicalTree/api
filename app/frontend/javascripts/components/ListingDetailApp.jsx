@@ -141,12 +141,17 @@ class ListingMap extends React.Component {
   render() {
     let center = { lat: -34.397, lng: 150.644 };
 
+    let options = {
+      scrollwheel: false
+    };
+
     return (
       <div className="listing-map">
         <h3>How to get here</h3>
         <div className="listing-map-area">
           <GoogleMap
             bootstrapURLKeys={{ key: window.ET.keys.gmaps_api_key }}
+            options={options}
             defaultZoom={8}
             defaultCenter={center}>
           </GoogleMap>
