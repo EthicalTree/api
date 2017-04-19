@@ -1,6 +1,6 @@
 class Location < ApplicationRecord
-  has_many :listing_locations, dependant: true
-  has_many :listings, through: :listing_locations
+  belongs_to :listing
+  has_many :operating_hours, class_name: 'OperatingHours'
 
   acts_as_mappable
 end

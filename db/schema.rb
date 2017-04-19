@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170416234138) do
+ActiveRecord::Schema.define(version: 20170419010359) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -30,16 +30,17 @@ ActiveRecord::Schema.define(version: 20170416234138) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
   end
 
-  create_table "listing_ethicalities", force: :cascade do |t|
-    t.integer  "ethicality_key"
+  create_table "ethicalities", force: :cascade do |t|
+    t.string   "name"
+    t.string   "slug"
     t.integer  "listing_id"
-    t.datetime "created_at",     null: false
-    t.datetime "updated_at",     null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "listing_locations", force: :cascade do |t|
-    t.integer  "listing_id",  null: false
-    t.integer  "location_id", null: false
+    t.integer  "listing_id"
+    t.integer  "location_id"
     t.datetime "created_at",  null: false
     t.datetime "updated_at",  null: false
   end
@@ -51,6 +52,7 @@ ActiveRecord::Schema.define(version: 20170416234138) do
   end
 
   create_table "locations", force: :cascade do |t|
+    t.integer  "listing_id"
     t.float    "lat"
     t.float    "lng"
     t.datetime "created_at", null: false
@@ -61,9 +63,9 @@ ActiveRecord::Schema.define(version: 20170416234138) do
     t.string   "day"
     t.time     "open"
     t.time     "close"
-    t.integer  "listing_operating_hours_id"
-    t.datetime "created_at",                 null: false
-    t.datetime "updated_at",                 null: false
+    t.integer  "location_id"
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
   end
 
   create_table "users", force: :cascade do |t|

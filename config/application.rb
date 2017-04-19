@@ -14,6 +14,9 @@ module EthicalTree
 
     config.active_job.queue_adapter = :delayed_job
 
+    # Time settings
+    config.active_record.time_zone_aware_types = [:datetime, :time]
+
     # React settings
     config.react.camelize_props = true #default false
     config.react.addons = true # defaults to false
