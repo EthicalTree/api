@@ -199,6 +199,8 @@ export default class ListingDetailApp extends React.Component {
       hours: '12pm - 5pm'
     }];
 
+    let { images, qualities, title, bio, hours } = this.props.listing;
+
     return (
       <div className="listing-detail">
         <ListingImages images={images} />
