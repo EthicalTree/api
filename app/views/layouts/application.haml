@@ -7,6 +7,8 @@
     = stylesheet_link_tag 'application', media: 'all'
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick.min.css'
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css'
+    = javascript_pack_tag 'listing_detail'
+    = javascript_include_tag 'application'
 
   %body
     = render 'keys'
@@ -15,5 +17,4 @@
     .lmt
       = yield
     = render 'footer'
-    = javascript_include_tag 'application', 'data-turbolinks-track': 'reload'
 

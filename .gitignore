@@ -24,3 +24,5 @@
 
 app/assets/javascripts
 node_modules
+/public/packs
+/node_modules

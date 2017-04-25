@@ -26,6 +26,7 @@ gem 'font-awesome-rails'
 gem 'delayed_job_active_record'
 gem 'geokit-rails'
 gem 'react-rails'
+gem 'webpacker'
 
 source 'https://rails-assets.org' do
   gem 'rails-assets-tether', '>= 1.3.3'
