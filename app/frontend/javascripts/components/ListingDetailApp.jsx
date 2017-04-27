@@ -1,13 +1,15 @@
-import React from 'react';
-import Slider from 'react-slick';
-import Modal from 'react-modal';
-import GoogleMap from 'google-map-react';
+import React from 'react'
+import Slider from 'react-slick'
+import Modal from 'react-modal'
+import GoogleMap from 'google-map-react'
+
+import axios from 'axios'
 
 class ImageAddModal extends React.Component {
   render() {
     return (
       <Modal />
-    );
+    )
   }
 }
 
@@ -17,7 +19,7 @@ class ListingImages extends React.Component {
       let style = {
         background: `url('${image.src}') no-repeat center center`,
         height: '300px'
-      };
+      }
 
       return (
         <div
@@ -26,7 +28,7 @@ class ListingImages extends React.Component {
           <div style={style} />
         </div>
       )
-    });
+    })
 
     return (
       <div className="listing-images">
@@ -38,7 +40,7 @@ class ListingImages extends React.Component {
           {slides}
         </Slider>
       </div>
-    );
+    )
   }
 }
 
@@ -49,7 +51,7 @@ class Rating extends React.Component {
         {this.props.value}
         <i className="fa fa-star"></i>
       </div>
-    );
+    )
   }
 }
 
@@ -60,29 +62,29 @@ class TitleBar extends React.Component {
         <h2 className="title">{this.props.title}</h2>
         <Rating value={this.props.rating} />
       </div>
-    );
+    )
   }
 }
 
 class Ethicality extends React.Component {
   render() {
-    let qualities = this.props.qualities.map(quality => {
+    let ethicalities = this.props.ethicalities.map(quality => {
       return (
         <div key={quality.name} className="quality">
           <i className="fa fa-superpowers"></i>
           <p className="name">{quality.name}</p>
         </div>
-      );
-    });
+      )
+    })
 
     return (
       <div className="ethicality">
         <h3 className="title">Ethicality</h3>
-        <div className="qualities">
-          {qualities}
+        <div className="ethicalities">
+          {ethicalities}
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -93,7 +95,7 @@ class DailyHours extends React.Component {
         <p>{this.props.day}</p>
         <p>{this.props.hours}</p>
       </div>
-    );
+    )
   }
 }
 
@@ -102,15 +104,15 @@ class OperatingHours extends React.Component {
     let hours = this.props.hours.map(hours => {
       return (
         <DailyHours key={hours.day} day={hours.day} hours={hours.hours} />
-      );
-    });
+      )
+    })
 
     return (
       <div className="operating-hours">
         <h3 className="title">Operating Hours</h3>
         {hours}
       </div>
-    );
+    )
   }
 }
 
@@ -119,10 +121,10 @@ class AsideInfo extends React.Component {
   render() {
     return (
       <aside>
-        <Ethicality qualities={this.props.qualities} />
+        <Ethicality ethicalities={this.props.ethicalities} />
         <OperatingHours hours={this.props.hours} />
       </aside>
-    );
+    )
   }
 }
 
@@ -133,17 +135,17 @@ class Bio extends React.Component {
         <h3>About {this.props.title}</h3>
         <p>{this.props.bio}</p>
       </div>
-    );
+    )
   }
 }
 
 class ListingMap extends React.Component {
   render() {
-    let center = { lat: -34.397, lng: 150.644 };
+    let center = { lat: -34.397, lng: 150.644 }
 
     let options = {
       scrollwheel: false
-    };
+    }
 
     return (
       <div className="listing-map">
@@ -157,7 +159,7 @@ class ListingMap extends React.Component {
           </GoogleMap>
         </div>
       </div>
-    );
+    )
   }
 }
 
@@ -171,25 +173,44 @@ class ListingInfo extends React.Component {
 
         <ListingMap/>
       </div>
-    );
+    )
   }
 }
 
 export default class ListingDetailApp extends React.Component {
 
+  constructor(props) {
+    super(props)
+
+    this.state = {
+      images: [],
+      ethicalities: [],
+      title: '',
+      hours: []
+    }
+
+    this.fetchListing()
+  }
+
+  fetchListing() {
+    axios.get(`/listings/${this.props.id}`).then(listing => {
+      console.log('SET STATE')
+    })
+  }
+
   render() {
     let images = [{
       src: '/assets/stock/listing_default.jpg'
-    }];
+    }]
 
-    let qualities = [{
+    let ethicalities = [{
       name: 'Vegetarian',
     }, {
       name: 'Vegan'
-    }];
+    }]
 
-    let title = "Willy's Kitchen";
-    let bio = "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat";
+    let title = "Willy's Kitchen"
+    let bio = "At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium voluptatum deleniti atque corrupti quos dolores et quas molestias excepturi sint occaecati cupiditate non provident, similique sunt in culpa qui officia deserunt mollitia animi, id est laborum et dolorum fuga. Et harum quidem rerum facilis est et expedita distinctio. Nam libero tempore, cum soluta nobis est eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus, omnis voluptas assumenda est, omnis dolor repellendus. Temporibus autem quibusdam et aut officiis debitis aut rerum necessitatibus saepe eveniet ut et voluptates repudiandae sint et molestiae non recusandae. Itaque earum rerum hic tenetur a sapiente delectus, ut aut reiciendis voluptatibus maiores alias consequatur aut perferendis doloribus asperiores repellat"
 
     let hours = [{
       day: 'Monday',
@@ -197,28 +218,25 @@ export default class ListingDetailApp extends React.Component {
     }, {
       day: 'Tuesday',
       hours: '12pm - 5pm'
-    }];
-
-    let { images, qualities, title, bio, hours } = this.props.listing;
+    }]
 
     return (
       <div className="listing-detail">
-        <ListingImages images={images} />
+        <ListingImages images={this.state.images} />
         <TitleBar
           rating="4.5"
-          title={title} />
+          title={this.state.title} />
 
         <AsideInfo
-          qualities={qualities}
-          hours={hours}
-          />
+          ethicalities={this.state.ethicalities}
+          hours={this.state.hours}/>
 
         <ListingInfo
-          bio={bio}
-          title={title} />
+          bio={this.state.bio}
+          title={this.state.title} />
         <div style={{ height: '500px' }}/>
       </div>
-    );
+    )
   }
 
 }

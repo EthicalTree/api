@@ -14,4 +14,13 @@ Rails.application.routes.draw do
   post :resend_email_confirm, to: 'users#resend_email_confirm'
   get 'confirm_email/:token', to: 'users#confirm_email', as: :confirm_email
 
+  # API
+  resources :listings do
+    resources :images
+    resources :ethicalities
+    resources :locations do
+      resources :operating_hours
+    end
+  end
+
 end

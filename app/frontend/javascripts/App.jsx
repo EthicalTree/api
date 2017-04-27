@@ -1,5 +1,5 @@
-import React from 'react';
-import ListingDetailApp from './components/ListingDetailApp.jsx';
+import React from 'react'
+import ListingDetailApp from './components/ListingDetailApp.jsx'
 
 export default class App extends React.Component {
 

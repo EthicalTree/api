@@ -21,6 +21,7 @@
   },
   "homepage": "https://github.com/applepicke/ethicaltree#readme",
   "dependencies": {
+    "axios": "^0.16.1",
     "google-map-react": "^0.24.0",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
