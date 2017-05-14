@@ -1,4 +1,4 @@
-class OperatingHoursController < ApplicationController
+class OperatingHoursController < APIController
 
   before_action :require_operating_hours, only: %i{show update destroy}
 
@@ -21,8 +21,6 @@ class OperatingHoursController < ApplicationController
   def destroy
 
   end
-
-  def
 
   private
 

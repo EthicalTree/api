@@ -1,4 +1,4 @@
-class ListingsController < ApplicationController
+class ListingsController < APIController
 
   before_action :require_listing, only: %i{show update destroy}
 
@@ -11,7 +11,7 @@ class ListingsController < ApplicationController
   end
 
   def show
-
+    json_response @listing
   end
 
   def update
@@ -22,8 +22,6 @@ class ListingsController < ApplicationController
 
   end
 
-  def
-
   private
 
   def listing_params
@@ -31,7 +29,7 @@ class ListingsController < ApplicationController
   end
 
   def require_listing
-
+    @listing = Listing.find(params[:id])
   end
 
 end

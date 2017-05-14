@@ -1,4 +1,4 @@
-class EthicalitiesController < ApplicationController
+class EthicalitiesController < APIController
 
   before_action :require_ethicality, only: %i{show update destroy}
 
@@ -21,8 +21,6 @@ class EthicalitiesController < ApplicationController
   def destroy
 
   end
-
-  def
 
   private
 

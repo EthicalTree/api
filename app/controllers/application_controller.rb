@@ -5,3 +5,8 @@ class ApplicationController < ActionController::Base
     raise ActionController::RoutingError.new('Not Found')
   end
 end
+
+class APIController < ActionController::API
+  include Response
+  include ExceptionHandler
+end

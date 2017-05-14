@@ -1,4 +1,4 @@
-class ImagesController < ApplicationController
+class ImagesController < APIController
   before_action :require_image, only: %i{show update destroy}
 
   def index
@@ -20,8 +20,6 @@ class ImagesController < ApplicationController
   def destroy
 
   end
-
-  def
 
   private
 

@@ -1,4 +1,4 @@
-class LocationsController < ApplicationController
+class LocationsController < APIController
 
   before_action :require_location, only: %i{show update destroy}
 
@@ -21,8 +21,6 @@ class LocationsController < ApplicationController
   def destroy
 
   end
-
-  def
 
   private
 

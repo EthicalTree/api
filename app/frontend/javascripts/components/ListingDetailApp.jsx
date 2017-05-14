@@ -182,23 +182,6 @@ export default class ListingDetailApp extends React.Component {
   constructor(props) {
     super(props)
 
-    this.state = {
-      images: [],
-      ethicalities: [],
-      title: '',
-      hours: []
-    }
-
-    this.fetchListing()
-  }
-
-  fetchListing() {
-    axios.get(`/listings/${this.props.id}`).then(listing => {
-      console.log('SET STATE')
-    })
-  }
-
-  render() {
     let images = [{
       src: '/assets/stock/listing_default.jpg'
     }]
@@ -220,6 +203,24 @@ export default class ListingDetailApp extends React.Component {
       hours: '12pm - 5pm'
     }]
 
+    this.state = {
+      images: images,
+      ethicalities: ethicalities,
+      title: title,
+      bio: bio,
+      hours: hours
+    }
+
+    this.fetchListing()
+  }
+
+  fetchListing() {
+    axios.get(`/listings/${this.props.id}`).then(listing => {
+      this.setState(listing.data)
+    })
+  }
+
+  render() {
     return (
       <div className="listing-detail">
         <ListingImages images={this.state.images} />
@@ -234,7 +235,6 @@ export default class ListingDetailApp extends React.Component {
         <ListingInfo
           bio={this.state.bio}
           title={this.state.title} />
-        <div style={{ height: '500px' }}/>
       </div>
     )
   }
