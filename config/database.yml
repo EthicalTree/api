@@ -1,13 +1,15 @@
 default: &default
-  adapter: postgresql
-  encoding: unicode
-  host: localhost
-  user: postgres
-  password: root
+  adapter: mysql2
+  encoding: utf8
+  database: ethicaltree
+  host: 127.0.0.1
+  port: 3306
+  username: root
+  password: ""
 
 development:
   <<: *default
-  database: ethicaltree_dev
+  database: ethicaltree
 
 test:
   <<: *default
@@ -15,9 +17,8 @@ test:
 
 production:
   <<: *default
-  database: ethicaltree
+  database: ethicaltree_prod
   pool: 5
   host: localhost
-  user: <%= ENV["DB_USERNAME"] %>
+  username: <%= ENV["DB_USERNAME"] %>
   password: <%= ENV["DB_PASSWORD"] %>
-  port: 5432

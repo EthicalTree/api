@@ -30,7 +30,7 @@ Rails.application.configure do
   # Serve assets from webpack-dev-server
   config.action_controller.asset_host = Proc.new { |source|
     if source =~ /application\.js$/i
-    "http://ethicaltree:8080/assets"
+    "http://localhost:8081/assets"
     end
   }
 

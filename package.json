@@ -7,8 +7,8 @@
     "test": "test"
   },
   "scripts": {
-    "server": "rails s -b 0.0.0.0",
-    "webpack": "webpack-dev-server --watch --progress --profile --colors --inline --host 0.0.0.0 --public ethicaltree:8080",
+    "server": "rails s",
+    "webpack": "webpack-dev-server --watch --progress --profile --colors --inline",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -42,6 +42,7 @@
     "babel-preset-react": "^6.23.0",
     "babel-preset-stage-0": "^6.24.1",
     "css-loader": "^0.28.1",
+    "node-sass": "^4.5.2",
     "sass-loader": "^6.0.5",
     "style-loader": "^0.17.0",
     "webpack": "^2.3.3"
