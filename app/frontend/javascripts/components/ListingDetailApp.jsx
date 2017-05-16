@@ -203,15 +203,18 @@ export default class ListingDetailApp extends React.Component {
       hours: '12pm - 5pm'
     }]
 
+    let rating = "4.3"
+
     this.state = {
       images: images,
       ethicalities: ethicalities,
       title: title,
       bio: bio,
-      hours: hours
+      hours: hours,
+      rating: rating,
     }
 
-    this.fetchListing()
+    //this.fetchListing()
   }
 
   fetchListing() {
@@ -225,7 +228,7 @@ export default class ListingDetailApp extends React.Component {
       <div className="listing-detail">
         <ListingImages images={this.state.images} />
         <TitleBar
-          rating="4.5"
+          rating={this.state.rating}
           title={this.state.title} />
 
         <AsideInfo

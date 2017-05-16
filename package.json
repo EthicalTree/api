@@ -8,7 +8,7 @@
   },
   "scripts": {
     "server": "rails s",
-    "webpack": "webpack-dev-server --watch --progress --profile --colors --inline",
+    "webpack": "webpack-dev-server",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

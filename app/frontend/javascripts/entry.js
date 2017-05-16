@@ -4,10 +4,14 @@ import { Route } from 'react-router';
 import { BrowserRouter } from 'react-router-dom';
 import App from './App.jsx';
 
+// for hot reloading
+if (module.hot) {
+  module.hot.accept()
+}
+
+
 ReactDOM.render(
-  <BrowserRouter>
-    <Route path="/" component={App} />
-  </BrowserRouter>,
+  <App />,
   document.getElementById('app')
 );
 
