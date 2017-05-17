@@ -1,7 +1,8 @@
 import React from 'react'
 import Slider from 'react-slick'
 import Modal from 'react-modal'
-import GoogleMap from 'google-map-react'
+
+import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 
 import axios from 'axios'
 
@@ -123,26 +124,55 @@ const Bio = (props) => {
   )
 }
 
-const ListingMap = (props) => {
-  let center = { lat: -34.397, lng: 150.644 }
+const Map = withGoogleMap(props => {
 
-  let options = {
-    scrollwheel: false
+  let bounds = new google.maps.LatLngBounds()
+
+  let markers = props.locations.map(l => {
+    bounds.extend(l)
+
+    return (
+      <Marker key={`${l.lat}+${l.lng}`} position={l} />
+    )
+  })
+
+  let onLoad = (map) => {
+    map.fitBounds(bounds)
   }
+
+  return (
+    <GoogleMap
+      ref={onLoad}
+      defaultZoom={12}
+      defaultCenter={props.locations[0]}
+      defaultOptions={{
+        scrollwheel: false
+      }}>
+
+      {markers}
+
+    </GoogleMap>
+  )
+})
+
+const ListingMap = props => {
 
   return (
     <div className="listing-map">
       <h3>How to get here</h3>
       <div className="listing-map-area">
-        <GoogleMap
-          bootstrapURLKeys={{ key: window.ET.keys.gmaps_api_key }}
-          options={options}
-          defaultZoom={8}
-          defaultCenter={center}>
-        </GoogleMap>
+        <Map
+          locations={props.locations}
+          containerElement={
+            <div style={{ height: `100%` }} />
+          }
+          mapElement={
+            <div style={{ height: `100%` }} />
+          }/>
       </div>
     </div>
   )
+
 }
 
 const ListingInfo = (props) => {
@@ -152,7 +182,9 @@ const ListingInfo = (props) => {
         title={props.title}
         bio={props.bio} />
 
-      <ListingMap/>
+      <ListingMap
+        locations={props.locations}
+        />
     </div>
   )
 }
@@ -185,6 +217,14 @@ export default class ListingDetailApp extends React.Component {
 
     let rating = "4.3"
 
+    let locations = [{
+      lat: 45.391,
+      lng: -75.754
+    }, {
+      lat: 45.394,
+      lng: -75.749
+    }]
+
     this.state = {
       images: images,
       ethicalities: ethicalities,
@@ -192,6 +232,7 @@ export default class ListingDetailApp extends React.Component {
       bio: bio,
       hours: hours,
       rating: rating,
+      locations: locations
     }
 
     //this.fetchListing()
@@ -216,6 +257,7 @@ export default class ListingDetailApp extends React.Component {
           hours={this.state.hours}/>
 
         <ListingInfo
+          locations={this.state.locations}
           bio={this.state.bio}
           title={this.state.title} />
       </div>
