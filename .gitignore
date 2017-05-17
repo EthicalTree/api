@@ -24,3 +24,4 @@
 
 app/assets/javascripts
 node_modules
+npm-debug.log
