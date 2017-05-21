@@ -14,6 +14,7 @@ gem 'daemons'
 gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
+gem 'aws-sdk', '~> 2'
 
 # Extra Libraries
 gem 'bootstrap', '~> 4.0.0.alpha6'
