@@ -23,4 +23,6 @@ Rails.application.routes.draw do
     end
   end
 
+  get '*home', to: 'home#index'
+
 end

@@ -239,7 +239,7 @@ export default class ListingDetailApp extends React.Component {
   }
 
   fetchListing() {
-    axios.get(`/listings/${this.props.id}`).then(listing => {
+    axios.get(`/listings/${this.props.mathc.slug}`).then(listing => {
       this.setState(listing.data)
     })
   }
