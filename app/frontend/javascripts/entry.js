@@ -1,17 +1,34 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { Route } from 'react-router';
-import { BrowserRouter } from 'react-router-dom';
-import App from './App.jsx';
+import React from 'react'
+import { render } from 'react-dom'
+import { AppContainer } from 'react-hot-loader'
 
-// for hot reloading
-if (module.hot) {
-  module.hot.accept()
-}
+import { Provider } from 'react-redux'
+import configureStore from './store/configureStore'
 
+import { createDevTools } from 'redux-devtools';
+import LogMonitor from 'redux-devtools-log-monitor';
+import DockMonitor from 'redux-devtools-dock-monitor';
 
-ReactDOM.render(
-  <App />,
+import Root from './root/Root'
+
+const store = configureStore()
+
+render(
+  <AppContainer>
+    <Root store={store}/>
+  </AppContainer>,
   document.getElementById('app')
 );
 
+// for hot reloading
+if (module.hot) {
+  module.hot.accept('./root/Root', () => {
+    const RootContainer = require('./root/Root').default
+    render(
+      <AppContainer>
+        <RootContainer store={store} />
+      </AppContainer>,
+      document.getElementById('app')
+    )
+  })
+}

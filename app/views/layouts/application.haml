@@ -10,10 +10,7 @@
     %script{src: "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.secrets["gmaps_api_key"]}"}
 
   %body
-    = render 'header'
-    = render 'flash'
     .lmt
       = yield
-    = render 'footer'
     = javascript_include_tag 'application'
 

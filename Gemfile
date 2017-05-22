@@ -1,6 +1,5 @@
 source 'https://rubygems.org'
 
-
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.1'
 gem 'mysql2'
@@ -15,9 +14,9 @@ gem 'jquery-rails'
 gem 'turbolinks', '~> 5'
 gem 'jbuilder', '~> 2.5'
 gem 'aws-sdk', '~> 2'
+gem 'bootstrap', '~> 4.0.0.alpha6'
 
 # Extra Libraries
-gem 'bootstrap', '~> 4.0.0.alpha6'
 gem 'haml'
 gem 'aws-sdk', '~> 2'
 gem 'httparty'

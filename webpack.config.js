@@ -15,7 +15,10 @@ module.exports = {
     // bundle the client for hot reloading
     // only- means to only hot reload for successful updates
 
-    application: './app/frontend/javascripts/entry.js'
+    application: [
+      'react-hot-loader/patch',
+      './app/frontend/javascripts/entry.js'
+    ]
   },
 
   devtool: 'cheap-module-source-map',
@@ -33,6 +36,7 @@ module.exports = {
 
     new webpack.NoEmitOnErrorsPlugin(),
     // do not emit compiled assets that include errors
+
   ],
 
   devServer: {
@@ -65,7 +69,7 @@ module.exports = {
         loader: 'babel-loader',
         exclude: /node_modules/,
         query: {
-          presets: ['es2015', 'react'],
+          presets: ['es2015', 'react', 'stage-0'],
         }
       },
       {

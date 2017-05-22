@@ -1,0 +1,25 @@
+@import "variables"
+
+.ReactModal__Body--open
+  overflow: hidden
+
+.et-modal
+  .modal-close-wrapper
+    text-align: right
+
+    .modal-close
+      color: $color-inverse
+
+      &:hover
+        text-decoration: none
+
+
+.loginModal
+  height: auto
+
+  @media (max-width: $screen-xs-max)
+    width: 100%
+
+  @media (min-width: $screen-sm-min)
+    max-width: 350px
+    height: auto

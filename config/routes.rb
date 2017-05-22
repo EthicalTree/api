@@ -3,9 +3,8 @@ Rails.application.routes.draw do
   root to: 'home#index'
 
   # Sessions
-  get :login, to: 'sessions#new'
   post :login, to: 'sessions#create'
-  get :logout, to: 'sessions#destroy'
+  post :logout, to: 'sessions#destroy'
 
   # Signup
   get :signup, to: 'users#new'

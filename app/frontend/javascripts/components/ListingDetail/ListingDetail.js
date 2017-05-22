@@ -6,6 +6,8 @@ import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 
 import axios from 'axios'
 
+import css from './css/listing_detail.sass'
+
 const ImageAddModal = (props) => {
   return (
     <Modal />
@@ -137,7 +139,9 @@ const Map = withGoogleMap(props => {
   })
 
   let onLoad = (map) => {
-    map.fitBounds(bounds)
+    if (map) {
+      map.fitBounds(bounds)
+    }
   }
 
   return (
@@ -189,7 +193,7 @@ const ListingInfo = (props) => {
   )
 }
 
-export default class ListingDetailApp extends React.Component {
+export default class ListingDetail extends React.Component {
 
   constructor(props) {
     super(props)
