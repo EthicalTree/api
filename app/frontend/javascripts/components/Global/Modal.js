@@ -1,6 +1,8 @@
 import React from 'react'
 import ReactModal from 'react-modal'
 
+import Loader from './Loader'
+
 const baseStyles = {
   content: {
     position: 'absolute',
@@ -47,13 +49,17 @@ const Modal = (props) => {
       className={`et-modal ${props.className}`}
       >
 
-      <div className="modal-close-wrapper">
-        <a href="#" className="modal-close" onClick={props.onRequestClose}>
-          <i className="fa fa-times"></i>
-        </a>
-      </div>
+      <Loader loading={props.loading}>
 
-      {props.children}
+        <div className="modal-close-wrapper">
+          <a href="#" className="modal-close" onClick={props.onRequestClose}>
+            <i className="fa fa-times"></i>
+          </a>
+        </div>
+
+        {props.children}
+
+      </Loader>
     </ReactModal>
   )
 }

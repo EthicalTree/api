@@ -73,9 +73,13 @@ module.exports = {
         }
       },
       {
-        test: /.sass?$/,
+        test: /.sass$/,
         loader: ['style-loader', 'css-loader', 'sass-loader'],
         exclude: /node_modules/,
+      },
+      {
+        test: /.css$/,
+        loader: ['style-loader', 'css-loader'],
       }
     ]
   },

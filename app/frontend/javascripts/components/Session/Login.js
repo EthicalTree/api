@@ -20,9 +20,10 @@ const LoginModal = (props) => {
   return (
     <Modal
       className="loginModal"
+      loading={props.session.loginLoading}
       contentLabel="Login"
       shouldCloseOnOverlayClick={true}
-      onRequestClose={e => { dispatch({ type: 'CLOSE_LOGIN_MODAL' }) }}
+      onRequestClose={e => { dispatch({ type: 'SET_LOGIN_MODAL', data: false }) }}
       isOpen={props.session.isLoggingIn}>
 
       <Container>
