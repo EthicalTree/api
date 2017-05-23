@@ -40,7 +40,7 @@ class LoginModal extends React.Component {
 
     return (
       <Modal
-        className="loginModal"
+        className="login-modal small-modal"
         loading={session.loginLoading}
         contentLabel="Login"
         shouldCloseOnOverlayClick={false}

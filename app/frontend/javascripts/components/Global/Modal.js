@@ -1,6 +1,13 @@
 import React from 'react'
 import ReactModal from 'react-modal'
 
+import {
+  Container,
+  Row,
+  Col,
+  Button
+} from 'reactstrap'
+
 import Loader from './Loader'
 
 const baseStyles = {
@@ -64,4 +71,37 @@ const Modal = (props) => {
   )
 }
 
+const ConfirmModal = (props) => {
+  return (
+    <Modal
+      {...props}>
+
+      <Container>
+        <Row>
+          <Col>
+            <h5>{props.msg}</h5>
+          </Col>
+        </Row>
+
+        <Row className="mt-4 text-center">
+          <Col>
+            <Button role="button" onClick={props.onRequestClose} className="">
+              No
+            </Button>
+
+            <Button role="button" onClick={props.onConfirm} color="primary" className="ml-2">
+              Yes
+            </Button>
+          </Col>
+        </Row>
+      </Container>
+    </Modal>
+  )
+}
+
+export {
+  ConfirmModal
+}
+
 export default Modal
+

@@ -11,7 +11,8 @@ class SessionsController < ApplicationController
     if @user
       if @user.confirmed?
         view_context.log_in @user
-        render json: {}, status: :ok
+        data = { user: @user.as_json(only: [:id, :first_name, :last_name]) }
+        render json: data , status: :ok
       end
     else
       render json: { error: true, msg: 'Invalid email/password' }, status: :ok

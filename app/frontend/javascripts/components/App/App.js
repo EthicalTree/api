@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter as Router, Route } from 'react-router-dom'
 
 import { Header, Footer } from '../Global'
-import { LoginModal } from '../Session'
+import { LoginModal, LogoutModal } from '../Session'
 
 import ListingDetail from '../ListingDetail'
 import css from './css/application.sass'
@@ -24,6 +24,7 @@ export default class App extends React.Component {
         </div>
         <Footer />
         <LoginModal />
+        <LogoutModal />
       </div>
     )
   }
