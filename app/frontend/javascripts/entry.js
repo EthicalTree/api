@@ -11,7 +11,9 @@ import DockMonitor from 'redux-devtools-dock-monitor';
 
 import Root from './root/Root'
 
-const store = configureStore()
+const store = configureStore(window.ET)
+
+console.log(window.ET)
 
 render(
   <AppContainer>

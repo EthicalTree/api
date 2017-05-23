@@ -11,7 +11,7 @@ class SessionsController < ApplicationController
     if @user
       if @user.confirmed?
         view_context.log_in @user
-        data = { user: @user.as_json(only: [:id, :first_name, :last_name]) }
+        data = { user: @user.as_json }
         render json: data , status: :ok
       end
     else

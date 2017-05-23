@@ -19,6 +19,10 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  def as_json options=nil
+    super(only: [:id, :first_name, :last_name])
+  end
+
 private
 
   def confirmation_token

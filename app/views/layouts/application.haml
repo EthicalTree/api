@@ -9,6 +9,13 @@
     = stylesheet_link_tag 'https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.6.0/slick-theme.min.css'
     %script{src: "https://maps.googleapis.com/maps/api/js?key=#{Rails.application.secrets["gmaps_api_key"]}"}
 
+  :javascript
+    window.ET = {
+      session: {
+        user: #{(if current_user then current_user else nil end).to_json}
+      }
+    }
+
   %body
     .lmt
       = yield
