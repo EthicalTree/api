@@ -1,5 +1,4 @@
 class ApplicationController < ActionController::Base
-  protect_from_forgery with: :exception
 
   def render_404
     raise ActionController::RoutingError.new('Not Found')
@@ -9,4 +8,9 @@ end
 class APIController < ActionController::API
   include Response
   include ExceptionHandler
+  include Knock::Authenticable
+end
+
+class SecuredController < APIController
+  before_action :authenticate_user
 end

@@ -25,7 +25,7 @@ const Header = (props) => {
         </NavbarBrand>
 
         <Collapse isOpen={props.header.isOpen} navbar>
-          {props.loggedIn &&
+          {props.session.loggedIn &&
             <Nav navbar className="mr-4 ml-auto">
               <NavItem>
                 <NavLink
@@ -37,7 +37,7 @@ const Header = (props) => {
             </Nav>
           }
 
-          {!props.loggedIn &&
+          {!props.session.loggedIn &&
             <Nav navbar className="mr-4 ml-auto">
               <NavItem>
                 <NavLink

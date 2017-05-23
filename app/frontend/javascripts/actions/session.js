@@ -6,15 +6,18 @@ export const login = (data) => {
 
     axios.post('/login', { session: data })
       .then(response => {
-
-        dispatch({ type: 'SET_LOGIN_LOADING', data: false })
-        dispatch({ type: 'LOGIN' })
-
+        if (response.data.error) {
+          dispatch({ type: 'SET_LOGIN_ERROR', data: response.data.msg })
+        }
+        else {
+          dispatch({ type: 'LOGIN', data: response.data })
+        }
       })
-      .fail(() => {
-
+      .catch(() => {
         dispatch({ type: 'SET_ERROR', data: 'Oops. Something went wrong!' })
-
+      })
+      .then(() => {
+        dispatch({ type: 'SET_LOGIN_LOADING', data: false })
       })
   }
 }

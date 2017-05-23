@@ -11,13 +11,10 @@ class SessionsController < ApplicationController
     if @user
       if @user.confirmed?
         view_context.log_in @user
-        redirect_to root_path
-      else
-        redirect_to pending_confirmation_path(email: @user.email)
+        render json: {}, status: :ok
       end
     else
-      @login_error = 'Invalid email/password'
-      render :new
+      render json: { error: true, msg: 'Invalid email/password' }, status: :ok
     end
   end
 
@@ -25,7 +22,8 @@ class SessionsController < ApplicationController
     view_context.log_out
     redirect_to root_path
   end
-private
+
+  private
 
   def session_params
     params.require(:session).permit :email, :password

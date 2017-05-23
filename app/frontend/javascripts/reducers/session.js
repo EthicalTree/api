@@ -10,7 +10,16 @@ const session = (state={}, action) => {
       return {...state, isSigningUp: action.data}
     case 'SET_LOGIN_LOADING':
       return {...state, loginLoading: action.data}
+    case 'SET_LOGIN_ERROR':
+      return {...state, loginError: action.data}
     case 'LOGIN':
+      return {
+        ...state,
+        ...action.data,
+        loginError: false,
+        isLoggingIn: false,
+        loggedIn: true
+      }
       console.log('logging in')
     case 'LOGOUT':
       console.log('logging out')
