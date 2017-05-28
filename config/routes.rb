@@ -8,11 +8,8 @@ Rails.application.routes.draw do
   get :logout, to: 'sessions#destroy'
 
   # Signup
-  get :signup, to: 'users#new'
   post :signup, to: 'users#create'
-  get :pending_confirmation, to: 'users#pending_confirmation'
-  post :resend_email_confirm, to: 'users#resend_email_confirm'
-  get 'confirm_email/:token', to: 'users#confirm_email', as: :confirm_email
+  post :confirm_email, to: 'users#confirm_email'
 
   # API
   resources :listings do

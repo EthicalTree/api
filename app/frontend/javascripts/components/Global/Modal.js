@@ -20,12 +20,12 @@ const baseStyles = {
     borderRadius: '4px',
     outline: 'none',
     padding: '20px',
-    top: '50%',
+    top: '10%',
     left: '50%',
     right: 'auto',
     bottom: 'auto',
     marginRight: '-50%',
-    transform: 'translate(-50%, -70%)'
+    transform: 'translateX(-50%)'
   },
   overlay: {
 
@@ -51,6 +51,7 @@ const Modal = (props) => {
 
   return (
     <ReactModal
+      shouldCloseOnOverlayClick={false}
       {...props}
       style={newStyles}
       className={`et-modal ${props.className}`}

@@ -14,25 +14,26 @@ import {
   Alert
 } from 'reactstrap'
 
-import { login } from '../../actions/session'
+import { signup } from '../../actions/session'
 
-class LoginModal extends React.Component {
+class SignupModal extends React.Component {
 
   constructor(props) {
     super(props)
 
     this.state = {
       email: '',
-      password: ''
+      password: '',
+      confirmPassword: ''
     }
+
   }
 
   submit(e) {
     const { dispatch } = this.props
-    e.preventDefault();
+    e.preventDefault()
 
-    dispatch(login(this.state))
-    this.setState({ password: '' })
+    dispatch(signup(this.state))
   }
 
   render() {
@@ -40,28 +41,20 @@ class LoginModal extends React.Component {
 
     return (
       <Modal
-        className="login-modal small-modal"
-        loading={session.loginLoading}
-        contentLabel="Login"
-        onRequestClose={e => { dispatch({ type: 'SET_LOGIN_MODAL', data: false }) }}
-        isOpen={session.isLoggingIn}>
+        className="signup-modal small-modal"
+        loading={session.signupLoading}
+        contentLabel="Signup"
+        onRequestClose={e => { dispatch({ type: 'SET_SIGNUP_MODAL', data: false }) }}
+        isOpen={session.isSigningUp}>
 
         <Container>
-          {session.loginError &&
+          {session.signupErrors &&
             <Row>
               <Col>
                 <Alert color="danger">
-                  {session.loginError}
-                </Alert>
-              </Col>
-            </Row>
-          }
-
-          {session.loginInfo &&
-            <Row>
-              <Col>
-                <Alert color="success">
-                  {session.loginInfo}
+                  { session.signupErrors.map(err => {
+                    return <span>{err}<br/></span>
+                  })}
                 </Alert>
               </Col>
             </Row>
@@ -69,38 +62,50 @@ class LoginModal extends React.Component {
 
           <Row>
             <Col>
-              <Form action="/login" method="post" onSubmit={this.submit.bind(this)}>
+              <Form action="/signup" method="post" onSubmit={this.submit.bind(this)}>
                 <FormGroup>
-                  <Label for="loginEmail">Email Address</Label>
+                  <Label for="signupEmail">Email Address</Label>
                   <Input
                     autoFocus
                     value={this.state.email}
                     onChange={e => { this.setState({ email: e.target.value }) }}
                     type="email"
                     name="email"
-                    id="loginEmail"
+                    id="signupEmail"
                     placeholder="Enter email..."/>
                 </FormGroup>
 
                 <FormGroup>
-                  <Label for="loginPassword">Password</Label>
+                  <Label for="signupPassword">Password</Label>
                   <Input
                     value={this.state.password}
                     onChange={e => { this.setState({ password: e.target.value }) }}
                     type="password"
                     name="password"
-                    id="loginPassword"
+                    id="signupPassword"
                     placeholder="Enter password..." />
+                </FormGroup>
+
+                <FormGroup>
+                  <Label for="signupPasswordConfirm">Confirm Password</Label>
+                  <Input
+                    value={this.state.confirmPassword}
+                    onChange={e => { this.setState({ confirmPassword: e.target.value }) }}
+                    type="password"
+                    name="confirmPassword"
+                    id="signupConfirmPassword"
+                    placeholder="Enter password again..." />
                 </FormGroup>
 
                 <FormGroup className="mt-4">
                   <Button block color="primary" role="button" type="submit">
-                    Login
+                    Sign me up!
                   </Button>
                 </FormGroup>
               </Form>
             </Col>
           </Row>
+
         </Container>
       </Modal>
     )
@@ -108,10 +113,11 @@ class LoginModal extends React.Component {
 
 }
 
+
 const select = (state) => {
   return {
     session: state.session
   }
 }
 
-export default connect(select)(LoginModal)
+export default connect(select)(SignupModal)

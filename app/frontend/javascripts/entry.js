@@ -13,8 +13,6 @@ import Root from './root/Root'
 
 const store = configureStore(window.ET)
 
-console.log(window.ET)
-
 render(
   <AppContainer>
     <Root store={store}/>

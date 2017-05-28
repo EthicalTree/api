@@ -4,8 +4,6 @@ class User < ApplicationRecord
   before_create :confirmation_token
 
   validates :email, presence: true, email: true, uniqueness: true
-  validates :first_name, presence: true
-  validates :last_name, presence: true
 
   def confirm!
     update!(confirmed_at: DateTime.current)
@@ -23,11 +21,15 @@ class User < ApplicationRecord
     super(only: [:id, :first_name, :last_name])
   end
 
+  def regenerate_token
+    self.confirm_token = SecureRandom.urlsafe_base64(4)
+  end
+
 private
 
   def confirmation_token
     if self.confirm_token.blank?
-        self.confirm_token = SecureRandom.urlsafe_base64.to_s
+      self.regenerate_token
     end
   end
 

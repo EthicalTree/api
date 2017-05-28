@@ -5,31 +5,17 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new user_params
+    if @user = User.where(email: user_params[:email], confirmed_at: nil).first
+      @user.regenerate_token
+    else
+      @user = User.new user_params
+    end
 
     if @user.save
       AccountMailer.confirm_email(@user).deliver_later
-      render 'confirm_email_sent'
+      render json: {}, status: :ok
     else
-      render :new
-    end
-  end
-
-  def resend_email_confirm
-    @user = User.find_by email: params[:email], confirmed_at: nil
-
-    if @user
-      AccountMailer.confirm_email(@user).deliver_later
-      flash[:info] = "Confirmation email has been re-sent!"
-      redirect_to pending_confirmation_path(email: @user.email)
-    else
-      render_404
-    end
-  end
-
-  def pending_confirmation
-    unless @user = User.find_by(email: params[:email], confirmed_at: nil)
-      render_404
+      render json: { errors: @user.errors.full_messages }
     end
   end
 
@@ -37,11 +23,10 @@ class UsersController < ApplicationController
     @user = User.find_by confirm_token: params[:token]
 
     if @user
-      flash[:info] = "Thanks for confirming! You can now log in below."
       @user.update confirmed_at: DateTime.current
-      redirect_to login_path
+      render json: {}, status: :ok
     else
-      redirect_to root_path
+      render json: { errors: ["That's not the right token!"] }
     end
 
   end
