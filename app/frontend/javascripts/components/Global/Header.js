@@ -1,6 +1,8 @@
 import React from 'react'
 import { connect } from 'react-redux'
 
+import { Link } from 'react-router-dom'
+
 import {
   Navbar,
   NavbarToggler,
@@ -19,10 +21,12 @@ const Header = (props) => {
       <Navbar light toggleable>
         <NavbarToggler right onClick={e => { dispatch({ type: 'TOGGLE_HEADER_ACCESSIBLE' }) }} />
 
-        <NavbarBrand href="/">
-          <span className="sr-only">EthicalTree</span>
-          <img className="ml-4" src="/assets/logo/logo-48x48.png" alt="EthicalTree Logo" />
-        </NavbarBrand>
+        <Link to="/">
+          <NavbarBrand>
+            <span className="sr-only">EthicalTree</span>
+            <img className="ml-4" src="/assets/logo/logo-48x48.png" alt="EthicalTree Logo" />
+          </NavbarBrand>
+        </Link>
 
         <Collapse isOpen={props.header.isOpen} navbar>
           {props.session.user &&

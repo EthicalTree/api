@@ -1,7 +1,9 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const webpack = require('webpack');
 
-module.exports = {
+const isDebug = process.env.NODE_ENV != 'production'
+
+let config = {
   // the base path which will be used to resolve entry points
   context: __dirname,
 
@@ -25,18 +27,10 @@ module.exports = {
 
   plugins: [
     new webpack.LoaderOptionsPlugin({
-      debug: true
+      debug: isDebug
     }),
-
-    new webpack.HotModuleReplacementPlugin(),
-    // enable HMR globally
-
-    new webpack.NamedModulesPlugin(),
-    // prints more readable module names in the browser console on HMR updates
-
     new webpack.NoEmitOnErrorsPlugin(),
     // do not emit compiled assets that include errors
-
   ],
 
   devServer: {
@@ -86,3 +80,31 @@ module.exports = {
 
 };
 
+if (isDebug) {
+  config.plugins = [
+    ...config.plugins,
+
+    new webpack.HotModuleReplacementPlugin(),
+    // enable HMR globally
+
+    new webpack.NamedModulesPlugin(),
+    // prints more readable module names in the browser console on HMR updates
+
+  ]
+}
+else {
+  config = {
+    ...config,
+    devtool: 'source-maps',
+    entry: {
+      application: './app/frontend/javascripts/entry.js',
+    },
+    output: {
+      ...config.output,
+      publicPath: '/assets/',
+      path: path.join(__dirname, 'public', 'assets', 'javascripts'),
+    }
+  }
+}
+
+module.exports = config;

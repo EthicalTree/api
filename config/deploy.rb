@@ -4,7 +4,7 @@ lock "3.7.2"
 set :application, "ethicaltree"
 set :repo_url, "git@github.com:applepicke/ethicaltree.git"
 set :deploy_to, '/home/applepicke/apps/ethicaltree'
-set :chruby_ruby, '2.3.3'
+set :chruby_ruby, 'ruby-2.3.3'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
@@ -46,15 +46,22 @@ task :reload_unicorn do
   invoke 'unicorn:reload'
 end
 
-# desc 'copy env file'
-# task :copy_env do
-#   on roles(:web) do |_host|
-#     execute "ln -nfs /home/applepicke/configs/willyc/.env /home/applepicke/apps/willyc/current/.env"
-#   end
-# end
+desc "build javascript"
+task :webpack_build do
+  run_locally do
+    roles(:web).each do |host|
+      execute 'npm run build'
+      execute(
+        :rsync,
+        '-avzr',
+        'public/assets/javascripts',
+        "#{host.user}@#{host.hostname}:#{fetch(:deploy_to)}/current/public/assets/"
+      )
+    end
+  end
+end
 
 # after 'deploy:updating', :copy_env
 after :deploy, :reload_unicorn
-
-
+after :deploy, :webpack_build
 

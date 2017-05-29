@@ -17,7 +17,7 @@
 # property set. Specify the username and a domain or IP for the server.
 # Don't use `:all`, it's a meta role.
 
-hosts = ['ethicaltree.willyc.me']
+hosts = ['beta.ethicaltree.com']
 unpriv = hosts.map { |h| "applepicke@#{h}" }
 
 role :app, unpriv
