@@ -19,5 +19,6 @@
   %body
     .lmt
       = yield
-    = javascript_include_tag 'application'
+
+    %script{src: "#{Rails.configuration.js_prefix}/javascripts/application.js"}
 

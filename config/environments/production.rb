@@ -104,4 +104,6 @@ Rails.application.configure do
 
   # React
   config.react.variant = :production
+
+  config.js_prefix = "/assets"
 end

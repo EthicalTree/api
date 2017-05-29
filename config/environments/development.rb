@@ -27,13 +27,6 @@ Rails.application.configure do
     config.cache_store = :null_store
   end
 
-  # Serve assets from webpack-dev-server
-  config.action_controller.asset_host = Proc.new { |source|
-    if source =~ /application\.js$/i
-    "http://localhost:8081/assets"
-    end
-  }
-
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
 
@@ -64,4 +57,6 @@ Rails.application.configure do
 
   # React
   config.react.variant = :development
+
+  config.js_prefix = "http://localhost:8081/assets"
 end
