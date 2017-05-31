@@ -54,9 +54,11 @@ Rails.application.configure do
   #config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.file_watcher = ActiveSupport::FileUpdateChecker
 
-
-  # React
-  config.react.variant = :development
-
-  config.js_prefix = "http://localhost:8081/assets"
+  # CORS settings
+  config.middleware.insert_before 0, Rack::Cors do
+    allow do
+      origins '*'
+      resource '*', :headers => :any, :methods => [:get, :post, :patch, :put, :delete, :options]
+    end
+  end
 end

@@ -3,32 +3,20 @@ source 'https://rubygems.org'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '~> 5.0.1'
 gem 'mysql2'
-gem 'puma', '~> 3.0'
-gem 'sass-rails', '~> 5.0'
-gem 'uglifier', '>= 1.3.0'
-gem 'coffee-rails', '~> 4.2'
+gem 'puma', '~> 3.7.0'
 gem 'exception_notification'
 gem 'daemons'
 
-gem 'jquery-rails'
 gem 'jbuilder', '~> 2.5'
 gem 'aws-sdk', '~> 2'
-gem 'bootstrap', '~> 4.0.0.alpha6'
 gem 'knock'
+gem 'rack-cors', require: 'rack/cors'
 
 # Extra Libraries
-gem 'haml'
 gem 'httparty'
 gem 'dotenv-rails'
-gem 'simple_form'
-gem 'font-awesome-rails'
 gem 'delayed_job_active_record'
 gem 'geokit-rails'
-gem 'react-rails'
-
-source 'https://rails-assets.org' do
-  gem 'rails-assets-tether', '>= 1.3.3'
-end
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'

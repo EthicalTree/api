@@ -25,7 +25,6 @@ Rails.application.configure do
 
   # Do not fallback to assets pipeline if a precompiled asset is missed.
   config.assets.compile = false
-  config.assets.digest = false
 
   # `config.assets.precompile` and `config.assets.version` have moved to config/initializers/assets.rb
 
@@ -103,8 +102,11 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  # React
-  config.react.variant = :production
-
-  config.js_prefix = "/assets"
+# CORS settings
+  config.middleware.insert_before 0, Rack::Cors do
+    allow do
+      origins '*.ethicaltree.com'
+      resource '*', :headers => :any, :methods => [:get, :post, :patch, :put, :delete, :options]
+    end
+  end
 end

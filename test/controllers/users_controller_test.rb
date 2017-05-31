@@ -6,8 +6,6 @@ class UsersControllerTest < ActionController::TestCase
     post :create, params: {
       user: {
         email: 'test@test.com',
-        first_name: 'test',
-        last_name: 'test',
         password: 'password',
         password_confirmation: 'wrong'
       }
@@ -18,9 +16,7 @@ class UsersControllerTest < ActionController::TestCase
   test 'fields should have values' do
     post :create, params: {
       user: {
-        email: 'test@test.com',
-        first_name: '',
-        last_name: 'test',
+        email: '',
         password: 'password',
         password_confirmation: 'wrong'
       }
@@ -30,9 +26,7 @@ class UsersControllerTest < ActionController::TestCase
     post :create, params: {
       user: {
         email: 'test@test.com',
-        first_name: 'test',
-        last_name: '',
-        password: 'password',
+        password: '',
         password_confirmation: 'wrong'
       }
     }
@@ -47,8 +41,6 @@ class UsersControllerTest < ActionController::TestCase
     post :create, params: {
       user: {
         email: 'test@test.com',
-        first_name: 'test',
-        last_name: 'test',
         password: 'password',
         password_confirmation: 'password'
       }
@@ -68,16 +60,6 @@ class UsersControllerTest < ActionController::TestCase
 
     get :confirm_email, params: { token: 'myspecialtoken' }
     assert user.reload.confirmed?
-  end
-
-  test 'resend confirm email should actually send the email' do
-    user = create :user, email: 'test@test.com', confirmed_at: nil
-
-    deliver_later = stub(deliver_later: nil)
-    AccountMailer.stubs(:confirm_email).returns(deliver_later)
-    deliver_later.expects(:deliver_later).once
-
-    post :resend_email_confirm, params: { email: 'test@test.com' }
   end
 
 end

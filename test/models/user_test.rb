@@ -6,8 +6,6 @@ class UserTest < ActiveSupport::TestCase
   end
 
   should validate_presence_of(:email)
-  should validate_presence_of(:first_name)
-  should validate_presence_of(:last_name)
   should validate_presence_of(:password)
 
   test "email should be unique" do
