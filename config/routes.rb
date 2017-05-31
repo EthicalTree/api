@@ -9,6 +9,7 @@ Rails.application.routes.draw do
 
   # API
   namespace :v1 do
+    resources :users, only: %i{show}
     resources :listings do
       resources :images
       resources :ethicalities
