@@ -6,10 +6,10 @@ Rails.application.routes.draw do
   # Signup
   post :signup, to: 'users#create'
   post :confirm_email, to: 'users#confirm_email'
+  resources :users, only: %i{show}
 
   # API
   namespace :v1 do
-    resources :users, only: %i{show}
     resources :listings do
       resources :images
       resources :ethicalities
