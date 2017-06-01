@@ -11,6 +11,7 @@ gem 'jbuilder', '~> 2.5'
 gem 'aws-sdk', '~> 2'
 gem 'knock'
 gem 'rack-cors', require: 'rack/cors'
+gem 'haml'
 
 # Extra Libraries
 gem 'httparty'
