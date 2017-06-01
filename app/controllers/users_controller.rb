@@ -7,6 +7,8 @@ class UsersController < APIController
 
   def create
     if @user = User.where(email: user_params[:email], confirmed_at: nil).first
+      @user.attributes = {password: '', password_confirmation: '', password_digest: ''}
+      @user.attributes = user_params
       @user.regenerate_token
     else
       @user = User.new user_params
