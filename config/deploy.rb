@@ -2,7 +2,7 @@
 lock "3.7.2"
 
 set :application, "ethicaltree"
-set :repo_url, "git@github.com:applepicke/ethicaltree.git"
+set :repo_url, "git@github.com:applepicke/ethicaltree-api.git"
 set :deploy_to, '/home/applepicke/apps/ethicaltree'
 set :chruby_ruby, 'ruby-2.3.3'
 
