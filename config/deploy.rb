@@ -46,22 +46,6 @@ task :reload_unicorn do
   invoke 'unicorn:reload'
 end
 
-desc "build javascript"
-task :webpack_build do
-  run_locally do
-    roles(:web).each do |host|
-      execute 'npm run build'
-      execute(
-        :rsync,
-        '-avzr',
-        'public/assets/javascripts',
-        "#{host.user}@#{host.hostname}:#{fetch(:deploy_to)}/current/public/assets/"
-      )
-    end
-  end
-end
-
 # after 'deploy:updating', :copy_env
 after :deploy, :reload_unicorn
-after :deploy, :webpack_build
 
