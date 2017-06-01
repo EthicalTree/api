@@ -30,8 +30,8 @@ pid "/home/applepicke/apps/ethicaltree-api/current/tmp/pids/unicorn.pid"
 # By default, the Unicorn logger will write to stderr.
 # Additionally, ome applications/frameworks log to stderr or stdout,
 # so prevent them from going to /dev/null when daemonized here:
-stderr_path "/home/applepicke/logs/ethicaltree-api/unicorn.stderr.log"
-stdout_path "/home/applepicke/logs/ethicaltree-api/unicorn.stdout.log"
+stderr_path "/home/applepicke/logs/ethicaltree/unicorn.stderr.log"
+stdout_path "/home/applepicke/logs/ethicaltree/unicorn.stdout.log"
 
 # combine REE with "preload_app true" for memory savings
 # http://rubyenterpriseedition.com/faq.html#adapt_apps_for_cow
