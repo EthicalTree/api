@@ -14,7 +14,7 @@ worker_processes 1
 
 # Help ensure your application will always spawn in the symlinked
 # "current" directory that Capistrano sets up.
-working_directory '/home/applepicke/apps/ethicaltree/current' # available in 0.94.0+
+working_directory '/home/applepicke/apps/ethicaltree-api/current' # available in 0.94.0+
 
 # listen on both a Unix domain socket and a TCP port,
 # we use a shorter backlog for quicker failover when busy
@@ -25,13 +25,13 @@ listen "/tmp/unicorn.sock"
 timeout 60
 
 # feel free to point this anywhere accessible on the filesystem
-pid "/home/applepicke/apps/ethicaltree/current/tmp/pids/unicorn.pid"
+pid "/home/applepicke/apps/ethicaltree-api/current/tmp/pids/unicorn.pid"
 
 # By default, the Unicorn logger will write to stderr.
 # Additionally, ome applications/frameworks log to stderr or stdout,
 # so prevent them from going to /dev/null when daemonized here:
-stderr_path "/home/applepicke/logs/ethicaltree/unicorn.stderr.log"
-stdout_path "/home/applepicke/logs/ethicaltree/unicorn.stdout.log"
+stderr_path "/home/applepicke/logs/ethicaltree-api/unicorn.stderr.log"
+stdout_path "/home/applepicke/logs/ethicaltree-api/unicorn.stdout.log"
 
 # combine REE with "preload_app true" for memory savings
 # http://rubyenterpriseedition.com/faq.html#adapt_apps_for_cow
@@ -111,5 +111,5 @@ end
 
 # Explicitly set the Gemfile location so a restarting Unicorn can find new gems
 before_exec do |server|
-  ENV['BUNDLE_GEMFILE'] = File.join('/home/applepicke/apps/ethicaltree/current', 'Gemfile')
+  ENV['BUNDLE_GEMFILE'] = File.join('/home/applepicke/apps/ethicaltree-api/current', 'Gemfile')
 end
