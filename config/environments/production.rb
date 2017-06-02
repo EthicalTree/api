@@ -71,7 +71,7 @@ Rails.application.configure do
   Rails.application.config.middleware.use ExceptionNotification::Rack,
   :email => {
     :email_prefix => "[EthicalTree Errors] ",
-    :sender_address => %{"EthicalTree" <noreply@ethicaltree.com>},
+    :sender_address => %{"EthicalTree" <noreply@beta.ethicaltree.com>},
     :exception_recipients => %w{wcurtiscollins@gmail.com}
   }
 
