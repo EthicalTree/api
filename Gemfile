@@ -18,6 +18,7 @@ gem 'httparty'
 gem 'dotenv-rails'
 gem 'delayed_job_active_record'
 gem 'geokit-rails'
+gem 'faker'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
