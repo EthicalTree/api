@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   post :confirm_email, to: 'users#confirm_email'
   resources :users, only: %i{show}
 
+
   # API
   namespace :v1 do
     resources :listings do
@@ -17,6 +18,11 @@ Rails.application.routes.draw do
         resources :operating_hours
       end
     end
+  end
+
+  # S3
+  namespace :s3 do
+    get :sign, to: 's3#sign'
   end
 
 end
