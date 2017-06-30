@@ -1,14 +1,17 @@
 module V1
   class LocationsController < APIController
 
-    before_action :require_location, only: %i{show update destroy}
+    before_action :require_listing
 
     def index
 
     end
 
     def create
+      location = Location.new location_params
+      @listing.locations = [location]
 
+      render json: { locations: @listing.locations.as_json }, status: :ok
     end
 
     def show
@@ -26,11 +29,14 @@ module V1
     private
 
     def location_params
-
+      params.require(:location).permit(
+        :lat,
+        :lng
+      )
     end
 
-    def require_location
-
+    def require_listing
+      @listing = Listing.find_by!(slug: params[:listing_id])
     end
 
   end

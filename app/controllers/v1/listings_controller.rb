@@ -18,7 +18,7 @@ module V1
     end
 
     def show
-      json_response @listing.as_json include: [:ethicalities, :images, locations: [:operating_hours]]
+      json_response @listing.as_json include: [:ethicalities, :images, :locations]
     end
 
     def update

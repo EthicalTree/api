@@ -40,6 +40,9 @@ class UsersController < APIController
     end
   end
 
+  def get_location
+  end
+
   private
 
   def user_params
