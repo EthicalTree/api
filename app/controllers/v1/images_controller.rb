@@ -10,7 +10,7 @@ module V1
       image = Image.new image_params
       @listing.images.push image
 
-      render json: { images: @listing.images.as_json }, status: :ok
+      render json: { images: @listing.images.as_json.rotate(-1) }, status: :ok
     end
 
     def show
@@ -22,7 +22,10 @@ module V1
     end
 
     def destroy
+      image = @listing.images.find(params[:id])
 
+      image.destroy
+      render json: { images: @listing.images.as_json }, status: :ok
     end
 
     private
