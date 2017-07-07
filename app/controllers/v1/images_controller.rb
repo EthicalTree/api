@@ -18,7 +18,15 @@ module V1
     end
 
     def update
+      image = @listing.images.find(params[:id])
+      make_cover = params[:make_cover]
 
+      if make_cover
+        @listing.images.update_all(order: 0)
+        image.update(order: 1)
+
+        render json: { images: @listing.images.as_json }, status: :ok
+      end
     end
 
     def destroy
