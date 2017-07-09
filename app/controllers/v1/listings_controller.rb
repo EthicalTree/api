@@ -11,14 +11,14 @@ module V1
       @listing = Listing.new listing_params
 
       if @listing.save
-        render json: { slug: @listing.slug }, status: :ok
+        json_response @listing.as_json_full
       else
         render json: { errors: @listing.errors.full_messages }
       end
     end
 
     def show
-      json_response @listing.as_json include: [:ethicalities, :images, :locations]
+      json_response @listing.as_json_full
     end
 
     def update

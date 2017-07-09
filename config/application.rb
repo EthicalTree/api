@@ -16,8 +16,7 @@ module EthicalTree
 
     # Time settings
     config.active_record.time_zone_aware_types = [:datetime, :time]
-
-
+    config.time_zone = 'UTC'
 
   end
 end

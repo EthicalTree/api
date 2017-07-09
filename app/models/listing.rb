@@ -5,10 +5,27 @@ class Listing < ApplicationRecord
   has_many :listing_images
   has_many :images, through: :listing_images, class_name: 'Image'
 
+  has_many :operating_hours, class_name: 'OperatingHours'
+
   before_validation :ensure_slug
 
   validates :title, presence: true
   validates :slug, uniqueness: true
+
+  def as_json_full options={}
+    as_json({
+      include: [
+        :ethicalities,
+        :images,
+        :locations,
+        {
+          operating_hours: {
+            methods: [:label, :hours, :open_str, :close_str, :enabled]
+          }
+        }
+      ]
+    })
+  end
 
   private
 

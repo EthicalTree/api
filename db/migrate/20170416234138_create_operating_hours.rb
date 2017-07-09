@@ -4,7 +4,7 @@ class CreateOperatingHours < ActiveRecord::Migration[5.0]
       t.string :day
       t.time :open
       t.time :close
-      t.integer :location_id
+      t.integer :listing_id
       t.timestamps
     end
   end

@@ -76,9 +76,9 @@ ActiveRecord::Schema.define(version: 20170707040714) do
     t.string   "day"
     t.time     "open"
     t.time     "close"
-    t.integer  "location_id"
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
+    t.integer  "listing_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "users", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
