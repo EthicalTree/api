@@ -45,7 +45,9 @@ module V1
     end
 
     def require_listing
-      @listing = Listing.find_by(slug: params[:id])
+      if not @listing = Listing.find_by(slug: params[:id])
+        not_found
+      end
     end
 
   end
