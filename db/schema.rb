@@ -30,16 +30,9 @@ ActiveRecord::Schema.define(version: 20170707040714) do
   create_table "ethicalities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "name"
     t.string   "slug"
-    t.integer  "listing_id"
+    t.string   "icon_key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-  end
-
-  create_table "ethicality_images", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "ethicality_id"
-    t.integer  "image_id"
-    t.datetime "created_at",    null: false
-    t.datetime "updated_at",    null: false
   end
 
   create_table "images", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -47,6 +40,13 @@ ActiveRecord::Schema.define(version: 20170707040714) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer  "order"
+  end
+
+  create_table "listing_ethicalities", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "listing_id"
+    t.integer  "ethicality_id"
+    t.datetime "created_at",    null: false
+    t.datetime "updated_at",    null: false
   end
 
   create_table "listing_images", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

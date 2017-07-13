@@ -12,12 +12,5 @@ class CreateImages < ActiveRecord::Migration[5.0]
 
       t.timestamps
     end
-
-    create_table :ethicality_images do |t|
-      t.integer :ethicality_id
-      t.integer :image_id
-
-      t.timestamps
-    end
   end
 end

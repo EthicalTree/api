@@ -12,9 +12,10 @@ Rails.application.routes.draw do
 
   # API
   namespace :v1 do
+    resources :ethicalities
     resources :listings do
       resources :images
-      resources :ethicalities
+      resources :listing_ethicalities
       resources :locations
       resources :operating_hours
     end

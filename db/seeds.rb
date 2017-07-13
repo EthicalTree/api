@@ -6,23 +6,27 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 
-ethicalities = [
-  'Vegetarian',
-  'Vegan',
-  'Fair Trade',
-  'Cat Owned',
-  'No Martian Slaves'
-]
+ethicalities = {
+  'Vegetarian': 'leaf',
+  'Vegan': 'carrot',
+  'Woman Owned': 'portrait_female',
+  'Fair Trade': 'piggy_bank',
+}
 
-# create x number of random listings
-x = ENV['listings']
-if x
-  x.to_i.times do
-    l = Listing.new title: Faker::Company.name, bio: Faker::Lorem.words(rand(25..75))
+ethicalities.each do |name, icon_key|
+  name = name.to_s
+  slug = name.parameterize separator: '_'
 
-    l.ethicalities = ethicalities.sample(rand(1..5)).map do |e|
-      Ethicality.new name: e
-    end
+  ethicality = Ethicality.find_by slug: slug
 
+  if not ethicality
+    Ethicality.create name: name, icon_key: icon_key
+  else
+    ethicality.assign_attributes name: name, icon_key: icon_key
+    ethicality.save
   end
 end
+
+
+
+

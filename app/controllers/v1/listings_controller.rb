@@ -1,7 +1,7 @@
 module V1
   class ListingsController < APIController
     before_action :require_listing, only: %i{show update destroy}
-    before_action :authenticate_user, only: %i{update}
+    before_action :authenticate_user, only: %i{update create destroy}
 
     def index
 

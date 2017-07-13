@@ -5,6 +5,9 @@ class Listing < ApplicationRecord
   has_many :listing_images
   has_many :images, through: :listing_images, class_name: 'Image'
 
+  has_many :listing_ethicalities
+  has_many :ethicalities, through: :listing_ethicalities, class_name: 'Ethicality'
+
   has_many :operating_hours, class_name: 'OperatingHours'
 
   before_validation :ensure_slug
@@ -39,5 +42,10 @@ end
 class ListingImage < ApplicationRecord
   belongs_to :listing
   belongs_to :image
-
 end
+
+class ListingEthicality < ApplicationRecord
+  belongs_to :listing
+  belongs_to :ethicality
+end
+
