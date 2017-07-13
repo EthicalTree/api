@@ -26,4 +26,7 @@ Rails.application.routes.draw do
     get :sign, to: 's3#sign'
   end
 
+  # Status
+  get :status, to: 'status#index'
+
 end
