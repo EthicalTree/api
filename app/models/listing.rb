@@ -14,6 +14,7 @@ class Listing < ApplicationRecord
 
   validates :title, presence: true
   validates :slug, uniqueness: true
+  validates_length_of :bio, maximum: 2000, allow_blank: true
 
   def as_json_full options={}
     as_json({
