@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.0.1'
+gem 'rails', '~> 5.1.2'
 gem 'mysql2'
 gem 'puma', '~> 3.7.0'
 gem 'exception_notification'
@@ -15,7 +15,7 @@ gem 'haml-rails'
 
 # Extra Libraries
 gem 'httparty'
-gem 'dotenv-rails'
+gem 'dotenv-rails', '~> 2.2.1'
 gem 'delayed_job_active_record'
 gem 'geokit-rails'
 gem 'fog-aws'

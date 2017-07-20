@@ -1,11 +1,10 @@
 class Listing < ApplicationRecord
   has_many :locations, dependent: :destroy
-  has_many :ethicalities
 
   has_many :listing_images
-  has_many :images, through: :listing_images, class_name: 'Image'
-
   has_many :listing_ethicalities
+
+  has_many :images, through: :listing_images, class_name: 'Image'
   has_many :ethicalities, through: :listing_ethicalities, class_name: 'Ethicality'
 
   has_many :operating_hours, class_name: 'OperatingHours'

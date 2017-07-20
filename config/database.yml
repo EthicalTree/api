@@ -2,7 +2,7 @@ default: &default
   adapter: mysql2
   encoding: utf8
   database: ethicaltree
-  host: 127.0.0.1
+  host: mysql
   port: 3306
   username: root
   password: ""
