@@ -19,6 +19,7 @@ gem 'dotenv-rails', '~> 2.2.1'
 gem 'delayed_job_active_record'
 gem 'geokit-rails'
 gem 'fog-aws'
+gem 'kaminari'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'

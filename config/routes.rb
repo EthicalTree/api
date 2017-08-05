@@ -12,6 +12,7 @@ Rails.application.routes.draw do
 
   # API
   namespace :v1 do
+    get :search, to: 'search#search'
     resources :ethicalities
     resources :listings do
       resources :images

@@ -30,6 +30,15 @@ class Listing < ApplicationRecord
     })
   end
 
+  def as_json_search options={}
+    as_json({
+      include: [
+        :ethicalities,
+        :images
+      ]
+    })
+  end
+
   private
 
   def ensure_slug
