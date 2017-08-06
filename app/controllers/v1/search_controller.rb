@@ -2,8 +2,14 @@ module V1
   class SearchController < APIController
 
     def search
-      results = Listing.page(1).per(12)
-      result_json = results.map{|l| l.as_json_search }.as_json
+      page = search_params[:page].to_i
+      results = Listing.page(page + 1).per(12)
+
+      result_json = {
+        listings: results.map{|l| l.as_json_search }.as_json,
+        currentPage: page,
+        pageCount: results.total_pages
+      }
 
       render json: result_json, status: :ok
     end
@@ -11,9 +17,10 @@ module V1
     private
 
     def search_params
-      params.require(:search).permit(
+      params.permit(
         :query,
-        :ethicalities
+        :ethicalities,
+        :page
       )
     end
 
