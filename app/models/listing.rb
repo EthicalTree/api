@@ -15,6 +15,15 @@ class Listing < ApplicationRecord
   validates :slug, uniqueness: true
   validates_length_of :bio, maximum: 2000, allow_blank: true
 
+  @@search_fields = [
+    'title',
+    'bio'
+  ]
+
+  def self.search_fields
+    return @@search_fields
+  end
+
   def as_json_full options={}
     as_json({
       include: [
