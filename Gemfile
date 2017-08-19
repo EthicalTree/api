@@ -18,6 +18,7 @@ gem 'httparty'
 gem 'dotenv-rails', '~> 2.2.1'
 gem 'delayed_job_active_record'
 gem 'geokit-rails'
+gem 'geocoder'
 gem 'fog-aws'
 gem 'kaminari'
 

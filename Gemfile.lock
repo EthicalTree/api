@@ -114,6 +114,7 @@ GEM
       fog-core
       nokogiri (>= 1.5.11, < 2.0.0)
     formatador (0.2.5)
+    geocoder (1.4.4)
     geokit (1.11.0)
     geokit-rails (2.2.0)
       geokit (~> 1.5)
@@ -297,6 +298,7 @@ DEPENDENCIES
   factory_girl_rails
   faker
   fog-aws
+  geocoder
   geokit-rails
   haml-rails
   httparty
@@ -322,4 +324,4 @@ DEPENDENCIES
   web-console
 
 BUNDLED WITH
-   1.15.2
+   1.15.3

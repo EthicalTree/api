@@ -34,7 +34,8 @@ class Listing < ApplicationRecord
     as_json({
       include: [
         :ethicalities,
-        :images
+        :images,
+        :locations,
       ]
     })
   end

@@ -3,7 +3,7 @@ module V1
 
     def search
       page = search_params[:page].to_i
-      results = Listing.page(page + 1).per(12)
+      results = Listing.includes(:locations).where.not(locations: { listing_id: nil }).page(page + 1).per(12)
 
       result_json = {
         listings: results.map{|l| l.as_json_search }.as_json,

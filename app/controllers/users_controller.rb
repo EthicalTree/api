@@ -36,7 +36,9 @@ class UsersController < APIController
 
   def show
     if params[:id] == 'current'
-      render json: { user: current_user.to_json }
+      render json: {
+        user: current_user.to_json
+      }
     end
   end
 
