@@ -2,6 +2,7 @@ module V1
   class ListingsController < APIController
     before_action :require_listing, only: %i{show update destroy}
     before_action :authenticate_user, only: %i{update create destroy}
+    before_action :has_permission, only: %i{update create destroy}
 
     def index
 
@@ -46,6 +47,12 @@ module V1
 
     def require_listing
       if not @listing = Listing.find_by(slug: params[:id])
+        not_found
+      end
+    end
+
+    def has_permission
+      if not current_user.can_edit_listing
         not_found
       end
     end

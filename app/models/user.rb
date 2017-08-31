@@ -18,11 +18,15 @@ class User < ApplicationRecord
   end
 
   def as_json options=nil
-    super(only: [:id, :first_name, :last_name])
+    super(only: [:id, :first_name, :last_name], methods: :can_edit_listing)
   end
 
   def regenerate_token
     self.confirm_token = SecureRandom.urlsafe_base64(4)
+  end
+
+  def can_edit_listing
+    true
   end
 
 private

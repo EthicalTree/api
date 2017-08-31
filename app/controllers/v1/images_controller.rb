@@ -1,6 +1,7 @@
 module V1
   class ImagesController < APIController
     before_action :require_listing
+    before_action :has_permission
 
     def index
 
@@ -46,6 +47,12 @@ module V1
 
     def require_listing
       if not @listing = Listing.find_by!(slug: params[:listing_id])
+        not_found
+      end
+    end
+
+    def has_permission
+      if not current_user.can_edit_listing
         not_found
       end
     end
