@@ -9,9 +9,11 @@ module V1
       results = Listing.includes([:locations, :ethicalities])
 
       if ethicalities.any?
-        results = results.where(
-          ethicalities: { slug: ethicalities }
-        )
+        ethicalities.each do |ethicality|
+          results = results.where(
+            ethicalities: { slug: ethicality }
+          )
+        end
       end
 
       if query.any?
