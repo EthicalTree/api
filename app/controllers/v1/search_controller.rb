@@ -17,12 +17,14 @@ module V1
       if query.any?
         inner_search = nil
 
-        Listing.search_fields.each do |field|
-          inner_query = results.where("LOWER(#{field}) LIKE ?", "%#{query[0].downcase}%")
-          if inner_search
-            inner_search = inner_search.or(inner_query)
-          else
-            inner_search = inner_query
+        query.each do |query_term|
+          Listing.search_fields.each do |field|
+            inner_query = results.where("LOWER(#{field}) LIKE ?", "%#{query_term.downcase}%")
+            if inner_search
+              inner_search = inner_search.or(inner_query)
+            else
+              inner_search = inner_query
+            end
           end
         end
 
