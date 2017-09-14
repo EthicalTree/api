@@ -46,6 +46,41 @@ task :reload_unicorn do
   invoke 'unicorn:reload'
 end
 
+
+desc 'Stop the delayed_job process'
+task :stop_delayed_job do
+	on roles(:app) do
+		within release_path do
+			with rails_env: fetch(:rails_env) do
+				execute :bundle, :exec, :'bin/delayed_job', :stop
+			end
+		end
+	end
+end
+
+desc 'Start the delayed_job process'
+task :start_delayed_job do
+	on roles(:app) do
+		within release_path do
+			with rails_env: fetch(:rails_env) do
+				execute :bundle, :exec, :'bin/delayed_job', "-n 2", :start
+			end
+		end
+	end
+end
+
+desc 'Restart the delayed_job process'
+task :restart_delayed_job do
+	on roles(:app) do
+		within release_path do
+			with rails_env: fetch(:rails_env) do
+				execute :bundle, :exec, :'bin/delayed_job', "-n 2", :restart
+			end
+		end
+	end
+end
+
 # after 'deploy:updating', :copy_env
 after :deploy, :reload_unicorn
+after :deploy, :restart_delayed_job
 
