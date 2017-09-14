@@ -25,6 +25,19 @@ class User < ApplicationRecord
     self.confirm_token = SecureRandom.urlsafe_base64(4)
   end
 
+  def regenerate_forgot_password_token
+    self.forgot_password_token = loop do
+      random_token = SecureRandom.urlsafe_base64(nil, false)
+      break random_token unless User.exists?(forgot_password_token: random_token)
+    end
+    self.save
+  end
+
+  def forgot_password_link
+    domain = Rails.application.secrets[:webhost]
+    "https://#{domain}/forgot_password/#{self.forgot_password_token}"
+  end
+
   def can_edit_listing
     true
   end

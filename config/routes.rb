@@ -2,6 +2,7 @@ Rails.application.routes.draw do
 
   # Sessions
   post :login, to: 'user_token#create'
+  post :forgot_password, to: 'users#forgot_password'
 
   # Signup
   post :signup, to: 'users#create'

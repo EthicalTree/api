@@ -51,6 +51,7 @@ group :development do
   gem 'web-console'
   gem 'listen', '~> 3.0.5'
   gem 'spring-watcher-listen'
+  gem 'letter_opener'
 end
 
 group :production do

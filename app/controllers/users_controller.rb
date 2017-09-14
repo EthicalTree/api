@@ -31,6 +31,31 @@ class UsersController < APIController
     else
       render json: { errors: ["That's not the right token!"] }
     end
+  end
+
+  def forgot_password
+    if token = params[:token]
+      @user = User.where.not(forgot_password_token: nil).find_by forgot_password_token: token
+
+      if !@user
+        render json: { errors: ["Not a valid confirmation token!"] }
+      elsif @user.update_attributes(change_password_params)
+        render json: {}, status: :ok
+      else
+        render json: { errors: @user.errors.full_messages }
+      end
+    else
+      @user = User.find_by email: params[:email]
+
+      if @user
+        @user.regenerate_forgot_password_token
+        AccountMailer.forgot_password(@user).deliver_later
+        render json: {}, status: :ok
+      else
+        render json: { errors: ["Whoops! We can't find a user with that email address."] }
+      end
+    end
+
 
   end
 
@@ -57,4 +82,10 @@ class UsersController < APIController
     )
   end
 
+  def change_password_params
+    params.permit(
+      :password,
+      :password_confirmation
+    )
+  end
 end

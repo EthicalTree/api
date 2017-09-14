@@ -54,6 +54,10 @@ Rails.application.configure do
   #config.file_watcher = ActiveSupport::EventedFileUpdateChecker
   config.file_watcher = ActiveSupport::FileUpdateChecker
 
+  # Render emails to file and open in browser
+  config.action_mailer.delivery_method = :letter_opener
+  config.active_job.queue_adapter = :inline
+
   # CORS settings
   config.middleware.insert_before 0, Rack::Cors do
     allow do
