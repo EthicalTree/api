@@ -60,10 +60,10 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
-    address: Rails.application.secrets[:smtp]['host'],
+    address: Rails.application.secrets[:smtp][:host],
     port: 587,
-    user_name: Rails.application.secrets[:smtp]['user_name'],
-    password: Rails.application.secrets[:smtp]['password'],
+    user_name: Rails.application.secrets[:smtp][:user_name],
+    password: Rails.application.secrets[:smtp][:password],
     authentication: 'plain',
     enable_starttls_auto: true
   }
