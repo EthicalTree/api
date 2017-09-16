@@ -192,6 +192,8 @@ GEM
     nio4r (2.1.0)
     nokogiri (1.8.0)
       mini_portile2 (~> 2.2.0)
+    password_strength (1.1.4)
+      activemodel
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -316,6 +318,7 @@ DEPENDENCIES
   listen (~> 3.0.5)
   mocha
   mysql2
+  password_strength
   pry
   pry-byebug
   pry-rails

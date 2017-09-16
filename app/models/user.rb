@@ -4,6 +4,7 @@ class User < ApplicationRecord
   before_create :confirmation_token
 
   validates :email, presence: true, email: true, uniqueness: true
+  validates_strength_of :password, with: :email
 
   def confirm!
     update!(confirmed_at: DateTime.current)
