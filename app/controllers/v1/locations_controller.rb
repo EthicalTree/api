@@ -8,6 +8,7 @@ module V1
     end
 
     def create
+      authorize! :update, @listing
       location = Location.new location_params
       @listing.locations = [location]
 

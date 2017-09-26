@@ -37,7 +37,9 @@ class UsersController < APIController
     if token = params[:token]
       @user = User.where.not(forgot_password_token: nil).find_by forgot_password_token: token
 
-      if !@user
+      if @user && params[:check]
+        render json: { email: @user.email }, status: :ok
+      elsif !@user
         render json: { errors: ["Not a valid confirmation token!"] }
       elsif @user.update_attributes(change_password_params)
         render json: {}, status: :ok

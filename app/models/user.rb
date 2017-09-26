@@ -3,6 +3,8 @@ class User < ApplicationRecord
 
   before_create :confirmation_token
 
+  has_many :owned_listings, foreign_key: :owner_id, class_name: "Listing"
+
   validates :email, presence: true, email: true, uniqueness: true
   validates_strength_of :password, with: :email
 

@@ -22,6 +22,7 @@ gem 'geocoder'
 gem 'fog-aws'
 gem 'kaminari'
 gem 'password_strength'
+gem 'access-granted', '~> 1.1.0'
 
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'

@@ -9,6 +9,7 @@ module V1
     end
 
     def create
+      authorize! :update, @listing
       operating_hours = operating_hours_params
 
       p operating_hours

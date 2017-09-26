@@ -18,5 +18,8 @@ module EthicalTree
     config.active_record.time_zone_aware_types = [:datetime, :time]
     config.time_zone = 'UTC'
 
+    # Roles and Policies
+    config.autoload_paths += %W(#{config.root}/app/policies #{config.root}/app/roles)
+
   end
 end

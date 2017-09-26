@@ -9,7 +9,9 @@ module V1
     end
 
     def create
+      authorize! :create, Listing
       @listing = Listing.new listing_params
+      @listing.owner_id = current_user.id
 
       if @listing.save
         json_response @listing.as_json_full
@@ -23,6 +25,7 @@ module V1
     end
 
     def update
+      authorize! :update, @listing
       @listing.assign_attributes listing_params
 
       if @listing.save
@@ -41,7 +44,7 @@ module V1
     def listing_params
       params.require(:listing).permit(
         :title,
-        :bio,
+        :bio
       )
     end
 

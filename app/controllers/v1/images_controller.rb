@@ -8,6 +8,7 @@ module V1
     end
 
     def create
+      authorize! :update, @listing
       image = Image.new image_params
       @listing.images.push image
 
@@ -19,7 +20,9 @@ module V1
     end
 
     def update
+      authorize! :update, @listing
       image = @listing.images.find(params[:id])
+
       make_cover = params[:make_cover]
 
       if make_cover
@@ -31,6 +34,7 @@ module V1
     end
 
     def destroy
+      authorize! :update, @listing
       image = @listing.images.find(params[:id])
 
       image.destroy
