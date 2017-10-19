@@ -21,6 +21,10 @@ Rails.application.routes.draw do
       resources :locations
       resources :operating_hours
     end
+
+    namespace :admin do
+      resources :users
+    end
   end
 
   # S3

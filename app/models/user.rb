@@ -6,7 +6,8 @@ class User < ApplicationRecord
   has_many :owned_listings, foreign_key: :owner_id, class_name: "Listing"
 
   validates :email, presence: true, email: true, uniqueness: true
-  validates_strength_of :password, with: :email
+  validates_strength_of :password, with: :email,
+    if: Proc.new { |m| m.password && m.password_confirmation }
 
   def confirm!
     update!(confirmed_at: DateTime.current)
@@ -20,8 +21,8 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
-  def as_json options=nil
-    super(only: [:id, :first_name, :last_name], methods: :can_edit_listing)
+  def as_json_basic options=nil
+    as_json(only: [:id, :first_name, :last_name], methods: :can_edit_listing)
   end
 
   def regenerate_token

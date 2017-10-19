@@ -16,6 +16,7 @@ class AccessPolicy
     # In this case an administrator.
     #
     role :admin, proc { |user| user && user.admin? } do
+      can :manage, User
       can :manage, Listing
     end
 
