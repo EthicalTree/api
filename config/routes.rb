@@ -9,7 +9,7 @@ Rails.application.routes.draw do
   post :confirm_email, to: 'users#confirm_email'
 
   get :location, to: 'users#get_location'
-  resources :users, only: %i{show}
+  resources :users, only: %i{show update}
 
   # API
   namespace :v1 do

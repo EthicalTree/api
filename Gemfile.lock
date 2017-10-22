@@ -193,6 +193,11 @@ GEM
     nio4r (2.1.0)
     nokogiri (1.8.0)
       mini_portile2 (~> 2.2.0)
+    oj (3.3.8)
+    olive_branch (2.1.1)
+      multi_json
+      oj
+      rails (>= 4.0)
     password_strength (1.1.4)
       activemodel
     pry (0.10.4)
@@ -320,6 +325,7 @@ DEPENDENCIES
   listen (~> 3.0.5)
   mocha
   mysql2
+  olive_branch
   password_strength
   pry
   pry-byebug

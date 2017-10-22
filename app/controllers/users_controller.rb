@@ -57,8 +57,6 @@ class UsersController < APIController
         render json: { errors: ["Whoops! We can't find a user with that email address."] }
       end
     end
-
-
   end
 
   def show
@@ -69,7 +67,16 @@ class UsersController < APIController
     end
   end
 
-  def get_location
+  def update
+    if params[:id] == 'current'
+      current_user.update_attributes user_params
+
+      if current_user.save
+        render json: {}, status: :ok
+      else
+        render json: { errors: current_user.errors.full_messages }
+      end
+    end
   end
 
   private

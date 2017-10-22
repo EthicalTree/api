@@ -22,7 +22,7 @@ class User < ApplicationRecord
   end
 
   def as_json_basic options=nil
-    as_json(only: [:id, :first_name, :last_name], methods: :can_edit_listing)
+    as_json(only: [:id, :first_name, :last_name, :email, :admin])
   end
 
   def regenerate_token
@@ -40,10 +40,6 @@ class User < ApplicationRecord
   def forgot_password_link
     domain = Rails.application.secrets[:webhost]
     "https://#{domain}/forgot_password/#{self.forgot_password_token}"
-  end
-
-  def can_edit_listing
-    true
   end
 
 private
