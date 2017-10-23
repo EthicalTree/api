@@ -69,12 +69,19 @@ class UsersController < APIController
 
   def update
     if params[:id] == 'current'
-      current_user.update_attributes user_params
+      @user = User.find_by(id: current_user.id)
 
-      if current_user.save
-        render json: {}, status: :ok
+      # Don't let user change password without providing user password first
+      if (user_params[:password_confirmation] || user_params[:password]) && !@user.authenticate(params[:user][:current_password])
+        render json: { errors: ["Specified password for current user is incorrect"] }
       else
-        render json: { errors: current_user.errors.full_messages }
+        @user.update_attributes user_params
+
+        if @user.save
+          render json: {}, status: :ok
+        else
+          render json: { errors: @user.errors.full_messages }
+        end
       end
     end
   end
