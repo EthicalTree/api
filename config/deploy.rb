@@ -63,7 +63,7 @@ task :start_delayed_job do
   on roles(:app) do
     within release_path do
       with rails_env: fetch(:rails_env) do
-        execute :bundle, :exec, :'bin/delayed_job', "-n 2", :start
+        execute :bundle, :exec, :'bin/delayed_job', :start
       end
     end
   end
@@ -74,7 +74,7 @@ task :restart_delayed_job do
   on roles(:app) do
     within release_path do
       with rails_env: fetch(:rails_env) do
-        execute :bundle, :exec, :'bin/delayed_job', "-n 2", :restart
+        execute :bundle, :exec, :'bin/delayed_job', :restart
       end
     end
   end
