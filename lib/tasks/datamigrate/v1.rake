@@ -50,12 +50,12 @@ namespace :datamigrate do
 
     # Get sql backup
     puts 'Retrieving sql file...'
-    #res = HTTParty.get(sql_url, basic_auth: auth)
-    #sql_filename = extract(res)
+    res = HTTParty.get(sql_url, basic_auth: auth)
+    sql_filename = extract(res)
 
     # Nuke backup db and load sql file
     puts 'Nuking and creating db...'
-    #replace_db sql_filename
+    replace_db sql_filename
 
     # Connect to migration db and copy data
     puts 'Connecting to the db...'
