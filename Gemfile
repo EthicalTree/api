@@ -25,6 +25,9 @@ gem 'password_strength'
 gem 'access-granted', '~> 1.1.0'
 gem 'olive_branch'
 
+# For data migration
+gem 'php-serialize'
+
 # Use Redis adapter to run Action Cable in production
 # gem 'redis', '~> 3.0'
 # Use ActiveModel has_secure_password

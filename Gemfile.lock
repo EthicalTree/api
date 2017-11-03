@@ -200,6 +200,7 @@ GEM
       rails (>= 4.0)
     password_strength (1.1.4)
       activemodel
+    php-serialize (1.2.0)
     pry (0.10.4)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -327,6 +328,7 @@ DEPENDENCIES
   mysql2
   olive_branch
   password_strength
+  php-serialize
   pry
   pry-byebug
   pry-rails
@@ -343,4 +345,4 @@ DEPENDENCIES
   web-console
 
 BUNDLED WITH
-   1.16.0.pre.2
+   1.16.0
