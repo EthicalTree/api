@@ -63,7 +63,7 @@ namespace :datamigrate do
     puts 'Creating listings...'
     listings = create_listings(domain, db)
 
-    # pull data from db into existing db using existing models
+    puts 'Done!'
   end
 
   private
@@ -82,10 +82,10 @@ namespace :datamigrate do
     ")
 
     results.each do |row|
-      get_or_create_listing row
+      listing = get_or_create_listing row, domain, db
+      listing.save
+      print('.')
     end
-
-    listing.save
   end
 
   def get_or_create_listing row, domain, db
@@ -114,8 +114,10 @@ namespace :datamigrate do
     business_hours = PHP.unserialize row[:business_hours]
     listing.operating_hours = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].map do |day|
       is_open = business_hours["#{day}_closed"] == 'open'
+      open = business_hours["#{day}_open"]
+      close = business_hours["#{day}_close"]
 
-      if !is_open
+      if !is_open || !open.present? || !close.present?
         next
       end
 
@@ -123,8 +125,8 @@ namespace :datamigrate do
         oh = OperatingHours.new day: day
       end
 
-      oh.open = Time.parse(business_hours["#{day}_open"] + ' UTC')
-      oh.close = Time.parse(business_hours["#{day}_close"] + ' UTC')
+      oh.open = Time.parse(open + ' UTC')
+      oh.close = Time.parse(close + ' UTC')
       oh
     end.compact
 
