@@ -178,9 +178,9 @@ namespace :datamigrate do
     password = db_config[Rails.env]["password"]
     db = DBNAME
 
-    `mysql -u #{username} --password=#{password} --silent -e "DROP DATABASE IF EXISTS #{db}"`
-    `mysql -u #{username} --password=#{password} --silent -e "CREATE DATABASE #{db}"`
-    `mysql -u #{username} --password=#{password} --silent #{db} < #{sql_filename}`
+    `mysql -u #{username} --password="#{password}" --silent -e "DROP DATABASE IF EXISTS #{db}"`
+    `mysql -u #{username} --password="#{password}" --silent -e "CREATE DATABASE #{db}"`
+    `mysql -u #{username} --password="#{password}" --silent #{db} < #{sql_filename}`
   end
 
   def connect

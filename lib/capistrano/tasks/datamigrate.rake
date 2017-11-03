@@ -4,7 +4,7 @@ namespace :datamigrate do
     on roles(:app) do
       within "#{current_path}" do
         with rails_env: "#{fetch(:stage)}" do
-          execute :rake, "datamigrate:v1", args[:sql_file], args[:domain], args[:username], args[:password]
+          execute :rake, "datamigrate:v1[#{args[:sql_file]},#{args[:domain]},#{args[:username]},#{args[:password]}]"
         end
       end
     end
