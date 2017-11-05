@@ -18,11 +18,10 @@ class UserTest < ActiveSupport::TestCase
   end
 
   test "user should be authenticatable" do
-    user = create :user, password: "password", password_confirmation: 'password'
+    user = create :user, password: "123abc%%456", password_confirmation: '123abc%%456'
 
     assert_not(user.authenticate("qwerty"))
-
-    assert(user.authenticate("password"))
+    assert(user.authenticate("123abc%%456"))
   end
 
   test "should confirm the user" do

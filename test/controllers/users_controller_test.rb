@@ -41,8 +41,8 @@ class UsersControllerTest < ActionController::TestCase
     post :create, params: {
       user: {
         email: 'test@test.com',
-        password: 'password',
-        password_confirmation: 'password'
+        password: '123abc%%456',
+        password_confirmation: '123abc%%456'
       }
     }
 
