@@ -6,6 +6,7 @@ class User < ApplicationRecord
   has_many :owned_listings, foreign_key: :owner_id, class_name: "Listing"
 
   validates :email, presence: true, email: true, uniqueness: true
+  validate :password_cannot_be_present_without_confirmation
   validates_strength_of :password, with: :email,
     if: Proc.new { |m| m.password && m.password_confirmation }
 
@@ -47,6 +48,12 @@ private
   def confirmation_token
     if self.confirm_token.blank?
       self.regenerate_token
+    end
+  end
+
+  def password_cannot_be_present_without_confirmation
+    if password && !password_confirmation
+      errors.add(:password_confirmation, "You must confirm your password")
     end
   end
 
