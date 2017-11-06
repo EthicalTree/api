@@ -4,6 +4,6 @@ class APIController < ActionController::API
   include Knock::Authenticable
 
   def not_found
-    raise ActionController::RoutingError.new('Not Found')
+    render status: 404
   end
 end

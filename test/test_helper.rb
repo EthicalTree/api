@@ -16,8 +16,10 @@ class ActiveSupport::TestCase
   fixtures :all
 
   # Add more helper methods to be used by all tests here...
-
-  def login user
-    @request.session['user_id'] = user
+  def authorize user
+    token = Knock::AuthToken.new(payload: { sub: user.id  }).token
+    request.headers.merge!({
+      'Authorization': "Bearer #{token}"
+    })
   end
 end

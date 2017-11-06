@@ -1,6 +1,7 @@
 module V1
   class OperatingHoursController < APIController
     before_action :require_listing
+    before_action :authenticate_user, only: %i{update create destroy}
 
     def index
 
@@ -9,8 +10,6 @@ module V1
     def create
       authorize! :update, @listing
       operating_hours = operating_hours_params
-
-      p operating_hours
 
       @listing.operating_hours = []
 
@@ -24,8 +23,6 @@ module V1
 
         @listing.operating_hours.push hour
       end
-
-      p @listing.operating_hours
 
       render json: { operating_hours: @listing.operating_hours.map{|o| o.as_json_full} }, status: :ok
     end

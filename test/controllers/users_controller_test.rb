@@ -102,4 +102,94 @@ class UsersControllerTest < ActionController::TestCase
     assert user.reload.confirmed?
   end
 
+  test 'forgot password link endpoint should generate a forgot password token' do
+    user = create :user, email: 'test@test.com'
+    assert_not user.forgot_password_token
+
+    get :forgot_password, params: { email: 'test@test.com' }
+    user.reload
+    token = user.forgot_password_token
+    assert token
+
+    get :forgot_password, params: { email: 'test@test.com' }
+    user.reload
+    assert token != user.forgot_password_token
+
+    # test user doesn't exist
+    res = get :forgot_password, params: { email: 'nonexistant@test.com' }
+    assert JSON.parse(res.body)["errors"]
+  end
+
+  test 'forgot password should reset password when supplied with correct token' do
+    user = create :user, email: 'test@test.com', forgot_password_token: 'token'
+    digest = user.password_digest
+
+    # shouldn't work when token not sent
+    res = get :forgot_password, params: { token: nil }
+    assert JSON.parse(res.body)["errors"]
+
+    get :forgot_password, params: { token: 'token', password: 'abc123!@#', password_confirmation: 'abc123!@#' }
+    user.reload
+    assert digest != user.password_digest
+
+    # check password errors are handles properly
+    res = get :forgot_password, params: { token: 'token', password: 'abc123!@#', password_confirmation: '' }
+    assert JSON.parse(res.body)["errors"]
+
+    # token check
+    res = get :forgot_password, params: { token: 'token', check: true}
+    assert JSON.parse(res.body)["email"]
+  end
+
+  test 'requesting current user should show the current user' do
+    user = create :user
+    authorize user
+    res = get :show, params: { id: 'current' }
+    assert JSON.parse(res.body)["user"]["id"] == user.id
+  end
+
+  test 'updating current user should update current user params' do
+    user = create :user, first_name: 'Test', last_name: 'Name'
+    authorize user
+    res = put :update, params: {
+      id: 'current',
+      user: {
+        first_name: 'New',
+        last_name: 'Testname'
+      }
+    }
+
+    user.reload
+    assert user.first_name == 'New'
+    assert user.last_name == 'Testname'
+  end
+
+  test 'should not be able to update password without providing current password' do
+    user = create :user, first_name: 'Test', last_name: 'Name', password: 'abc123!@#', password_confirmation: 'abc123!@#'
+    digest = user.password_digest
+
+    authorize user
+    res = put :update, params: {
+      id: 'current',
+      user: {
+        password: '!@#abc123',
+        password_confirmation: '!@#abc123',
+      }
+    }
+
+    assert JSON.parse(res.body)["errors"]
+
+    res = put :update, params: {
+      id: 'current',
+      user: {
+        password: '!@#abc123',
+        password_confirmation: '!@#abc123',
+        current_password: 'abc123!@#',
+      }
+    }
+
+    user.reload
+    assert user.password_digest != digest
+  end
+
 end

@@ -1,10 +1,6 @@
 class UsersController < APIController
   before_action :authenticate_user, only: :show
 
-  def new
-    @user = User.new
-  end
-
   def create
     if @user = User.where(email: user_params[:email], confirmed_at: nil).first
       @user.attributes = {password: '', password_confirmation: '', password_digest: ''}
