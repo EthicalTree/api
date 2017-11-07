@@ -9,6 +9,7 @@ module V1
     end
 
     def create
+      authorize! :update, @listing
       @listing.ethicalities = []
       ethicality_params[:ethicalities].each do |e|
         ethicality = Ethicality.find_by slug: e[:slug]
@@ -36,9 +37,7 @@ module V1
     end
 
     def require_listing
-      if not @listing = Listing.find_by!(slug: params[:listing_id])
-        not_found
-      end
+      @listing = Listing.find_by!(slug: params[:listing_id])
     end
 
   end

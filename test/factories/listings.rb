@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :listing do
-    title "Awesome Test Company"
-    bio "A cool description"
+    title { Faker::Company.name }
+    bio { Faker::Company.catch_phrase }
   end
 end
