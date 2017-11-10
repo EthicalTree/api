@@ -105,7 +105,7 @@ Rails.application.configure do
 # CORS settings
   config.middleware.insert_before 0, Rack::Cors do
     allow do
-      origins 'http://beta.ethicaltree.com'
+      origins 'https://beta.ethicaltree.com'
       resource '*', :headers => :any, :methods => [:get, :post, :patch, :put, :delete, :options]
     end
   end
