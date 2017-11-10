@@ -1,12 +1,12 @@
-require "capistrano/datadog"
-set :datadog_api_key, "f1f357148ae8a4d3d65b44e14be42a80"
-
 # Load DSL and set up stages
 require "capistrano/setup"
 
 # Include default deployment tasks
 require "capistrano/deploy"
 require 'capistrano3/unicorn'
+
+require "capistrano/datadog"
+set :datadog_api_key, "f1f357148ae8a4d3d65b44e14be42a80"
 
 # Load the SCM plugin appropriate to your project:
 #
