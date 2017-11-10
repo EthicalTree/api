@@ -83,6 +83,8 @@ GEM
       activerecord (>= 3.0, < 5.2)
       delayed_job (>= 3.0, < 5)
     docile (1.1.5)
+    dogapi (1.3.6)
+      json (>= 1.5.1)
     dotenv (2.2.1)
     dotenv-rails (2.2.1)
       dotenv (= 2.2.1)
@@ -317,6 +319,7 @@ DEPENDENCIES
   capistrano3-unicorn
   daemons
   delayed_job_active_record
+  dogapi (~> 1.3.0)
   dotenv-rails (~> 2.2.1)
   exception_notification
   factory_girl_rails
