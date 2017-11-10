@@ -59,6 +59,7 @@ group :development do
   gem 'listen', '~> 3.0.5'
   gem 'spring-watcher-listen'
   gem 'letter_opener'
+  gem 'dogapi', '~> 1.3.0'
 end
 
 group :production do
