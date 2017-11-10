@@ -9,9 +9,15 @@ module V1
     def create
       authorize! :update, @listing
       image = Image.new image_params
-      @listing.images.push image
 
-      render json: { images: @listing.images.as_json.rotate(-1) }, status: :ok
+      if params[:menu_id]
+        @listing.menu.images.push image
+        render json: { images: @listing.menu.images.as_json.rotate(-1) }, status: :ok
+      else
+        @listing.images.push image
+        render json: { images: @listing.images.as_json.rotate(-1) }, status: :ok
+      end
+
     end
 
     def show
@@ -34,10 +40,17 @@ module V1
 
     def destroy
       authorize! :update, @listing
-      image = @listing.images.find(params[:id])
 
-      image.destroy
-      render json: { images: @listing.images.as_json }, status: :ok
+      if params[:menu_id]
+        image = @listing.menu.images.find(params[:id])
+        image.destroy
+        render json: { images: @listing.menu.images.as_json }, status: :ok
+      else
+        image = @listing.images.find(params[:id])
+        image.destroy
+        render json: { images: @listing.images.as_json }, status: :ok
+      end
+
     end
 
     private

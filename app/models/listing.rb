@@ -4,6 +4,7 @@ class Listing < ApplicationRecord
   has_many :locations, dependent: :destroy
   has_many :listing_images
   has_many :listing_ethicalities
+  has_many :menus
   has_many :images, through: :listing_images, class_name: 'Image'
   has_many :ethicalities, through: :listing_ethicalities, class_name: 'Ethicality'
   has_many :operating_hours, class_name: 'OperatingHours'
@@ -25,17 +26,25 @@ class Listing < ApplicationRecord
     return @@search_fields
   end
 
+  # For now we only support one menu, but might support in the future
+  def menu
+    if self.menus.empty?
+      self.menus = [Menu.create(title: '')]
+      self.save
+    end
+    self.menus.first
+  end
+
   def as_json_full options={}
     as_json({
       include: [
         :ethicalities,
         :images,
         :locations,
-        {
-          operating_hours: {
-            methods: [:label, :hours, :open_str, :close_str, :enabled]
-          }
-        }
+        { menus: { include: [:images] } },
+        { operating_hours: { methods: [
+          :label, :hours, :open_str, :close_str, :enabled
+        ]}},
       ]
     })
   end

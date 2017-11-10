@@ -16,6 +16,9 @@ Rails.application.routes.draw do
     get :search, to: 'search#search'
     resources :ethicalities
     resources :listings do
+      resources :menus do
+        resources :images
+      end
       resources :images
       resources :listing_ethicalities
       resources :locations
