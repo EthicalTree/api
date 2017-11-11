@@ -36,6 +36,9 @@ class Listing < ApplicationRecord
   end
 
   def as_json_full options={}
+    # make sure a menu is created if it doesn't exist
+    self.menu
+
     as_json({
       include: [
         :ethicalities,

@@ -7,14 +7,14 @@ module S3
       headers = {"Content-Type" => params[:contentType], "x-amz-acl" => "public-read"}
 
       slug = params[:slug]
-      menu_id = params[:menu_id]
+      menu_id = params[:menuId]
 
       name = "#{SecureRandom.uuid}-#{params[:objectName]}"
 
       if slug && menu_id
-        key = "listings/#{slug}/images/#{name}"
-      else
         key = "listings/#{slug}/menu/#{menu_id}/#{name}"
+      else
+        key = "listings/#{slug}/images/#{name}"
       end
 
       url = $fog.put_object_url($s3_bucket, key, 15.minutes.from_now.to_time.to_i, headers, options)
