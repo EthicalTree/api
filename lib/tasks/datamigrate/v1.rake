@@ -28,6 +28,7 @@ namespace :datamigrate do
       operating_hours: 'geodir_timing',
       phone: 'geodir_contact',
       cover_image: 'featured_image',
+      menu: 'geodir_menu',
       ethical_criteria: 'geodir_ethicalcriteria'
     },
     hours: {
@@ -40,28 +41,34 @@ namespace :datamigrate do
   }
 
   desc "Copies data from V1 site to a V2 site"
-  task :v1, [:sql_url, :domain, :username, :password] => [:environment] do |task, args|
+  task :v1, [:sql_url, :domain, :username, :password, :nofetch] => [:environment] do |task, args|
     sql_url = args[:sql_url]
     domain = args[:domain]
     username = args[:username]
     password = args[:password]
+    nofetch = !!args[:nofetch]
 
     auth = {username: username, password: password}
 
-    # Get sql backup
-    puts 'Retrieving sql file...'
-    res = HTTParty.get(sql_url, basic_auth: auth)
-    sql_filename = extract(res)
+    if nofetch
+      # Skip fetching of sql
+      puts 'Skipping fetch of sql file...'
+    else
+      # Get sql backup
+      puts 'Retrieving sql file...'
+      res = HTTParty.get(sql_url, basic_auth: auth)
+      sql_filename = extract(res)
 
-    # Nuke backup db and load sql file
-    puts 'Nuking and creating db...'
-    replace_db sql_filename
+      # Nuke backup db and load sql file
+      puts 'Nuking and creating db...'
+      replace_db sql_filename
+    end
 
     # Connect to migration db and copy data
     puts 'Connecting to the db...'
     db = connect()
     puts 'Creating listings...'
-    listings = create_listings(domain, db)
+    create_listings(domain, db)
 
     puts 'Done!'
   end
@@ -145,7 +152,7 @@ namespace :datamigrate do
       if !image = Image.find_by(key: key)
         res = HTTParty.get("https://#{domain}/wp-content/uploads/#{image_row[:file]}")
 
-        url = $fog_bucket.files.create({
+        $fog_bucket.files.create({
           key: key,
           body: res.body,
           public: true
@@ -157,6 +164,29 @@ namespace :datamigrate do
       image.order = order
       image
     end.compact
+
+    # generate the menu if it doens't exist
+    listing.menu
+
+    listing.menu.images = Nokogiri::HTML(row[:geodir_menu]).css('img').map do |image_tag|
+      src = image_tag[:src]
+      name = "datamigrate_v1_#{URI.parse(src).path.parameterize}"
+      key = "listings/#{listing.title.parameterize}/menus/#{listing.menu.id}/images/#{name}"
+
+      if !image = Image.find_by(key: key)
+        res = HTTParty.get(src)
+
+        $fog_bucket.files.create({
+          key: key,
+          body: res.body,
+          public: true
+        })
+
+        image = Image.new(key: key)
+      end
+
+      image
+    end
 
     listing
   end
