@@ -3,6 +3,7 @@ module V1
 
     def search
       page = search_params[:page].to_i
+      location = search_params[:location]
       @query = search_params[:query].downcase
       @ethicalities = search_params[:ethicalities].split(',')
 
@@ -28,9 +29,19 @@ module V1
       ).order(
         'eth_total DESC',
         'likeness DESC'
-      ).distinct
+      )
 
-      results = results.page(page + 1).per(12)
+      #directory_location = DirectoryLocation.find_by(name: location)
+
+      #if !directory_location.present?
+      #  session_location = Session.session_location(remote_ip)
+      #  coords = [session_location[:latitude], session_location[:longitude]]
+      #else
+      #  coords = directory_location.coordinates
+      #end
+
+      #results.by_distance(origin: coords)
+      results = results.distinct().page(page + 1).per(12)
 
       result_json = {
         listings: results.map{|l| l.as_json_search.merge(eth_total: l.eth_total, likeness: l.likeness) }.as_json,
@@ -41,13 +52,33 @@ module V1
       render json: result_json, status: :ok
     end
 
+    def locations
+      location = Session.session_location(remote_ip)
+      latlng = [location[:latitude], location[:longitude]]
+      query = params[:query]
+
+      results = DirectoryLocation.select(:name)
+
+      if query
+        results = results.where(
+          "name LIKE :query",
+          query: "%#{query}%"
+        )
+      end
+
+      results = results.by_distance(origin: latlng).limit(6)
+
+      render json: results.map {|r| r.name}, status: :ok
+    end
+
     private
 
     def search_params
       params.permit(
         :query,
         :ethicalities,
-        :page
+        :page,
+        :location
       )
     end
 

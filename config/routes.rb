@@ -3,17 +3,17 @@ Rails.application.routes.draw do
   # Sessions
   post :login, to: 'user_token#create'
   post :forgot_password, to: 'users#forgot_password'
+  resources :sessions, only: %i{index}
 
   # Signup
   post :signup, to: 'users#create'
   post :confirm_email, to: 'users#confirm_email'
-
-  get :location, to: 'users#get_location'
   resources :users, only: %i{show update}
 
   # API
   namespace :v1 do
     get :search, to: 'search#search'
+    get :locations, to: 'search#locations'
     resources :ethicalities
     resources :listings do
       resources :menus do

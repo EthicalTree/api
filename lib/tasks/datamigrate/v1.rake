@@ -140,7 +140,9 @@ namespace :datamigrate do
     ethicalities = ethicalities.map {|e| Ethicality.find_by(slug: ETHICALITIES[e.to_s.to_sym])}.compact
 
     location.update_attributes lat: lat, lng: lng
+    DirectoryLocation.create_locations lat, lng
     listing.locations = [location]
+
     listing.ethicalities = ethicalities
 
     images = db.query("SELECT file,menu_order FROM #{TABLES[:images]} WHERE post_id='#{row[:post_id]}'")
