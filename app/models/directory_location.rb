@@ -14,10 +14,10 @@ class DirectoryLocation < ApplicationRecord
         name: address,
         lat: details[:location]["lat"],
         lng: details[:location]["lng"],
-        boundlat1: details[:northeast]["lat"],
-        boundlng1: details[:northeast]["lng"],
-        boundlat2: details[:southwest]["lat"],
-        boundlng2: details[:southwest]["lng"],
+        boundlat1: details[:bounds][:northeast]["lat"],
+        boundlng1: details[:bounds][:northeast]["lng"],
+        boundlat2: details[:bounds][:southwest]["lat"],
+        boundlng2: details[:bounds][:southwest]["lng"],
       })
     end
 
