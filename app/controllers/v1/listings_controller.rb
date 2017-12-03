@@ -48,7 +48,7 @@ module V1
     end
 
     def require_listing
-      @listing = Listing.find_by(slug: params[:id])
+      @listing = Listing.find_by!(slug: params[:id])
     end
   end
 end
