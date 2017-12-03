@@ -9,42 +9,50 @@ module V1
 
       fields = [
         :id,
-        :slug,
-        :title,
-        :bio,
+        :lat,
+        :lng,
+        'listings.id',
+        'listings.slug',
+        'listings.title',
+        'listings.bio',
         build_ethicality_statement,
         build_likeness_statement
       ].compact
 
       joins = [
+        :listing,
         build_ethicality_join,
-        :locations
       ].compact
 
-      results = Listing.select(fields).joins(joins).where.not(
+      results = Location.select(fields).joins(joins).where.not(
         'locations.lat': nil,
         'locations.lng': nil
       ).group(
+        'locations.id',
         'listings.id'
-      ).order(
+      )
+
+      directory_location = DirectoryLocation.find_by(name: location)
+
+      if !directory_location.present?
+        session_location = Session.session_location(remote_ip)
+        coords = [session_location["latitude"], session_location["longitude"]]
+        results = results.within(5, origin: coords)
+      else
+        results = results.in_bounds(directory_location.bounds, origin: directory_location.coordinates)
+      end
+
+      results = results.order(
         'eth_total DESC',
         'likeness DESC'
       )
 
-      #directory_location = DirectoryLocation.find_by(name: location)
-
-      #if !directory_location.present?
-      #  session_location = Session.session_location(remote_ip)
-      #  coords = [session_location[:latitude], session_location[:longitude]]
-      #else
-      #  coords = directory_location.coordinates
-      #end
-
-      #results.by_distance(origin: coords)
       results = results.distinct().page(page + 1).per(12)
+      result_ids = results.map {|r| r.id}
+      listings = Listing.find(result_ids).index_by(&:id).slice(*result_ids).values
 
       result_json = {
-        listings: results.map{|l| l.as_json_search.merge(eth_total: l.eth_total, likeness: l.likeness) }.as_json,
+        listings: listings.map{|l| l.as_json_search},
         currentPage: page,
         pageCount: results.total_pages
       }
@@ -54,7 +62,7 @@ module V1
 
     def locations
       location = Session.session_location(remote_ip)
-      latlng = [location[:latitude], location[:longitude]]
+      latlng = [location["latitude"], location["longitude"]]
       query = params[:query]
 
       results = DirectoryLocation.select(:name)

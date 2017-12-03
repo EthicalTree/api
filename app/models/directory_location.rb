@@ -14,10 +14,10 @@ class DirectoryLocation < ApplicationRecord
         name: address,
         lat: details[:location]["lat"],
         lng: details[:location]["lng"],
-        boundlat1: details[:bounds][0]["lat"],
-        boundlng1: details[:bounds][0]["lng"],
-        boundlat2: details[:bounds][1]["lat"],
-        boundlng2: details[:bounds][1]["lng"],
+        boundlat1: details[:northeast]["lat"],
+        boundlng1: details[:northeast]["lng"],
+        boundlat2: details[:southwest]["lat"],
+        boundlng2: details[:southwest]["lng"],
       })
     end
 
@@ -49,6 +49,13 @@ class DirectoryLocation < ApplicationRecord
 
   def coordinates
     [lat, lng]
+  end
+
+  def bounds
+    Geokit::Bounds.new(
+      Geokit::LatLng.new(boundlat2, boundlng2),
+      Geokit::LatLng.new(boundlat1, boundlng1)
+    )
   end
 
 end

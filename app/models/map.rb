@@ -13,7 +13,10 @@ class Map
       city: extracted[:locality],
       neighbourhood: extracted[:neighborhood],
       sublocality: extracted[:sublocality],
-      bounds: [bounds["northeast"], bounds["southwest"]],
+      bounds: {
+        northeast: bounds["northeast"],
+        southwest: bounds["southwest"]
+      },
       location: details["geometry"]["location"]
     }
   end
