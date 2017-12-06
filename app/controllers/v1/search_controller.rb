@@ -32,14 +32,21 @@ module V1
         'listings.id'
       )
 
-      directory_location = DirectoryLocation.find_by(name: location)
+      if location.present?
+        directory_location = DirectoryLocation.find_by(name: location)
 
-      if !directory_location.present?
+        if directory_location.present?
+          results = results.in_bounds(directory_location.bounds, origin: directory_location.coordinates)
+        else
+          location = Map.build_from_address(location)[:location]
+          coords = [location['lat'], location['lng']]
+          results = results.within(5, origin: coords)
+        end
+
+      else
         session_location = Session.session_location(remote_ip)
         coords = [session_location["latitude"], session_location["longitude"]]
         results = results.within(5, origin: coords)
-      else
-        results = results.in_bounds(directory_location.bounds, origin: directory_location.coordinates)
       end
 
       results = results.order(
