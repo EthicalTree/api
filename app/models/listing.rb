@@ -36,7 +36,7 @@ class Listing < ApplicationRecord
   end
 
   def open_status time_zone
-    hours = operating_hours.todays_hours
+    hours = operating_hours.todays_hours time_zone
 
     if hours.present? && hours.open && hours.close
       hours.status time_zone
