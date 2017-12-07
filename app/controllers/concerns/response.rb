@@ -3,8 +3,8 @@ module Response
     render json: object, status: status
   end
 
-  def secured_json_response(object, method, status=:ok)
-    response = object.public_send(method).merge({
+  def secured_json_response(object, method, options={}, status=:ok)
+    response = object.public_send(method, options).merge({
       permissions: object.permissions(current_user)
     })
 

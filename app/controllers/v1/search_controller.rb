@@ -44,8 +44,7 @@ module V1
         end
 
       else
-        session_location = Session.session_location(remote_ip)
-        coords = [session_location["latitude"], session_location["longitude"]]
+        coords = [location_information[:latitude], location_information[:longitude]]
         results = results.within(5, origin: coords)
       end
 
@@ -59,7 +58,7 @@ module V1
       listings = Listing.find(result_ids).index_by(&:id).slice(*result_ids).values
 
       result_json = {
-        listings: listings.map{|l| l.as_json_search},
+        listings: listings.map{|l| l.as_json_search location: location_information},
         currentPage: page,
         pageCount: results.total_pages
       }
@@ -68,8 +67,7 @@ module V1
     end
 
     def locations
-      location = Session.session_location(remote_ip)
-      latlng = [location["latitude"], location["longitude"]]
+      latlng = [location_information[:latitude], location_information[:longitude]]
       query = params[:query]
 
       results = DirectoryLocation.select(:name)

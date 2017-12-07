@@ -16,4 +16,8 @@ class APIController < ActionController::API
       request.remote_ip
     end
   end
+
+  def location_information
+    Session.session_location(remote_ip)
+  end
 end

@@ -1,8 +1,41 @@
 class OperatingHours < ApplicationRecord
   belongs_to :listing
 
+  status_choices = [
+    :opening_soon,
+    :open,
+    :closing_soon,
+    :closed
+  ]
+
+  def self.todays_hours time_zone='UTC'
+    today = Time.now.in_time_zone(time_zone).strftime('%A').downcase
+    find_by day: today
+  end
+
   def as_json_full
     as_json methods: [:label, :hours, :open_str, :close_str, :enabled]
+  end
+
+  def status time_zone='UTC', now=nil
+    if !now
+      now = Time.now.in_time_zone(time_zone)
+    end
+
+    open_time = now.change(hour: open.hour, minute: open.min)
+    opening_soon_time = open_time - 30.minutes
+    close_time = now.change(hour: close.hour, minute: close.min)
+    closing_soon_time = close_time - 30.minutes
+
+    if now.between? opening_soon_time, open_time
+      :opening_soon
+    elsif now.between? closing_soon_time, close_time
+      :closing_soon
+    elsif now.between? open_time, close_time
+      :open
+    else
+      :closed
+    end
   end
 
   def label

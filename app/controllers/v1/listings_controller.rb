@@ -13,14 +13,14 @@ module V1
       @listing.owner_id = current_user.id
 
       if @listing.save
-        secured_json_response @listing, :as_json_full
+        secured_json_response @listing, :as_json_full, { location: location_information }
       else
         render json: { errors: @listing.errors.full_messages }
       end
     end
 
     def show
-      secured_json_response @listing, :as_json_full
+      secured_json_response @listing, :as_json_full, { location: location_information }
     end
 
     def update

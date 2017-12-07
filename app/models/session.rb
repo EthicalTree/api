@@ -10,7 +10,14 @@ class Session
       res = HTTParty.get(@@GEOSERVICES[0] % ip_address)
       JSON.parse(res.body).to_json
     end
-    JSON.parse(location_json)
+
+    r = JSON.parse(location_json)
+
+    {
+      latitude: r["latitude"],
+      longitude: r["longitude"],
+      time_zone: r["time_zone"]
+    }
   rescue JSON::ParserError
     {}
   end
