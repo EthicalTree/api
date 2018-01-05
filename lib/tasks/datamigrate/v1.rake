@@ -92,6 +92,7 @@ namespace :datamigrate do
     results.each do |row|
       listing = get_or_create_listing row, domain, db
       listing.save
+      listing.images.each {|i| i.save}
       print('.')
     end
   end
@@ -152,7 +153,8 @@ namespace :datamigrate do
     else
       images = []
     end
-    images = images + db.query("SELECT file,menu_order FROM #{TABLES[:images]} WHERE post_id='#{row[:post_id]}'").to_a
+
+    images = db.query("SELECT file,menu_order FROM #{TABLES[:images]} WHERE post_id='#{row[:post_id]}'").to_a + images
 
     listing.images = images.map do |image_row|
       name = "datamigrate_v1_#{image_row[:file].gsub('/', '_')}"
