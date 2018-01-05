@@ -1,6 +1,9 @@
 class Ethicality < ApplicationRecord
   before_save :ensure_slug
 
+  def as_tag_json
+  end
+
   private
 
   def ensure_slug

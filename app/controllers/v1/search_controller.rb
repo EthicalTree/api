@@ -84,6 +84,22 @@ module V1
       render json: results.map {|r| r.name}, status: :ok
     end
 
+    def suggestions
+      query = params[:query]
+
+      ethicalities = Ethicality.where(
+        "name LIKE :query",
+        query: "%#{query}%"
+      )
+
+      results = [{
+        title: 'Ethical Preference',
+        suggestions: ethicalities.map {|e| e.as_json.merge({ type: 'ethicality' })}
+      }]
+
+      render json: results, status: :ok
+    end
+
     private
 
     def search_params

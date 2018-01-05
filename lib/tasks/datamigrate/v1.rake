@@ -23,6 +23,7 @@ namespace :datamigrate do
     listing: {
       id: 'post_id',
       title: 'post_title',
+      featured_image: 'featured_image',
       lat: 'post_latitude',
       lng: 'post_longitude',
       operating_hours: 'geodir_timing',
@@ -100,6 +101,7 @@ namespace :datamigrate do
     lat = row[:post_latitude].to_f
     lng = row[:post_longitude].to_f
     ethicalities = row[:geodir_ethicalcriteria].split(',')
+    featured_image = row[:featured_image]
 
     listing = Listing.find_by(slug: title.parameterize)
 
@@ -145,11 +147,17 @@ namespace :datamigrate do
 
     listing.ethicalities = ethicalities
 
-    images = db.query("SELECT file,menu_order FROM #{TABLES[:images]} WHERE post_id='#{row[:post_id]}'")
+    if featured_image
+      images = [{ file: featured_image, menu_order: 0 }]
+    else
+      images = []
+    end
+    images = images + db.query("SELECT file,menu_order FROM #{TABLES[:images]} WHERE post_id='#{row[:post_id]}'").to_a
+
     listing.images = images.map do |image_row|
       name = "datamigrate_v1_#{image_row[:file].gsub('/', '_')}"
       key = "listings/#{listing.title.parameterize}/images/#{name}"
-      order = image_row[:menu_order] - 1
+      order = image_row[:menu_order]
 
       if !image = Image.find_by(key: key)
         res = HTTParty.get("https://#{domain}/wp-content/uploads/#{image_row[:file]}")

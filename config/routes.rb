@@ -14,6 +14,8 @@ Rails.application.routes.draw do
   namespace :v1 do
     get :search, to: 'search#search'
     get :locations, to: 'search#locations'
+    post :search_suggestions, to: 'search#suggestions'
+
     resources :ethicalities
     resources :listings do
       resources :menus do
