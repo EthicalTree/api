@@ -72,10 +72,16 @@ module V1
 
       results = DirectoryLocation.select(:name)
 
-      if query
+      if query.present?
         results = results.where(
           "name LIKE :query",
           query: "%#{query}%"
+        ).order(
+          "CASE
+            WHEN name LIKE #{Listing.connection.quote("#{query}%")} THEN 1
+            WHEN name LIKE #{Listing.connection.quote("%#{query}%")} THEN 3
+            ELSE 2
+          END, name"
         )
       end
 
