@@ -18,6 +18,12 @@ class APIController < ActionController::API
   end
 
   def location_information
-    Session.session_location(remote_ip)
+    if Rails.env == 'test'
+      {
+        time_zone: "UTC"
+      }
+    else
+      Session.session_location(remote_ip)
+    end
   end
 end

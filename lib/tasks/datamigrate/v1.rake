@@ -23,6 +23,7 @@ namespace :datamigrate do
     listing: {
       id: 'post_id',
       title: 'post_title',
+      status: 'post_status',
       featured_image: 'featured_image',
       lat: 'post_latitude',
       lng: 'post_longitude',
@@ -99,6 +100,7 @@ namespace :datamigrate do
 
   def get_or_create_listing row, domain, db
     title = row[:post_title]
+    status = row[:post_status]
     lat = row[:post_latitude].to_f
     lng = row[:post_longitude].to_f
     ethicalities = row[:geodir_ethicalcriteria].split(',')
@@ -112,7 +114,8 @@ namespace :datamigrate do
 
     listing.update_attributes({
       title: title,
-      bio: row[:post_content]
+      bio: row[:post_content],
+      visibility: if status == 'publish' then 'published' else 'unpublished' end
     })
 
     if listing.locations.present?

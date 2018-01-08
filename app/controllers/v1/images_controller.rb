@@ -9,6 +9,8 @@ module V1
     def create
       authorize! :update, @listing
       image = Image.new image_params
+      image.order = @listing.images.count + 1
+      image.save
 
       if params[:menu_id]
         @listing.menu.images.push image
@@ -31,8 +33,8 @@ module V1
       make_cover = params[:make_cover]
 
       if make_cover
-        @listing.images.update_all(order: 0)
-        image.update(order: 1)
+        @listing.images.update_all(order: 1)
+        image.update(order: 0)
 
         render json: { images: @listing.images.as_json }, status: :ok
       end
@@ -62,7 +64,7 @@ module V1
     end
 
     def require_listing
-      @listing = Listing.find_by!(slug: params[:listing_id])
+      @listing = Listing.published.find_by!(slug: params[:listing_id])
     end
   end
 end

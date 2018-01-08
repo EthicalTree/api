@@ -20,7 +20,7 @@ module V1
       ].compact
 
       joins = [
-        :listing,
+        "INNER JOIN listings ON listings.id = locations.listing_id AND listings.visibility = 0",
         build_ethicality_join,
       ].compact
 

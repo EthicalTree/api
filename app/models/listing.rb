@@ -1,6 +1,8 @@
 class Listing < ApplicationRecord
   include Accessible
 
+  enum visibility: [:published, :unpublished]
+
   has_many :locations, dependent: :destroy
   has_many :listing_images
   has_many :listing_ethicalities
@@ -62,8 +64,10 @@ class Listing < ApplicationRecord
     })
 
     if options[:location]
-      with_location_fields result, options[:location]
+      result = with_location_fields result, options[:location]
     end
+
+    result
   end
 
   def as_json_search options={}
@@ -76,8 +80,10 @@ class Listing < ApplicationRecord
     })
 
     if options[:location]
-      with_location_fields result, options[:location]
+      result = with_location_fields result, options[:location]
     end
+
+    result
   end
 
   def with_location_fields listing, location
