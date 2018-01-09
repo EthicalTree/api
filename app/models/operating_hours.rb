@@ -9,7 +9,7 @@ class OperatingHours < ApplicationRecord
   ]
 
   def self.todays_hours time_zone='UTC'
-    today = Time.now.in_time_zone(time_zone).strftime('%A').downcase
+    today = Timezone.now(time_zone).strftime('%A').downcase
     find_by day: today
   end
 
@@ -19,7 +19,7 @@ class OperatingHours < ApplicationRecord
 
   def status time_zone='UTC', now=nil
     if !now
-      now = Time.now.in_time_zone(time_zone)
+      now = Timezone.now time_zone
     end
 
     open_time = now.change(hour: open.hour, minute: open.min)
