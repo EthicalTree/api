@@ -38,7 +38,7 @@ module V1
         if directory_location.present?
           results = results.in_bounds(directory_location.bounds, origin: directory_location.coordinates)
         else
-          location = Map.build_from_address(location)[:location]
+          location = MapApi.build_from_address(location)[:location]
           coords = [location['lat'], location['lng']]
           results = results.within(30, units: :kms, origin: coords)
         end

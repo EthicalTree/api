@@ -1,6 +1,7 @@
 # Defines a location that a user can search for (ie. city, province, county, etc)
 class DirectoryLocation < ApplicationRecord
   validates :name, uniqueness: true
+  validates :timezone, presence: true
 
   acts_as_mappable
 
@@ -8,7 +9,7 @@ class DirectoryLocation < ApplicationRecord
     location = DirectoryLocation.find_by name: address
 
     if !location
-      details = Map.build_from_address address
+      details = MapApi.build_from_address address
 
       location = DirectoryLocation.new({
         name: address,
@@ -18,6 +19,7 @@ class DirectoryLocation < ApplicationRecord
         boundlng1: details[:bounds][:northeast]["lng"],
         boundlat2: details[:bounds][:southwest]["lat"],
         boundlng2: details[:bounds][:southwest]["lng"],
+        timezone: details[:timezone]
       })
     end
 
@@ -27,7 +29,7 @@ class DirectoryLocation < ApplicationRecord
   def self.build_locations lat, lng
     locations = []
 
-    details = Map.build_from_coordinates lat, lng
+    details = MapApi.build_from_coordinates lat, lng
 
     if details[:city].present? and details[:state].present?
       name = "#{details[:city]["long_name"]}, #{details[:state]["short_name"]}"

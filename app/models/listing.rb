@@ -37,11 +37,17 @@ class Listing < ApplicationRecord
     self.menus.first
   end
 
-  def open_status time_zone
-    hours = operating_hours.todays_hours time_zone
+  def open_status
+    location = locations.first
 
-    if hours.present? && hours.open && hours.close
-      hours.status time_zone
+    if location
+      hours = operating_hours.todays_hours location.timezone
+
+      if hours.present? && hours.open && hours.close
+        hours.status location.timezone
+      else
+        :closed
+      end
     else
       :closed
     end
@@ -51,7 +57,7 @@ class Listing < ApplicationRecord
     # make sure a menu is created if it doesn't exist
     self.menu
 
-    result = as_json({
+    as_json({
       include: [
         :ethicalities,
         :images,
@@ -60,35 +66,23 @@ class Listing < ApplicationRecord
         { operating_hours: { methods: [
           :label, :hours, :open_str, :close_str, :enabled
         ]}},
+      ],
+      methods: [
+        :open_status
       ]
     })
-
-    if options[:location]
-      result = with_location_fields result, options[:location]
-    end
-
-    result
   end
 
   def as_json_search options={}
-    result = as_json({
+    as_json({
       include: [
         :ethicalities,
         :images,
         :locations,
+      ],
+      methods: [
+        :open_status
       ]
-    })
-
-    if options[:location]
-      result = with_location_fields result, options[:location]
-    end
-
-    result
-  end
-
-  def with_location_fields listing, location
-    listing.merge({
-      open_status: open_status(location[:time_zone])
     })
   end
 

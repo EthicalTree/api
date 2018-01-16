@@ -145,7 +145,7 @@ namespace :datamigrate do
 
     ethicalities = ethicalities.map {|e| Ethicality.find_by(slug: ETHICALITIES[e.to_s.to_sym])}.compact
 
-    location.update_attributes lat: lat, lng: lng
+    location.update_attributes lat: lat, lng: lng, timezone: 'America/Toronto'
     DirectoryLocation.create_locations lat, lng
     listing.locations = [location]
 

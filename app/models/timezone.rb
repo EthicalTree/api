@@ -1,5 +1,5 @@
 class Timezone
-  def self.now time_zone
+  def self.now time_zone='UTC'
     if !time_zone.present?
       time_zone = 'UTC'
     end
