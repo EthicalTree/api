@@ -40,12 +40,12 @@ module V1
         else
           location = MapApi.build_from_address(location)[:location]
           coords = [location['lat'], location['lng']]
-          results = results.within(30, units: :kms, origin: coords)
+          results = results.within(10, units: :kms, origin: coords)
         end
 
       else
         coords = [location_information[:latitude], location_information[:longitude]]
-        results = results.within(30, units: :kms, origin: coords)
+        results = results.within(10, units: :kms, origin: coords)
       end
 
       results = results.order(
