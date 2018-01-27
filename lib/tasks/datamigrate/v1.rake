@@ -4,9 +4,12 @@ namespace :datamigrate do
 
   ETHICALITIES = {
     'Veg-friendly': 'vegetarian',
+    'Vegetarian': 'vegetarian',
+    'Vegan': 'vegan',
     'Fair Trade options': 'fair_trade',
     'Owned by a woman': 'woman_owned',
-    #'Organic options': 'organic',
+    'Organic options': 'organic',
+    'Organic': 'organic'
   }
 
   TABLES = {
