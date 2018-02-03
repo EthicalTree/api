@@ -6,8 +6,10 @@ class Listing < ApplicationRecord
   has_many :locations, dependent: :destroy
   has_many :listing_images
   has_many :listing_ethicalities
+  has_many :listing_tags
   has_many :menus
   has_many :images, through: :listing_images, class_name: 'Image'
+  has_many :tags, through: :listing_tags, class_name: 'Tag'
   has_many :ethicalities, through: :listing_ethicalities, class_name: 'Ethicality'
   has_many :operating_hours, class_name: 'OperatingHours'
 
@@ -60,6 +62,7 @@ class Listing < ApplicationRecord
     as_json({
       include: [
         :ethicalities,
+        :tags,
         :images,
         :locations,
         { menus: { include: [:images] } },
@@ -103,5 +106,10 @@ end
 class ListingEthicality < ApplicationRecord
   belongs_to :listing
   belongs_to :ethicality
+end
+
+class ListingTag < ApplicationRecord
+  belongs_to :listing
+  belongs_to :tag
 end
 

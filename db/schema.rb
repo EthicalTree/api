@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180116025017) do
+ActiveRecord::Schema.define(version: 20180201023918) do
 
   create_table "delayed_jobs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer "priority", default: 0, null: false
@@ -69,6 +69,13 @@ ActiveRecord::Schema.define(version: 20180116025017) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "listing_tags", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer "listing_id"
+    t.integer "tag_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "listings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
     t.string "title"
     t.string "slug"
@@ -109,6 +116,13 @@ ActiveRecord::Schema.define(version: 20180116025017) do
     t.integer "listing_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "tags", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "hashtag"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "use_type", default: 0
   end
 
   create_table "users", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

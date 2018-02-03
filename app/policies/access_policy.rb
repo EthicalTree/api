@@ -18,6 +18,7 @@ class AccessPolicy
     role :admin, proc { |user| user && user.admin? } do
       can :manage, User
       can :manage, Listing
+      can :manage, Tag
     end
 
     role :member, proc { |user| !!user } do

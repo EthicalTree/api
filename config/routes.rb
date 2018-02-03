@@ -23,12 +23,14 @@ Rails.application.routes.draw do
       end
       resources :images
       resources :listing_ethicalities
+      resources :listing_tags, path: :tags
       resources :locations
       resources :operating_hours
     end
 
     namespace :admin do
       resources :users
+      resources :tags
     end
   end
 

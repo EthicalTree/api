@@ -28,6 +28,3 @@ ethicalities.each do |name, icon_key|
   end
 end
 
-
-
-
