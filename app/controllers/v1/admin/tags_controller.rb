@@ -6,7 +6,14 @@ module V1
 
       def index
         authorize! :read, Tag
-        render json: Tag.all.map {|t| t.as_json_admin}
+
+        page = params[:page] or 1
+        results = Tag.all.page(page).per(25)
+        render json: {
+          tags: results.map {|t| t.as_json_admin},
+          current_page: page,
+          total_pages: results.total_pages
+        }
       end
 
       def create

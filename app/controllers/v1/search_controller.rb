@@ -59,8 +59,8 @@ module V1
 
       result_json = {
         listings: listings.map{|l| l.as_json_search location: location_information},
-        currentPage: page,
-        pageCount: results.total_pages
+        current_page: page,
+        page_count: results.total_pages
       }
 
       render json: result_json, status: :ok

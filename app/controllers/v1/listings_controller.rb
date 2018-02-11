@@ -43,7 +43,8 @@ module V1
     def listing_params
       params.require(:listing).permit(
         :title,
-        :bio
+        :bio,
+        :visibility
       )
     end
 

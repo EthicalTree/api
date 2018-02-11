@@ -7,7 +7,13 @@ module V1
       def index
         authorize! :read, User
 
-        render json: User.all.map {|u| u.as_json(only: [:id, :email, :admin])}
+        page = params[:page] or 1
+        results = User.all.page(page).per(25)
+        render json: {
+          users: results.as_json,
+          current_page: page,
+          total_pages: results.total_pages
+        }
       end
 
       def create
