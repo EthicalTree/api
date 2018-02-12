@@ -186,7 +186,7 @@ namespace :datamigrate do
     # generate the menu if it doens't exist
     listing.menu
 
-    listing.menu.images = Nokogiri::HTML(row[:geodir_menu]).css('img').map do |image_tag|
+    menu_images = Nokogiri::HTML(row[:geodir_menu]).css('img').map do |image_tag|
       src = image_tag[:src]
       name = "datamigrate_v1_#{URI.parse(src).path.parameterize}"
       key = "listings/#{listing.title.parameterize}/menus/#{listing.menu.id}/images/#{name}"
@@ -208,6 +208,10 @@ namespace :datamigrate do
       end
 
       image
+    end
+
+    if menu_images.present?
+      listing.menu.images = menu_images
     end
 
     listing
