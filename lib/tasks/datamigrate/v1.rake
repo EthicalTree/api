@@ -192,7 +192,11 @@ namespace :datamigrate do
       key = "listings/#{listing.title.parameterize}/menus/#{listing.menu.id}/images/#{name}"
 
       if !image = Image.find_by(key: key)
-        res = HTTParty.get(src)
+        begin
+          res = HTTParty.get(src)
+        rescue
+          next
+        end
 
         $fog_bucket.files.create({
           key: key,
