@@ -53,7 +53,7 @@ module V1
         'likeness DESC'
       )
 
-      results = results.distinct().page(page + 1).per(12)
+      results = results.distinct().page(page).per(12)
       result_ids = results.map {|r| r.id}
       listings = Listing.find(result_ids).index_by(&:id).slice(*result_ids).values
 
