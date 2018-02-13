@@ -7,7 +7,9 @@ namespace :datamigrate do
     'Vegetarian': 'vegetarian',
     'Vegan': 'vegan',
     'Fair Trade options': 'fair_trade',
+    'Fair trade': 'fair_trade',
     'Owned by a woman': 'woman_owned',
+    'Woman-owned': 'woman_owned',
     'Organic options': 'organic',
     'Organic': 'organic'
   }
