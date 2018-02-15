@@ -141,12 +141,14 @@ module V1
 
     def build_likeness_statement
       if @query.present?
-        query = @query
+        query = Listing.connection.quote("%#{@query}%")
 
         "(
           SELECT COUNT(likeness_listings.id) FROM listings likeness_listings
-          WHERE likeness_listings.id = listings.id AND
-          LOWER(listings.title) LIKE #{Listing.connection.quote("%#{query}%")}
+          WHERE likeness_listings.id = listings.id AND (
+            LOWER(listings.title) LIKE #{query} OR
+            LOWER(listings.bio) LIKE #{query}
+          )
         ) AS likeness"
       else
         "0 as likeness"
