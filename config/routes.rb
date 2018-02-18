@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     post :search_suggestions, to: 'search#suggestions'
 
     resources :ethicalities
+    resources :curated_lists
     resources :listings do
       resources :menus do
         resources :images
@@ -32,6 +33,7 @@ Rails.application.routes.draw do
       resources :users
       resources :tags
       resources :listings
+      resources :curated_lists
     end
   end
 

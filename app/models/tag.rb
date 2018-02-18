@@ -4,9 +4,16 @@ class Tag < ApplicationRecord
 
   has_many :listing_tags
   has_many :listings, through: :listing_tags, class_name: 'Listing'
+  has_many :curated_lists
 
   validates :hashtag, uniqueness: true
   validates :hashtag, presence: true
+
+  def sampled_listings
+    listings.order('RAND()').limit(8).map do |l|
+      l.as_json_full
+    end
+  end
 
   def as_json_admin
     as_json({

@@ -19,6 +19,7 @@ class AccessPolicy
       can :manage, User
       can :manage, Listing
       can :manage, Tag
+      can :manage, CuratedList
     end
 
     role :member, proc { |user| !!user } do
