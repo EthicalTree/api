@@ -5,15 +5,17 @@ module V1
       results = CuratedList.where({
         location: location,
         hidden: false
-      })
+      }).order(:order)
 
-      render json: { curated_lists: results.as_json(
-        include: {
-          tag: {
-            methods: :sampled_listings
+      render json: {
+        curated_lists: results.as_json(
+          include: {
+            tag: {
+              methods: :sampled_listings
+            }
           }
-        }
-      )}
+        )
+      }
     end
 
     def create

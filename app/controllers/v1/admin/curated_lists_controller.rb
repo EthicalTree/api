@@ -10,7 +10,10 @@ module V1
         page = params[:page] or 1
         location = params[:location]
 
-        results = CuratedList.where(location: location).page(page).per(25)
+        results = CuratedList.where(
+          location: location
+        ).order(:order).page(page).per(25)
+
         results_hash = {}
         results_hash[location] = {
           data: results.map {|t| t.as_json(include: :tag)},
@@ -47,10 +50,21 @@ module V1
         authorize! :update, CuratedList
 
         hashtag = curated_list_params[:hashtag]
+        order = curated_list_params[:order]
         params[:curated_list].delete :hashtag
+        params[:curated_list].delete :order
 
         @curated_list = CuratedList.find params[:id]
         @curated_list.assign_attributes curated_list_params
+
+        if order.present?
+          other_list = CuratedList.find_by(order: order)
+
+          if other_list.present?
+            other_list.update_column(:order, @curated_list.order)
+            @curated_list.order = order
+          end
+        end
 
         if hashtag.present?
           @curated_list.tag = Tag.find_by(hashtag: Tag.strip_hashes(hashtag))
@@ -79,7 +93,8 @@ module V1
           :description,
           :location,
           :hidden,
-          :hashtag
+          :hashtag,
+          :order
         )
       end
     end
