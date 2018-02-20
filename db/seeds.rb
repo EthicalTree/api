@@ -7,11 +7,11 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 
 ethicalities = {
-  'Vegetarian': 'carrot',
-  'Vegan': 'leaf',
-  'Woman Owned': 'portrait_female',
-  'Fair Trade': 'tag2',
-  'Organic': 'flower'
+  'Vegetarian': 'vegetarian',
+  'Vegan': 'vegan',
+  'Woman Owned': 'woman_owned',
+  'Fair Trade': 'fair_trade',
+  'Organic': 'organic'
 }
 
 ethicalities.each do |name, icon_key|
