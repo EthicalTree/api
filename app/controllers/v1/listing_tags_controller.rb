@@ -8,10 +8,10 @@ module V1
 
     def create
       authorize! :update, @listing
-      tag_params[:hashtag] = Tag.strip_hashes(tag_params[:hashtag])
-      tag = Tag.find_or_create_by tag_params
+      hashtag = Tag.strip_hashes(tag_params[:hashtag])
+      tag = Tag.find_or_create_by hashtag: hashtag
 
-      if !@listing.tags.find_by(hashtag: tag_params[:hashtag]).present?
+      if !@listing.tags.find_by(hashtag: hashtag).present?
         @listing.tags.push(tag)
         @listing.save
         render json: { tag: tag }, status: :ok

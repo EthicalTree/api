@@ -7,22 +7,14 @@ module V1
       def index
         authorize! :read, CuratedList
 
-        page = params[:page] or 1
-        location = params[:location]
+        page = params[:page] || 1
 
-        results = CuratedList.where(
-          location: location
-        ).order(:order).page(page).per(25)
-
-        results_hash = {}
-        results_hash[location] = {
-          data: results.map {|t| t.as_json(include: :tag)},
-          current_page: page,
-          total_pages: results.total_pages
-        }
+        results = CuratedList.all.order(:order).page(page).per(25)
 
         render json: {
-          curated_lists: results_hash,
+          curated_lists: results.map {|t| t.as_json(include: :tag)},
+          current_page: page,
+          total_pages: results.total_pages
         }
       end
 

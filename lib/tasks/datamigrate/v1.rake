@@ -36,6 +36,7 @@ namespace :datamigrate do
       phone: 'geodir_contact',
       cover_image: 'featured_image',
       menu: 'geodir_menu',
+      tags: 'post_tags',
       ethical_criteria: 'geodir_ethicalcriteria'
     },
     hours: {
@@ -110,6 +111,7 @@ namespace :datamigrate do
     lng = row[:post_longitude].to_f
     ethicalities = row[:geodir_ethicalcriteria].split(',')
     featured_image = row[:featured_image]
+    tags = row[:post_tags].split(',')
 
     listing = Listing.find_by(slug: title.parameterize)
 
@@ -123,12 +125,14 @@ namespace :datamigrate do
       visibility: if status == 'publish' then 'published' else 'unpublished' end
     })
 
+    # Locations
     if listing.locations.present?
       location = listing.locations[0]
     else
       location = Location.new
     end
 
+    # Business Hours
     business_hours = PHP.unserialize row[:business_hours]
     listing.operating_hours = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].map do |day|
       is_open = business_hours["#{day}_closed"] == 'open'
@@ -148,6 +152,7 @@ namespace :datamigrate do
       oh
     end.compact
 
+    # Ethicalities
     ethicalities = ethicalities.map {|e| Ethicality.find_by(slug: ETHICALITIES[e.to_s.to_sym])}.compact
 
     location.update_attributes lat: lat, lng: lng, timezone: 'America/Toronto'
@@ -156,6 +161,11 @@ namespace :datamigrate do
 
     listing.ethicalities = ethicalities
 
+    # Tags
+    tags = tags.map {|t| Tag.find_or_create_by(hashtag: Tag.strip_hashes(t))}
+    listing.tags = (tags + listing.tags)
+
+    # Images
     if featured_image
       images = [{ file: featured_image, menu_order: 0 }]
     else

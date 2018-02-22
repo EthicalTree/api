@@ -1,9 +1,7 @@
 module V1
   class CuratedListsController < APIController
     def index
-      location = "front_page"
       results = CuratedList.where({
-        location: location,
         hidden: false
       }).order(:order)
 
