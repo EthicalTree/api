@@ -10,7 +10,7 @@ module V1
         page = params[:page].to_i or 1
         results = Listing.all.page(page).per(25)
         render json: {
-          listings: results.as_json,
+          listings: results.map {|l| l.as_json_admin},
           current_page: page,
           total_pages: results.total_pages
         }
@@ -28,7 +28,24 @@ module V1
         authorize! :update, Listing
 
         @listing = Listing.find params[:id]
-        @listing.assign_attributes listing_params
+        @listing.assign_attributes({
+          visibility: listing_params[:visibility]
+        })
+
+        if listing_params[:plan_type].present?
+          price = BigDecimal(listing_params[:price])
+
+          plan = Plan.find_or_create_by listing_id: @listing.id
+          plan.assign_attributes({
+            listing_id: @listing.id,
+            plan_type: listing_params[:plan_type],
+            price: price
+          })
+
+          plan.save
+        else
+          @listing.plan.delete
+        end
 
         if @listing.save
           render json: {}
@@ -46,6 +63,9 @@ module V1
       def listing_params
         params.require(:listing).permit(
           :visibility,
+          :plan_type,
+          :price,
+          :id
         )
       end
     end

@@ -3,6 +3,7 @@ class Listing < ApplicationRecord
 
   enum visibility: [:published, :unpublished]
 
+  has_one :plan
   has_many :locations, dependent: :destroy
   has_many :listing_images
   has_many :listing_ethicalities
@@ -65,6 +66,7 @@ class Listing < ApplicationRecord
         :tags,
         :images,
         :locations,
+        { plan: { methods: [:type] } },
         { menus: { include: [:images] } },
         { operating_hours: { methods: [
           :label, :hours, :open_str, :close_str, :enabled
@@ -85,6 +87,14 @@ class Listing < ApplicationRecord
       ],
       methods: [
         :open_status
+      ]
+    })
+  end
+
+  def as_json_admin options={}
+    as_json({
+      include: [
+        { plan: { methods: [:type] } }
       ]
     })
   end

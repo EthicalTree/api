@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 
     resources :ethicalities
     resources :curated_lists
+    resources :plans
     resources :listings do
       resources :menus do
         resources :images

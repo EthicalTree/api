@@ -27,6 +27,7 @@ namespace :datamigrate do
     },
     listing: {
       id: 'post_id',
+      is_featured: 'is_featured',
       title: 'post_title',
       status: 'post_status',
       featured_image: 'featured_image',
