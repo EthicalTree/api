@@ -31,6 +31,14 @@ class Listing < ApplicationRecord
     return @@search_fields
   end
 
+  def featured_listings
+    if !plan.present?
+      Plan.featured_listings.map {|l| l.as_json_search}
+    else
+      []
+    end
+  end
+
   # For now we only support one menu, but might support in the future
   def menu
     if self.menus.empty?
@@ -73,7 +81,8 @@ class Listing < ApplicationRecord
         ]}},
       ],
       methods: [
-        :open_status
+        :open_status,
+        :featured_listings
       ]
     })
   end

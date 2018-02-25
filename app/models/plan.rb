@@ -1,4 +1,6 @@
 class Plan < ApplicationRecord
+  belongs_to :listing
+
   def self.Types
     {
       premium: { name: 'Premium', price: 57.00 },
@@ -6,6 +8,12 @@ class Plan < ApplicationRecord
       silver: { name: 'Silver', price: 129.00 },
       gold: { name: 'Gold', price: 189.00 }
     }
+  end
+
+  def self.featured_listings
+    Plan.all.order('RAND()').limit(4).map do |p|
+      p.listing
+    end.shuffle
   end
 
   validates :listing_id, presence: true
