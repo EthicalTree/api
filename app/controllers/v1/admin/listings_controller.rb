@@ -7,8 +7,22 @@ module V1
       def index
         authorize! :read, Listing
 
+        query = params[:query]
         page = params[:page].to_i or 1
-        results = Listing.all.page(page).per(25)
+        filter = params[:filter]
+
+        if query.present?
+          results = Listing.where("LOWER(title) LIKE :query", query: "%#{query.downcase}%")
+        else
+          results = Listing.all
+        end
+
+        if filter == 'plans'
+          results = results.joins(:plan)
+        end
+
+        results = results.order('title').page(page).per(25)
+
         render json: {
           listings: results.map {|l| l.as_json_admin},
           current_page: page,

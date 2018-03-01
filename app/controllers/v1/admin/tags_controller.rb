@@ -7,8 +7,16 @@ module V1
       def index
         authorize! :read, Tag
 
+        query = params[:query]
         page = params[:page] or 1
-        results = Tag.all.page(page).per(25)
+
+        if query.present?
+          results = Tag.where("hashtag LIKE :query", query: "%#{query.downcase}%")
+        else
+          results = Tag.all
+        end
+
+        results = results.order('hashtag').page(page).per(25)
         render json: {
           tags: results.map {|t| t.as_json_admin},
           current_page: page,

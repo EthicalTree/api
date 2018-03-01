@@ -7,8 +7,16 @@ module V1
       def index
         authorize! :read, User
 
+        query = params[:query]
         page = params[:page] or 1
-        results = User.all.page(page).per(25)
+
+        if query.present?
+          results = User.where("LOWER(email)LIKE :query", query: "%#{query.downcase}%")
+        else
+          results = User.all
+        end
+
+        results = results.order('email').page(page).per(25)
         render json: {
           users: results.as_json,
           current_page: page,

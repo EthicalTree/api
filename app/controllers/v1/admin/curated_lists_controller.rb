@@ -7,9 +7,16 @@ module V1
       def index
         authorize! :read, CuratedList
 
+        query = params[:query]
         page = params[:page] || 1
 
-        results = CuratedList.all.order(:order).page(page).per(25)
+        if query.present?
+          results = CuratedList.where("LOWER(name) LIKE :query", query: "%#{query.downcase}%")
+        else
+          results = CuratedList.all
+        end
+
+        results = results.order(:order).page(page).per(25)
 
         render json: {
           curated_lists: results.map {|t| t.as_json(include: :tag)},
