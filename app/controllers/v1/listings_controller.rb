@@ -13,14 +13,14 @@ module V1
       @listing.owner_id = current_user.id
 
       if @listing.save
-        secured_json_response @listing, :as_json_full, { location: location_information }
+        json_with_permissions @listing, :as_json_full
       else
         render json: { errors: @listing.errors.full_messages }
       end
     end
 
     def show
-      secured_json_response @listing, :as_json_full, { location: location_information }
+      json_with_permissions @listing, :as_json_full
     end
 
     def update
@@ -28,7 +28,7 @@ module V1
       @listing.assign_attributes listing_params
 
       if @listing.save
-        secured_json_response @listing, :as_json
+        json_with_permissions @listing, :as_json
       else
         render json: { errors: @listing.errors.full_messages }
       end

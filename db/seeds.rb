@@ -28,14 +28,3 @@ ethicalities.each do |name, icon_key|
   end
 end
 
-plans = {
-  'Premium': 57,
-  'Bronze': 69,
-  'Silver': 129,
-  'Gold': 189
-}
-
-plans.each do |name, price|
-  Plan.find_or_create_by(name: name, price: price)
-end
-

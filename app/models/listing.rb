@@ -64,7 +64,7 @@ class Listing < ApplicationRecord
     end
   end
 
-  def as_json_full options={}
+  def as_json_full
     # make sure a menu is created if it doesn't exist
     self.menu
 
@@ -87,12 +87,13 @@ class Listing < ApplicationRecord
     })
   end
 
-  def as_json_search options={}
+  def as_json_search
     as_json({
       include: [
         :ethicalities,
         :images,
         :locations,
+        :plan
       ],
       methods: [
         :open_status
@@ -100,7 +101,7 @@ class Listing < ApplicationRecord
     })
   end
 
-  def as_json_admin options={}
+  def as_json_admin
     as_json({
       include: [
         { plan: { methods: [:type] } }

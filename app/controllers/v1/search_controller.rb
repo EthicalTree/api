@@ -61,8 +61,8 @@ module V1
       listings = Listing.find(result_ids).index_by(&:id).slice(*result_ids).values
 
       result_json = {
-        featured: featured.map{|l| l.as_json_search location: location_information},
-        listings: listings.map{|l| l.as_json_search location: location_information},
+        featured: featured.map{|l| l.as_json_search},
+        listings: listings.map{|l| l.as_json_search},
         current_page: page,
         page_count: results.total_pages
       }

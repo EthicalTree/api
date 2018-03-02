@@ -11,7 +11,7 @@ class Tag < ApplicationRecord
 
   def sampled_listings
     listings.order('RAND()').limit(8).map do |l|
-      l.as_json_full
+      l.as_json_search
     end.shuffle
   end
 
