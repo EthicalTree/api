@@ -166,14 +166,7 @@ namespace :datamigrate do
     tags = tags.map {|t| Tag.find_or_create_by(hashtag: Tag.strip_hashes(t))}
     listing.tags = (tags + listing.tags)
 
-    # Images
-    if featured_image
-      images = [{ file: featured_image, menu_order: 0 }]
-    else
-      images = []
-    end
-
-    images = db.query("SELECT file,menu_order FROM #{TABLES[:images]} WHERE post_id='#{row[:post_id]}'").to_a + images
+    images = db.query("SELECT file,menu_order FROM #{TABLES[:images]} WHERE post_id='#{row[:post_id]}'").to_a
 
     listing.images = images.map do |image_row|
       name = "datamigrate_v1_#{image_row[:file].gsub('/', '_')}"
