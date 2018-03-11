@@ -17,6 +17,7 @@ class Listing < ApplicationRecord
   belongs_to :owner, foreign_key: :owner_id, class_name: 'User'
 
   before_validation :ensure_slug
+  before_save :lower_website
 
   validates :title, presence: true
   validates :slug, uniqueness: true
@@ -99,6 +100,12 @@ class Listing < ApplicationRecord
   def ensure_slug
     if not self.slug
       self.slug = self.title.parameterize
+    end
+  end
+
+  def lower_website
+    if self.website.present?
+      self.website = self.website.downcase
     end
   end
 end

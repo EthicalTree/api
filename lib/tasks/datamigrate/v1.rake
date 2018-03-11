@@ -38,7 +38,8 @@ namespace :datamigrate do
       cover_image: 'featured_image',
       menu: 'geodir_menu',
       tags: 'post_tags',
-      ethical_criteria: 'geodir_ethicalcriteria'
+      ethical_criteria: 'geodir_ethicalcriteria',
+      website: 'geodir_website'
     },
     hours: {
       operating_hours: 'business_hours'
@@ -108,6 +109,7 @@ namespace :datamigrate do
   def get_or_create_listing row, domain, db
     title = row[:post_title]
     status = row[:post_status]
+    website = row[:geodir_website] || ''
     lat = row[:post_latitude].to_f
     lng = row[:post_longitude].to_f
     ethicalities = row[:geodir_ethicalcriteria].split(',')
@@ -123,6 +125,7 @@ namespace :datamigrate do
     listing.update_attributes({
       title: title,
       bio: row[:post_content],
+      website: website.downcase,
       visibility: if status == 'publish' then 'published' else 'unpublished' end
     })
 

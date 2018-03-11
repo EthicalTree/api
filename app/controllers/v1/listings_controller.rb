@@ -44,7 +44,8 @@ module V1
       params.require(:listing).permit(
         :title,
         :bio,
-        :visibility
+        :visibility,
+        :website
       )
     end
 

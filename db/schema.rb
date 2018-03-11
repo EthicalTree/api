@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180224190335) do
+ActiveRecord::Schema.define(version: 20180311184449) do
 
   create_table "curated_lists", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
@@ -95,6 +95,7 @@ ActiveRecord::Schema.define(version: 20180224190335) do
     t.datetime "updated_at", null: false
     t.integer "owner_id"
     t.integer "visibility", default: 0
+    t.string "website"
   end
 
   create_table "locations", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
