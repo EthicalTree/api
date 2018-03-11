@@ -31,6 +31,10 @@ class DirectoryLocation < ApplicationRecord
 
     details = MapApi.build_from_coordinates lat, lng
 
+    if !details.present?
+      return
+    end
+
     if details[:city].present? and details[:state].present?
       name = "#{details[:city]["long_name"]}, #{details[:state]["short_name"]}"
       locations.append self.build_location(name)
