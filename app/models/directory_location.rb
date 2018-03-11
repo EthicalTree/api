@@ -32,7 +32,7 @@ class DirectoryLocation < ApplicationRecord
     details = MapApi.build_from_coordinates lat, lng
 
     if !details.present?
-      return
+      return []
     end
 
     if details[:city].present? and details[:state].present?
