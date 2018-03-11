@@ -135,23 +135,36 @@ namespace :datamigrate do
 
     # Business Hours
     business_hours = PHP.unserialize row[:business_hours]
+
+    listing.operating_hours.delete_all
     listing.operating_hours = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].map do |day|
       is_open = business_hours["#{day}_closed"] == 'open'
-      open = business_hours["#{day}_open"]
-      close = business_hours["#{day}_close"]
+      open1 = business_hours["#{day}_open"]
+      close1 = business_hours["#{day}_close"]
+      open2 = business_hours["#{day}_open_2"]
+      close2 = business_hours["#{day}_close_2"]
+      results = [nil, nil]
 
-      if !is_open || !open.present? || !close.present?
+      if !is_open
         next
       end
 
-      if !oh = listing.operating_hours.find_by(day: day)
+      if (open1.present? && close1.present?)
         oh = OperatingHours.new day: day
+        oh.open = Time.parse(open1 + ' EST').utc
+        oh.close = Time.parse(close1 + ' EST').utc
+        results[0] = oh
       end
 
-      oh.open = Time.parse(open + ' UTC')
-      oh.close = Time.parse(close + ' UTC')
-      oh
-    end.compact
+      if (open2.present? && close2.present?)
+        oh = OperatingHours.new day: day
+        oh.open = Time.parse(open2 + ' EST').utc
+        oh.close = Time.parse(close2 + ' EST').utc
+        results[1] = oh
+      end
+
+      results
+    end.flatten.compact
 
     # Ethicalities
     ethicalities = ethicalities.map {|e| Ethicality.find_by(slug: ETHICALITIES[e.to_s.to_sym])}.compact

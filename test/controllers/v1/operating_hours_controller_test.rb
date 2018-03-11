@@ -14,11 +14,11 @@ module V1
 
       authorize user
       res = post :create, params: { listing_id: 'new-listing', operating_hour: {
-        monday: { open: '11:00am', close: '5:00pm' },
-        tuesday: { open: '11:00am', close: '5:00pm' },
-        wednesday: { open: '11:00am', close: '5:00pm' },
-        thursday: { open: '11:00am', close: '5:00pm' },
-        friday: { open: '11:00am', close: '5:00pm' }
+        monday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
+        tuesday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
+        wednesday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
+        thursday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
+        friday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
       }}
 
       listing.reload
@@ -32,11 +32,11 @@ module V1
 
       authorize user
       res = post :create, params: { listing_id: 'new-listing', operating_hour: {
-        monday: { open: '11:00am', close: '5:00pm' },
-        tuesday: { open: '11:00am', close: '5:00pm' },
-        wednesday: { open: '11:00am', close: '5:00pm' },
-        thursday: { open: '11:00am', close: '5:00pm' },
-        friday: { open: '11:00am', close: '5:00pm' }
+        monday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
+        tuesday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
+        wednesday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
+        thursday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
+        friday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
       }}
 
       listing.reload
@@ -50,11 +50,11 @@ module V1
 
       authorize user
       res = post :create, params: { listing_id: 'new-listing', operating_hour: {
-        monday: { open: '11:00am', close: '5:00pm' },
-        tuesday: { open: '11:00am', close: '5:00pm' },
-        wednesday: { open: '11:00am', close: '5:00pm' },
-        thursday: { open: '11:00am', close: '5:00pm' },
-        friday: { open: '11:00am', close: '5:00pm' }
+        monday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
+        tuesday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
+        wednesday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
+        thursday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
+        friday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
       }}
 
       listing.reload
@@ -66,11 +66,11 @@ module V1
       listing = create :listing, slug: 'new-listing'
 
       res = post :create, params: { listing_id: 'new-listing', operating_hour: {
-        monday: { open: '11:00am', close: '5:00pm' },
-        tuesday: { open: '11:00am', close: '5:00pm' },
-        wednesday: { open: '11:00am', close: '5:00pm' },
-        thursday: { open: '11:00am', close: '5:00pm' },
-        friday: { open: '11:00am', close: '5:00pm' }
+        monday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
+        tuesday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
+        wednesday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
+        thursday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
+        friday: { hours: [{open_str: '11:00 am', close_str: '5:00 pm' }]},
       }}
 
       listing.reload

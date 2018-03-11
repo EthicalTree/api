@@ -13,15 +13,17 @@ module V1
 
       @listing.operating_hours = []
 
-      operating_hours.to_h.each do |k, v|
-        hour = OperatingHours.new do |oh|
-          oh.day = k
-          oh.open = if v[:enabled] then Time.parse(v[:open_str] + ' UTC') else nil end
-          oh.close = if v[:enabled] then Time.parse(v[:close_str] + ' UTC') else nil end
-          oh.listing_id = @listing.id
-        end
+      operating_hours.to_h.each do |day, value|
+        value["hours"].each do |v|
+          hour = OperatingHours.new do |oh|
+            oh.day = day
+            oh.open = Time.parse(v[:open_str] + ' UTC')
+            oh.close = Time.parse(v[:close_str] + ' UTC')
+            oh.listing_id = @listing.id
+          end
 
-        @listing.operating_hours.push hour
+          @listing.operating_hours.push hour
+        end
       end
 
       render json: { operating_hours: @listing.operating_hours.map{|o| o.as_json_full} }, status: :ok
@@ -42,8 +44,9 @@ module V1
     private
 
     def operating_hours_params
-
-      content = [:open_str, :close_str, :enabled]
+      content = {
+        hours: [:open_str, :close_str]
+      }
 
       params.require(:operating_hour).permit(
         sunday: content,

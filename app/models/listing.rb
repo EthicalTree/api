@@ -48,22 +48,6 @@ class Listing < ApplicationRecord
     self.menus.first
   end
 
-  def open_status
-    location = locations.first
-
-    if location
-      hours = operating_hours.todays_hours location.timezone
-
-      if hours.present? && hours.open && hours.close
-        hours.status location.timezone
-      else
-        :closed
-      end
-    else
-      :closed
-    end
-  end
-
   def as_json_full
     # make sure a menu is created if it doesn't exist
     self.menu
@@ -76,12 +60,13 @@ class Listing < ApplicationRecord
         :locations,
         { plan: { methods: [:type] } },
         { menus: { include: [:images] } },
-        { operating_hours: { methods: [
-          :label, :hours, :open_str, :close_str, :enabled
-        ]}},
+        { operating_hours: {
+          methods: [
+            :label, :hours, :open_str, :close_str
+          ]
+        }},
       ],
       methods: [
-        :open_status,
         :featured_listings
       ]
     })
@@ -93,10 +78,10 @@ class Listing < ApplicationRecord
         :ethicalities,
         :images,
         :locations,
-        :plan
-      ],
-      methods: [
-        :open_status
+        :plan,
+        operating_hours: {
+          methods: [:open_str, :close_str]
+        }
       ]
     })
   end
