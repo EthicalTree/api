@@ -5,6 +5,10 @@ class MapApi
   TimezoneUrl = "https://maps.googleapis.com/maps/api/timezone/json"
 
   def self.parse_results details
+    if !details.present?
+      return nil
+    end
+
     bounds = details["geometry"]["viewport"]
     location = details["geometry"]["location"]
     extracted = details["address_components"].reduce({}) do |a, c|

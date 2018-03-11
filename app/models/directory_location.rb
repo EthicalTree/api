@@ -45,7 +45,7 @@ class DirectoryLocation < ApplicationRecord
   end
 
   def self.create_locations lat, lng
-    locations = self.build_locations lat, lng
+    locations = self.build_locations(lat, lng).compact
     locations.each {|l| l.save}
   end
 
