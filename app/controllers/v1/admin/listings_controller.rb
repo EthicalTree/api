@@ -57,7 +57,7 @@ module V1
           })
 
           plan.save
-        else
+        elsif @listing.plan.present?
           @listing.plan.delete
         end
 
