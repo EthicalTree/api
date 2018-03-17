@@ -189,15 +189,15 @@ namespace :datamigrate do
       key = "listings/#{listing.title.parameterize}/images/#{name}"
       order = image_row[:menu_order]
 
+      res = HTTParty.get("https://#{domain}/wp-content/uploads/#{image_row[:file]}")
+
+      $fog_bucket.files.create({
+        key: key,
+        body: res.body,
+        public: true
+      })
+
       if !image = Image.find_by(key: key)
-        res = HTTParty.get("https://#{domain}/wp-content/uploads/#{image_row[:file]}")
-
-        $fog_bucket.files.create({
-          key: key,
-          body: res.body,
-          public: true
-        })
-
         image = Image.new(key: key)
       end
 
