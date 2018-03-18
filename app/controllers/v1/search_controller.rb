@@ -150,8 +150,10 @@ module V1
         "(
           SELECT COUNT(likeness_listings.id) FROM listings likeness_listings
           WHERE likeness_listings.id = listings.id AND (
-            LOWER(listings.title) LIKE #{query} OR
-            LOWER(listings.bio) LIKE #{query}
+            CASE
+              WHEN LOWER(listings.title) LIKE #{query} THEN 2
+              WHEN LOWER(listings.bio) LIKE #{query} THEN 1
+            END
           )
         ) AS likeness"
       else
