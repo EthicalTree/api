@@ -11,9 +11,13 @@ class Plan < ApplicationRecord
   end
 
   def self.featured_listings
-    Plan.all.order('RAND()').limit(4).map do |p|
-      p.listing
-    end.shuffle
+    if list = CuratedList.find_by(featured: true)
+      list.tag.listings.order('RAND()').limit(4).shuffle
+    else
+      Plan.all.order('RAND()').limit(4).map do |p|
+        p.listing
+      end.shuffle
+    end
   end
 
   validates :listing_id, presence: true

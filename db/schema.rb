@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180311184449) do
+ActiveRecord::Schema.define(version: 20180320014935) do
 
   create_table "curated_lists", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20180311184449) do
     t.boolean "hidden", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "featured"
   end
 
   create_table "delayed_jobs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

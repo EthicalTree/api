@@ -48,10 +48,15 @@ module V1
       def update
         authorize! :update, CuratedList
 
+        featured = curated_list_params[:featured]
         hashtag = curated_list_params[:hashtag]
         order = curated_list_params[:order]
         params[:curated_list].delete :hashtag
         params[:curated_list].delete :order
+
+        if featured == true
+          CuratedList.update_all featured: false
+        end
 
         @curated_list = CuratedList.find params[:id]
         @curated_list.assign_attributes curated_list_params
@@ -92,6 +97,7 @@ module V1
           :description,
           :location,
           :hidden,
+          :featured,
           :hashtag,
           :order
         )
