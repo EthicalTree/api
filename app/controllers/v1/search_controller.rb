@@ -18,11 +18,11 @@ module V1
         'listings.title',
         'listings.bio',
         build_ethicality_statement,
-        build_likeness_statement
       ].compact
 
       joins = [
         "INNER JOIN listings ON listings.id = locations.listing_id AND listings.visibility = 0",
+        "LEFT JOIN plans ON plans.id = locations.listing_id",
         build_ethicality_join,
       ].compact
 
@@ -53,7 +53,7 @@ module V1
 
       results = results.order(
         'eth_total DESC',
-        'likeness DESC'
+        build_likeness_statement
       )
 
       results = results.distinct().page(page).per(12)
@@ -147,17 +147,17 @@ module V1
       if @query.present?
         query = Listing.connection.quote("%#{@query}%")
 
-        "(
-          SELECT COUNT(likeness_listings.id) FROM listings likeness_listings
-          WHERE likeness_listings.id = listings.id AND (
-            CASE
-              WHEN LOWER(listings.title) LIKE #{query} THEN 2
-              WHEN LOWER(listings.bio) LIKE #{query} THEN 1
-            END
-          )
-        ) AS likeness"
+        "CASE
+          WHEN (
+            LOWER(listings.title) LIKE #{query} OR
+            LOWER(listings.bio) LIKE #{query}
+          ) AND plans.id IS NOT NULL THEN 3
+          WHEN LOWER(listings.title) LIKE #{query} THEN 2
+          WHEN LOWER(listings.bio) LIKE #{query} THEN 1
+          ELSE 0
+        END DESC"
       else
-        "0 as likeness"
+        ""
       end
     end
 
