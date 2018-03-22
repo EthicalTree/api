@@ -3,6 +3,7 @@ class Plan < ApplicationRecord
 
   def self.Types
     {
+      trial: { name: 'Trial', price: 0.00 },
       premium: { name: 'Premium', price: 57.00 },
       bronze: { name: 'Bronze', price: 69.00 },
       silver: { name: 'Silver', price: 129.00 },
