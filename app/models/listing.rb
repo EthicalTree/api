@@ -58,7 +58,7 @@ class Listing < ApplicationRecord
         :ethicalities,
         :tags,
         :images,
-        :locations,
+        { locations: { methods: [:formatted_address] } },
         { plan: { methods: [:type] } },
         { menus: { include: [:images] } },
         { operating_hours: {

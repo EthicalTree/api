@@ -39,7 +39,11 @@ namespace :datamigrate do
       menu: 'geodir_menu',
       tags: 'post_tags',
       ethical_criteria: 'geodir_ethicalcriteria',
-      website: 'geodir_website'
+      website: 'geodir_website',
+      address: 'post_address',
+      city: 'post_city',
+      region: 'post_region',
+      country: 'post_country'
     },
     hours: {
       operating_hours: 'business_hours'
@@ -115,6 +119,10 @@ namespace :datamigrate do
     ethicalities = row[:geodir_ethicalcriteria].split(',')
     featured_image = row[:featured_image]
     tags = row[:post_tags].split(',')
+    address = row[:post_address]
+    city = row[:post_city]
+    region = row[:post_region]
+    country = row[:post_country]
 
     listing = Listing.find_by(slug: title.parameterize)
 
@@ -172,8 +180,16 @@ namespace :datamigrate do
     # Ethicalities
     ethicalities = ethicalities.map {|e| Ethicality.find_by(slug: ETHICALITIES[e.to_s.to_sym])}.compact
 
-    location.update_attributes lat: lat, lng: lng, timezone: 'America/Toronto'
-    DirectoryLocation.create_locations lat, lng
+    location.update_attributes({
+      lat: lat,
+      lng: lng,
+      timezone: 'America/Toronto',
+      address: address,
+      city: city,
+      region: region,
+      country: country
+    })
+    #DirectoryLocation.create_locations lat, lng
     listing.locations = [location]
 
     listing.ethicalities = ethicalities
