@@ -19,6 +19,6 @@ production:
   <<: *default
   database: ethicaltree_prod
   pool: 5
-  host: localhost
+  host: <%= ENV["DB_HOSTNAME"] %>
   username: <%= ENV["DB_USERNAME"] %>
   password: <%= ENV["DB_PASSWORD"] %>
