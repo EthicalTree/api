@@ -1,0 +1,34 @@
+version: '3.0'
+
+services:
+
+  ethicaltree-api:
+    container_name: ethicaltree-api
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: bash -c "rm -f /usr/src/app/tmp/pids/server.pid && rails server -b 0.0.0.0"
+    depends_on:
+      - db
+    ports:
+      - 3001:3000
+    volumes:
+      - .:/usr/src/app
+  db:
+    image: mysql:5.7
+    container_name: ethicaltree-mysql
+    environment:
+      MYSQL_USER: root
+      MYSQL_PASSWORD: ""
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_ROOT_PASSWORD: ""
+    ports:
+      - 3308:3306
+    volumes:
+      - ./db-data:/var/lib/mysql
+
+networks:
+  default:
+    external:
+      name: ethicaltree
+

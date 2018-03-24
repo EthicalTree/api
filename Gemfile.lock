@@ -293,6 +293,8 @@ GEM
     tilt (2.0.7)
     tzinfo (1.2.3)
       thread_safe (~> 0.1)
+    tzinfo-data (1.2018.3)
+      tzinfo (>= 1.0.0)
     unicorn (5.3.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
@@ -337,7 +339,7 @@ DEPENDENCIES
   letter_opener
   listen (~> 3.0.5)
   mocha
-  mysql2
+  mysql2 (>= 0.3.18, < 0.5)
   olive_branch
   password_strength
   php-serialize
@@ -346,7 +348,7 @@ DEPENDENCIES
   pry-rails
   puma (~> 3.7.0)
   rack-cors
-  rails (~> 5.1.2)
+  rails (= 5.1.2)
   rails-controller-testing
   shoulda
   simplecov
