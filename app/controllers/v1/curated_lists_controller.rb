@@ -7,7 +7,7 @@ module V1
 
       render json: {
         curated_lists: results.as_json(
-          only: [ :name ],
+          only: [ :name, :id ],
           methods: :listings
         )
       }
