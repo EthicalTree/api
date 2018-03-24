@@ -7,6 +7,14 @@ class CuratedList < ApplicationRecord
   validates :name, presence: true
   validates :tag, presence: true
 
+  def listings
+    Listing.joins(
+      "INNER JOIN listing_tags ON listings.id = listing_tags.listing_id"
+    ).where('listing_tags.tag_id': tag_id).order('RAND()').limit(8).map do |l|
+      l.as_json_search
+    end.shuffle
+  end
+
   private
 
   def ensure_unique_order

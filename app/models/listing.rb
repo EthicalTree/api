@@ -63,7 +63,7 @@ class Listing < ApplicationRecord
         { menus: { include: [:images] } },
         { operating_hours: {
           methods: [
-            :label, :hours, :open_str, :close_str
+            :label
           ]
         }},
       ],
@@ -75,14 +75,34 @@ class Listing < ApplicationRecord
 
   def as_json_search
     as_json({
+      only: [
+        :id,
+        :slug,
+        :title
+      ],
       include: [
-        :ethicalities,
-        :images,
-        :locations,
-        :plan,
-        operating_hours: {
-          methods: [:open_str, :close_str]
-        }
+        {ethicalities: {only: [
+          :icon_key,
+          :slug
+        ]}},
+        {images: {only: [
+          :id,
+          :key,
+          :order
+        ]}},
+        {locations: {only: [
+          :id,
+          :lat,
+          :lng
+        ]}},
+        {plan: {only: [
+          :id
+        ]}},
+        {operating_hours: {only: [
+          :day,
+          :open,
+          :close
+        ]}}
       ]
     })
   end

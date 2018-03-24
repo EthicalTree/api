@@ -7,11 +7,8 @@ module V1
 
       render json: {
         curated_lists: results.as_json(
-          include: {
-            tag: {
-              methods: :sampled_listings
-            }
-          }
+          only: [ :name ],
+          methods: :listings
         )
       }
     end

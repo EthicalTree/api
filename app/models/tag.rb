@@ -9,12 +9,6 @@ class Tag < ApplicationRecord
   validates :hashtag, uniqueness: true
   validates :hashtag, presence: true
 
-  def sampled_listings
-    listings.order('RAND()').limit(8).map do |l|
-      l.as_json_search
-    end.shuffle
-  end
-
   def as_json_admin
     as_json({
       only: [
