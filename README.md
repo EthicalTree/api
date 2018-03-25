@@ -10,8 +10,8 @@ We use Ruby on Rails to manage the API layer of the application
 
 ## Requirements
 
-Docker Engine
-Docker Compose
+- Docker Engine
+- Docker Compose
 
 
 ## Running
