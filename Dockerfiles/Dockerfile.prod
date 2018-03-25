@@ -1,0 +1,21 @@
+FROM alpine:3.6
+
+RUN apk update && apk --update add ruby ruby-irb ruby-json ruby-rake \
+    ruby-bigdecimal ruby-io-console libstdc++ tzdata mysql-client \
+    mariadb-client-libs nodejs
+
+ENV HOME /app
+ADD Gemfile /app/
+ADD Gemfile.lock /app/
+
+RUN apk --update add --virtual build-dependencies build-base ruby-dev \
+    mysql-dev libc-dev libxml2-dev libxslt-dev linux-headers && \
+    gem install bundler --no-ri --no-rdoc && \
+    cd /app ; bundle install --without development test && \
+    apk del build-dependencies
+
+ENV RAILS_ENV production
+WORKDIR /app
+ADD . /app
+
+CMD ["bundle", "exec", "unicorn", "-p", "3000", "-c", "./config/unicorn/production.rb"]

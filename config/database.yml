@@ -17,7 +17,7 @@ test:
 
 production:
   <<: *default
-  database: ethicaltree_prod
+  database: ethicaltree
   pool: 5
   host: <%= ENV["DB_HOSTNAME"] %>
   username: <%= ENV["DB_USERNAME"] %>
