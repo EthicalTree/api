@@ -8,20 +8,12 @@ Welcome to EthicalTree! It's great to have you on board :)
 
 We use Ruby on Rails to manage the API layer of the application
 
-## Installation
+## Requirements
 
-This installation assumes you have installed:
+Docker Engine
+Docker Compose
 
-- `ruby 2.3.3`
-
-```
-bundle
-```
 
 ## Running
 
-#### Terminal 1
-
-```
-rails s
-```
+`docker-compose up`
