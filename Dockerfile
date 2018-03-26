@@ -4,7 +4,8 @@ ENV HOME /app
 ADD Gemfile /app/
 ADD Gemfile.lock /app/
 
-RUN apk --update add --virtual build-dependencies build-base linux-headers tzdata \
+RUN mkdir -p /app/tmp/pids && \
+  apk --update add --virtual build-dependencies build-base linux-headers tzdata \
   libxml2-dev libxslt-dev mariadb-client-libs mariadb-dev libbsd-dev && \
   cd /app ; bundle install --without development test
 
