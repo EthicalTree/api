@@ -11,4 +11,4 @@ RUN apk --update add --virtual build-dependencies build-base linux-headers tzdat
 WORKDIR /app
 ADD . /app
 
-CMD ["bundle", "exec", "unicorn", "-p", "3000", "-c", "./config/unicorn/production.rb"]
+CMD ["bundle", "exec", "unicorn", "-p", "80", "-c", "./config/unicorn/production.rb"]
