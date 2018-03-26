@@ -1,9 +1,9 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '5.1.2'
-gem 'mysql2', '>= 0.3.18', '< 0.5'
-gem 'puma', '~> 3.7.0'
+gem 'rails', '5.1.5'
+gem 'mysql2', '0.4.10'
+gem 'puma', '3.6.2'
 gem 'exception_notification'
 gem 'daemons'
 
@@ -14,6 +14,7 @@ gem 'rack-cors', require: 'rack/cors'
 gem 'haml-rails'
 gem 'bcrypt', '~> 3.1.7'
 gem 'dalli'
+gem 'mime-types'
 
 # Extra Libraries
 gem 'httparty'

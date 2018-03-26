@@ -6,8 +6,8 @@ services:
     container_name: ethicaltree-api
     build:
       context: .
-      dockerfile: ./Dockerfiles/Dockerfile.local
-    command: bash -c "rm -f /usr/src/app/tmp/pids/server.pid && rails server -b 0.0.0.0"
+      dockerfile: ./Dockerfile
+    command: ash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0"
     depends_on:
       - db
     ports:
