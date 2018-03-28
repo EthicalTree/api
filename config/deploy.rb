@@ -4,7 +4,7 @@ lock "3.7.2"
 set :application, "ethicaltree"
 set :repo_url, "git@github.com:applepicke/ethicaltree-api.git"
 set :deploy_to, '/home/applepicke/apps/ethicaltree-api'
-set :chruby_ruby, 'ruby-2.3.3'
+set :chruby_ruby, 'ruby-2.5.0'
 
 # Default branch is :master
 # ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
