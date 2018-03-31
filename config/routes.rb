@@ -30,11 +30,13 @@ Rails.application.routes.draw do
       resources :operating_hours
     end
 
+    # Admin
     namespace :admin do
       resources :users
       resources :tags
       resources :listings
       resources :curated_lists
+      resources :locations
     end
   end
 

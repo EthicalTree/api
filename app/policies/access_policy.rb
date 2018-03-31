@@ -20,6 +20,7 @@ class AccessPolicy
       can :manage, Listing
       can :manage, Tag
       can :manage, CuratedList
+      can :manage, DirectoryLocation
     end
 
     role :member, proc { |user| !!user } do

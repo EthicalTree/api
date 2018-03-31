@@ -1,7 +1,6 @@
 # Defines a location that a user can search for (ie. city, province, county, etc)
 class DirectoryLocation < ApplicationRecord
   validates :name, uniqueness: true
-  validates :timezone, presence: true
 
   acts_as_mappable
 

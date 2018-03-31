@@ -26,3 +26,6 @@
 coverage
 
 db-data
+
+.pry_history
+.ash_history

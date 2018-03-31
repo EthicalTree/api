@@ -6,14 +6,16 @@ services:
     container_name: ethicaltree-api
     build:
       context: .
-      dockerfile: ./Dockerfile
+      dockerfile: ./docker/Dockerfile.local
     command: ash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0"
+    stdin_open: true
+    tty: true
     depends_on:
       - db
     ports:
       - 3001:3000
     volumes:
-      - .:/usr/src/app
+      - .:/app
   db:
     image: mysql:5.7
     container_name: ethicaltree-mysql
