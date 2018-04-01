@@ -10,7 +10,7 @@ class CuratedList < ApplicationRecord
   def listings
     Listing.joins(
       "INNER JOIN listing_tags ON listings.id = listing_tags.listing_id"
-    ).where('listing_tags.tag_id': tag_id).order('RAND()').limit(8).map do |l|
+    ).where('listing_tags.tag_id': tag_id).order('RAND()').limit(6).map do |l|
       l.as_json_search
     end.shuffle
   end
