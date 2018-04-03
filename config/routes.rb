@@ -26,7 +26,7 @@ Rails.application.routes.draw do
         resources :images
       end
       resources :images
-      resources :listing_ethicalities
+      resources :listing_ethicalities, path: :ethicalities
       resources :listing_tags, path: :tags
       resources :locations
       resources :operating_hours

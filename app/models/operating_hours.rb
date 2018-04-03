@@ -10,9 +10,6 @@ class OperatingHours < ApplicationRecord
     as_json({
       methods: [
         :label,
-        :hours,
-        :open_str,
-        :close_str
       ]
     })
   end
