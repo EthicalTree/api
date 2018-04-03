@@ -7,7 +7,7 @@ module V1
 
       render json: {
         curated_lists: results.as_json(
-          only: [ :name, :id ],
+          only: [ :name, :id, :slug ],
           include: {tag: { only: :hashtag }},
           methods: :listings
         )
@@ -19,13 +19,12 @@ module V1
 
     def show
       page = params[:page] || 1
-      tag = Tag.find_by({hashtag: params[:id]})
-      list = CuratedList.find_by(tag: tag)
-      listings = tag.listings.page(page).per(18)
+      list = CuratedList.find_by(slug: params[:id])
+      listings = list.tag.listings.page(page).per(18)
 
       render json: {
         name: list.name,
-        hashtag: tag.hashtag,
+        slug: list.slug,
         listings: listings.map {|l| l.as_json_search},
         current_page: page,
         total_pages: listings.total_pages
