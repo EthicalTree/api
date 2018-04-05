@@ -32,6 +32,12 @@ class Listing < ApplicationRecord
     return @@search_fields
   end
 
+  def cover_image
+    image = images.first
+    key = if image.present? then image.key else '/defaults/opengraph-ethicaltree.png' end
+    S3.url($s3_bucket, key)
+  end
+
   def featured_listings
     if !plan.present?
       Plan.featured_listings.map {|l| l.as_json_search}
