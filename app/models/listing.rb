@@ -35,7 +35,7 @@ class Listing < ApplicationRecord
   def cover_image
     image = images.first
     key = if image.present? then image.key else '/defaults/opengraph-ethicaltree.png' end
-    S3.url($s3_bucket, key)
+    $fog.get_object_url($s3_bucket, key, 120)
   end
 
   def featured_listings
