@@ -10,9 +10,6 @@ Rails.application.routes.draw do
   post :confirm_email, to: 'users#confirm_email'
   resources :users, only: %i{show update}
 
-  # Opengraph
-  resources :opengraph, only: %i{index}
-
   # API
   namespace :v1 do
     get :search, to: 'search#search'
@@ -53,4 +50,5 @@ Rails.application.routes.draw do
   # Status
   get :status, to: 'status#index'
 
+  match "*path", to: "proxy#index", via: :all
 end
