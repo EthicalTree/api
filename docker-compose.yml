@@ -19,6 +19,7 @@ services:
   db:
     image: mysql:5.7
     container_name: ethicaltree-mysql
+    command: mysqld
     environment:
       MYSQL_USER: root
       MYSQL_PASSWORD: ""
