@@ -7,13 +7,13 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile.local
-    command: ash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0"
+    command: ash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0 -p 80"
     stdin_open: true
     tty: true
     depends_on:
       - db
     ports:
-      - 3001:3000
+      - 3001:80
     volumes:
       - .:/app
   db:
