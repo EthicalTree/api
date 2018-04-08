@@ -17,11 +17,11 @@ class Opengraph
   def self.get_meta_for_listing listing
     if listing.present?
       "
-        <meta property=\"og:url\" content=\"#{@url}\" />
-        <meta property=\"og:title\" content=\"#{listing.title}\" />
-        <meta property=\"og:description\" content=\"#{listing.bio}\" />
-        <meta property=\"og:image\" content=\"#{listing.cover_image}\" />
-        <meta name=\"twitter:card\" content=\"summary_large_image\" />
+        <meta property=\"og:url\" content=\"#{@url}\">
+        <meta property=\"og:title\" content=\"#{listing.title}\">
+        <meta property=\"og:description\" content=\"#{listing.bio}\">
+        <meta property=\"og:image\" content=\"#{listing.cover_image}\">
+        <meta name=\"twitter:card\" content=\"summary_large_image\">
       "
     else
       ""
