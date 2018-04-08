@@ -7,7 +7,7 @@ class ProxyController < APIController
 
     body = response.body.gsub(
       '<link rel="opengraph" href="">',
-      Opengraph.get_meta_tags("#{protocol}://#{proxyhost}/#{path}")
+      Opengraph.get_meta_tags("#{protocol}://#{webhost}/#{path}")
     )
 
     render html: body.html_safe
