@@ -22,6 +22,7 @@ class Opengraph
         <meta property=\"og:description\" content=\"#{listing.bio}\">
         <meta property=\"og:image\" content=\"#{listing.cover_image}\">
         <meta name=\"twitter:card\" content=\"summary_large_image\">
+        <meta name=\"fb:app_id\" content=\"#{Rails.application.secrets[:fb_app_id]}\">
       "
     else
       ""
