@@ -2,6 +2,8 @@ class ProxyController < APIController
   def index
     protocol = Rails.application.secrets[:protocol]
     proxyhost = Rails.application.secrets[:proxyhost]
+    webhost = Rails.application.secrets[:webhost]
+
     path = params[:url]
     response = HTTParty.get("#{protocol}://#{proxyhost}")
 
