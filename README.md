@@ -1,19 +1,37 @@
-# EthicalTree API
+# 🎉 EthicalTree API 🎉
 
-[![Codefresh build status]( https://g.codefresh.io/api/badges/build?repoOwner=applepicke&repoName=ethicaltree-api&branch=master&pipelineName=ethicaltree-api&accountName=applepicke&key=eyJhbGciOiJIUzI1NiJ9.NWFiN2UwZjE4NTA2ZmYwMDAxYTdlOTFl.6ppbppW5UgnXcgZ8u6wT_aIIbaSR5I_mZwkD9aqmL8c&type=cf-1)]( https://g.codefresh.io/repositories/applepicke/ethicaltree-api/builds?filter=trigger:build;branch:master;service:5ab7e1ed4137c0000123dfeb~ethicaltree-api)
+[![EthicalTree Project](https://img.shields.io/badge/site-EthicalTree-blue.svg)](https://ethicaltree.com)
 
-Welcome to EthicalTree! It's great to have you on board :)
+## Prerequisites
 
-### Rails
+Add the following entries to your `/etc/hosts` file:
 
-We use Ruby on Rails to manage the API layer of the application
+```
+127.0.0.1  api.ethicaltree.local
+127.0.0.1  ethicaltree.local
+127.0.0.1  cdn.ethicaltree.local
+```
 
-## Requirements
+Install:
 
-- Docker Engine
-- Docker Compose
-
+- [Docker](https://docs.docker.com/install/)
+- [Docker Compose](https://docs.docker.com/compose/install/)
 
 ## Running
 
-`docker-compose up`
+```
+docker-compose up
+```
+
+Then to make sure things are working:
+
+```
+curl api.ethicaltree.local:3001/v1/ethicalities
+```
+
+should return a json blob of data
+
+## Database
+
+Docker compose will automatically create your database in the `./db-data` directory. If you ever remove that directory then you will lose all your local data.
+
