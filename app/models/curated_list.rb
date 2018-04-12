@@ -9,12 +9,18 @@ class CuratedList < ApplicationRecord
   validates :tag, presence: true
   validates :slug, uniqueness: true
 
-  def listings
+  def _listings(count=6)
     Listing.joins(
       "INNER JOIN listing_tags ON listings.id = listing_tags.listing_id"
-    ).where('listing_tags.tag_id': tag_id).order('RAND()').limit(6).map do |l|
-      l.as_json_search
-    end.shuffle
+    ).where(
+      'listing_tags.tag_id': tag_id
+    ).order(
+      'RAND()'
+    ).limit(count).shuffle
+  end
+
+  def listings
+    self._listings.map {|l| l.as_json_search}
   end
 
   private

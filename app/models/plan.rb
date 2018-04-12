@@ -3,22 +3,25 @@ class Plan < ApplicationRecord
 
   def self.Types
     {
-      trial: { name: 'Trial', price: 0.00 },
-      premium: { name: 'Premium', price: 57.00 },
-      bronze: { name: 'Bronze', price: 69.00 },
-      silver: { name: 'Silver', price: 129.00 },
-      gold: { name: 'Gold', price: 189.00 }
+      trial: { name: 'Trial', price: 0.00, weight: 100 },
+      premium: { name: 'Premium', price: 57.00, weight: 200 },
+      bronze: { name: 'Bronze', price: 69.00, weight: 100 },
+      silver: { name: 'Silver', price: 129.00, weight: 200 },
+      gold: { name: 'Gold', price: 189.00, weight: 400 }
     }
   end
 
-  def self.featured_listings
-    if list = CuratedList.find_by(featured: true)
-      list.tag.listings.order('RAND()').limit(4).shuffle
-    else
-      Plan.all.order('RAND()').limit(4).map do |p|
-        p.listing
-      end.shuffle
-    end
+  def self.featured_listings(count=4)
+    cases = Plan.Types.map {|k,p| "WHEN plan_type='#{k}' THEN (RAND() * #{p[:weight]})"}
+
+    Plan.all.order(
+      "CASE
+        #{cases.join("\n")}
+        ELSE 100
+      END DESC"
+    ).limit(count).map do |p|
+      p.listing
+    end.shuffle
   end
 
   validates :listing_id, presence: true
