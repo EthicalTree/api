@@ -54,6 +54,8 @@ namespace :datamigrate do
     }
   }
 
+  Sanitizer = Rails::Html::FullSanitizer.new
+
   desc "Copies data from V1 site to a V2 site"
   task :v1, [:sql_url, :domain, :username, :password, :nofetch] => [:environment] do |task, args|
     sql_url = args[:sql_url]
@@ -124,6 +126,8 @@ namespace :datamigrate do
     region = row[:post_region]
     country = row[:post_country]
 
+    bio = CGI.unescapeHTML(Sanitizer.sanitize(row[:post_content]))
+
     listing = Listing.find_by(slug: title.parameterize)
 
     if !listing
@@ -132,7 +136,7 @@ namespace :datamigrate do
 
     listing.update_attributes({
       title: title,
-      bio: row[:post_content],
+      bio: bio,
       website: website.downcase,
       visibility: if status == 'publish' then 'published' else 'unpublished' end
     })
@@ -266,11 +270,12 @@ namespace :datamigrate do
 
     username = db_config[Rails.env]["username"]
     password = db_config[Rails.env]["password"]
+    host = db_config[Rails.env]["host"]
     db = DBNAME
 
-    `mysql -u #{username} --password="#{password}" --silent -e "DROP DATABASE IF EXISTS #{db}"`
-    `mysql -u #{username} --password="#{password}" --silent -e "CREATE DATABASE #{db}"`
-    `mysql -u #{username} --password="#{password}" --silent #{db} < #{sql_filename}`
+    `mysql -u #{username} -h #{host} --password="#{password}" --silent -e "DROP DATABASE IF EXISTS #{db}"`
+    `mysql -u #{username} -h #{host} --password="#{password}" --silent -e "CREATE DATABASE #{db}"`
+    `mysql -u #{username} -h #{host} --password="#{password}" --silent #{db} < #{sql_filename}`
   end
 
   def connect
