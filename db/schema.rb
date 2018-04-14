@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180403001408) do
+ActiveRecord::Schema.define(version: 20180414225517) do
 
   create_table "curated_lists", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "name"
@@ -66,6 +66,8 @@ ActiveRecord::Schema.define(version: 20180403001408) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "order"
+    t.integer "cover_offset_x", default: 0
+    t.integer "cover_offset_y", default: 0
   end
 
   create_table "listing_ethicalities", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

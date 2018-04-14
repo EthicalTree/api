@@ -31,13 +31,18 @@ module V1
       image = @listing.images.find(params[:id])
 
       make_cover = params[:make_cover]
+      offset_y = params[:offset_y] || image.cover_offset_y
+
+      if offset_y != image.cover_offset_y
+        image.update(cover_offset_y: offset_y)
+      end
 
       if make_cover
         @listing.images.update_all(order: 1)
         image.update(order: 0)
-
-        render json: { images: @listing.images.as_json }, status: :ok
       end
+
+      render json: { images: @listing.images.as_json }, status: :ok
     end
 
     def destroy
