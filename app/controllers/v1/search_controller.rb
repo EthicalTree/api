@@ -18,6 +18,7 @@ module V1
         'listings.title',
         'listings.bio',
         build_ethicality_statement,
+        build_likeness_statement
       ].compact
 
       joins = [
@@ -53,10 +54,20 @@ module V1
 
       results = results.order(
         'eth_total DESC',
-        build_likeness_statement
+        'likeness DESC'
+      ).distinct()
+
+      results_that_match = results.having(
+        "eth_total > 0 AND likeness > 0"
       )
 
-      results = results.distinct().page(page).per(12)
+      if results_that_match.length > 0
+        results = results_that_match
+      else
+        results = results.order('RAND()').limit(12)
+      end
+
+      results = results.page(page).per(12)
       result_ids = results.map {|r| r.id}
       listings = Listing.find(result_ids).index_by(&:id).slice(*result_ids).values
 
@@ -64,6 +75,7 @@ module V1
         featured: featured.map{|l| l.as_json_search},
         listings: listings.map{|l| l.as_json_search},
         current_page: page,
+        matches: results_that_match.length,
         page_count: results.total_pages
       }
 
@@ -137,9 +149,9 @@ module V1
 
     def build_ethicality_statement
       if @ethicalities.present?
-        'COUNT(ethicalities.slug) as eth_total'
+        "COUNT(ethicalities.slug) as 'eth_total'"
       else
-        '0 as eth_total'
+        "1 as 'eth_total'"
       end
     end
 
@@ -155,9 +167,9 @@ module V1
           WHEN LOWER(listings.title) LIKE #{query} THEN 2
           WHEN LOWER(listings.bio) LIKE #{query} THEN 1
           ELSE 0
-        END DESC"
+        END as 'likeness'"
       else
-        ""
+        "1 as 'likeness'"
       end
     end
 
