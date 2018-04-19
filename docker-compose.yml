@@ -12,14 +12,28 @@ services:
     tty: true
     depends_on:
       - db
+      - redis
     ports:
       - 3001:80
     volumes:
       - .:/app
+
+  sidekiq:
+    container_name: ethicaltree-sidekiq
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.local
+    command: ash -c "bundle exec sidekiq"
+    depends_on:
+      - redis
+    volumes:
+      - .:/app
+
   db:
     image: mysql:5.7
     container_name: ethicaltree-mysql
-    command: mysqld
+    command: >
+      --character-set-server=utf8mb4
     environment:
       MYSQL_USER: root
       MYSQL_PASSWORD: ""
@@ -29,6 +43,14 @@ services:
       - 3308:3306
     volumes:
       - ./db-data:/var/lib/mysql
+
+  redis:
+    image: redis:latest
+    container_name: ethicaltree-redis
+    ports:
+      - 6400:6379
+    command: >
+      --requirepass localpassword
 
 networks:
   default:

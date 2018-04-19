@@ -14,7 +14,7 @@ Rails.application.configure do
   config.consider_all_requests_local = true
 
   # Enable/disable caching. By default caching is disabled.
-  config.cache_store = :mem_cache_store
+  # config.cache_store = :mem_cache_store
 
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
@@ -44,7 +44,6 @@ Rails.application.configure do
 
   # Render emails to file and open in browser
   config.action_mailer.delivery_method = :letter_opener
-  config.active_job.queue_adapter = :inline
 
   # CORS settings
   config.middleware.insert_before 0, Rack::Cors do

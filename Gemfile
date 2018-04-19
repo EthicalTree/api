@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '5.1.5'
+gem 'rails', '5.2.0'
 gem 'mysql2', '0.4.10'
 gem 'puma', '3.6.2'
 gem 'exception_notification'
@@ -19,7 +19,6 @@ gem 'mime-types'
 # Extra Libraries
 gem 'httparty'
 gem 'dotenv-rails', '~> 2.2.1'
-gem 'delayed_job_active_record'
 gem 'geokit-rails', '~> 2.3.0'
 gem 'geocoder'
 gem 'fog-aws'
@@ -28,9 +27,12 @@ gem 'password_strength'
 gem 'access-granted', '~> 1.1.0'
 gem 'olive_branch'
 
+gem 'redis'
+gem 'hiredis'
+gem 'sidekiq'
+
 # For data migration
 gem 'php-serialize'
-
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -53,10 +55,12 @@ group :development do
   gem 'listen', '~> 3.0.5'
   gem 'spring-watcher-listen'
   gem 'letter_opener'
+  gem "launchy", "~> 2.4"
   gem 'dogapi', '~> 1.23.0'
 end
 
 group :production do
   gem 'unicorn'
 end
+
 

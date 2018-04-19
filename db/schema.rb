@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180414225517) do
+ActiveRecord::Schema.define(version: 2018_04_14_225517) do
 
-  create_table "curated_lists", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "curated_lists", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "name"
     t.string "description"
     t.integer "tag_id"
@@ -25,7 +25,7 @@ ActiveRecord::Schema.define(version: 20180414225517) do
     t.string "slug"
   end
 
-  create_table "delayed_jobs", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "delayed_jobs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "priority", default: 0, null: false
     t.integer "attempts", default: 0, null: false
     t.text "handler", null: false
@@ -40,20 +40,20 @@ ActiveRecord::Schema.define(version: 20180414225517) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "directory_locations", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "directory_locations", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "name"
-    t.float "boundlat1", limit: 24
-    t.float "boundlng1", limit: 24
-    t.float "boundlat2", limit: 24
-    t.float "boundlng2", limit: 24
-    t.float "lat", limit: 24
-    t.float "lng", limit: 24
+    t.float "boundlat1"
+    t.float "boundlng1"
+    t.float "boundlat2"
+    t.float "boundlng2"
+    t.float "lat"
+    t.float "lng"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "timezone"
   end
 
-  create_table "ethicalities", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "ethicalities", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "name"
     t.string "slug"
     t.string "icon_key"
@@ -61,7 +61,7 @@ ActiveRecord::Schema.define(version: 20180414225517) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "images", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "images", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -70,31 +70,31 @@ ActiveRecord::Schema.define(version: 20180414225517) do
     t.integer "cover_offset_y", default: 0
   end
 
-  create_table "listing_ethicalities", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "listing_ethicalities", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "listing_id"
     t.integer "ethicality_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "listing_images", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "listing_images", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "listing_id"
     t.integer "image_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "listing_tags", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "listing_tags", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "listing_id"
     t.integer "tag_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "listings", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin" do |t|
+  create_table "listings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "title"
     t.string "slug"
-    t.text "bio", limit: 16777215
+    t.text "bio"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "owner_id"
@@ -102,10 +102,10 @@ ActiveRecord::Schema.define(version: 20180414225517) do
     t.string "website"
   end
 
-  create_table "locations", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "locations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "listing_id"
-    t.float "lat", limit: 24
-    t.float "lng", limit: 24
+    t.float "lat"
+    t.float "lng"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "timezone", default: "UTC"
@@ -115,21 +115,21 @@ ActiveRecord::Schema.define(version: 20180414225517) do
     t.string "country"
   end
 
-  create_table "menu_images", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "menu_images", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "menu_id"
     t.integer "image_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "menus", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "menus", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.integer "listing_id"
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
 
-  create_table "operating_hours", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "operating_hours", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "day"
     t.time "open"
     t.time "close"
@@ -138,7 +138,7 @@ ActiveRecord::Schema.define(version: 20180414225517) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "plans", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "plans", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.bigint "listing_id"
     t.string "plan_type"
     t.decimal "price", precision: 16, scale: 2, default: "0.0"
@@ -147,19 +147,19 @@ ActiveRecord::Schema.define(version: 20180414225517) do
     t.index ["listing_id"], name: "index_plans_on_listing_id"
   end
 
-  create_table "tags", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "tags", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "hashtag"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "use_type", default: 0
   end
 
-  create_table "users", id: :integer, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+  create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
     t.string "email", null: false
     t.string "first_name", default: "", null: false
     t.string "last_name", default: "", null: false
     t.string "password_digest"
-    t.datetime "confirmed_at"
+    t.timestamp "confirmed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "confirm_token"

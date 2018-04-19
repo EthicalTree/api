@@ -105,9 +105,18 @@ namespace :datamigrate do
     ")
 
     results.each do |row|
-      listing = get_or_create_listing row, domain, db
-      listing.save
-      listing.images.each {|i| i.save}
+      begin
+        listing = get_or_create_listing row, domain, db
+        listing.save!
+        listing.images.each {|i| i.save}
+      rescue => e
+        if Rails.env == 'development'
+          print('An error has occured')
+          byebug
+          print('Do some stuff')
+        end
+      end
+
       print('.')
     end
   end
@@ -136,7 +145,7 @@ namespace :datamigrate do
 
     listing.update_attributes({
       title: title,
-      bio: bio,
+      bio: bio.truncate(1999),
       website: website.downcase,
       visibility: if status == 'publish' then 'published' else 'unpublished' end
     })

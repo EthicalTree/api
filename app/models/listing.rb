@@ -14,7 +14,7 @@ class Listing < ApplicationRecord
   has_many :ethicalities, through: :listing_ethicalities, class_name: 'Ethicality'
   has_many :operating_hours, class_name: 'OperatingHours'
 
-  belongs_to :owner, foreign_key: :owner_id, class_name: 'User'
+  belongs_to :owner, foreign_key: :owner_id, class_name: 'User', optional: true
 
   before_validation :ensure_slug
   before_save :lower_website
