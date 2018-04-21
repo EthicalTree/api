@@ -175,15 +175,15 @@ namespace :datamigrate do
 
       if (open1.present? && close1.present?)
         oh = OperatingHours.new day: day
-        oh.open = Time.parse(open1 + ' EST').utc
-        oh.close = Time.parse(close1 + ' EST').utc
+        oh.open = Time.parse(open1 + ' EDT').utc
+        oh.close = Time.parse(close1 + ' EDT').utc
         results[0] = oh
       end
 
       if (open2.present? && close2.present?)
         oh = OperatingHours.new day: day
-        oh.open = Time.parse(open2 + ' EST').utc
-        oh.close = Time.parse(close2 + ' EST').utc
+        oh.open = Time.parse(open2 + ' EDT').utc
+        oh.close = Time.parse(close2 + ' EDT').utc
         results[1] = oh
       end
 

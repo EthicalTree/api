@@ -47,7 +47,11 @@ module V1
         })
 
         if listing_params[:plan_type].present?
-          price = BigDecimal(listing_params[:price])
+          price = listing_params[:price]
+
+          if price.present?
+            price = BigDecimal(price)
+          end
 
           plan = Plan.find_or_create_by listing_id: @listing.id
           plan.assign_attributes({
