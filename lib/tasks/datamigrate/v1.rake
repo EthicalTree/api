@@ -109,6 +109,7 @@ namespace :datamigrate do
         listing = get_or_create_listing row, domain, db
         listing.save!
         listing.images.each {|i| i.save}
+        listing.menu.images.each {|i| i.save}
       rescue => e
         if Rails.env == 'development'
           print('An error has occured')
@@ -237,7 +238,7 @@ namespace :datamigrate do
     # generate the menu if it doens't exist
     listing.menu
 
-    images = Nokogiri::HTML(row[:geodir_menu]).css('img').map do |image_tag|
+    listing.menu.images = Nokogiri::HTML(row[:geodir_menu]).css('img').map do |image_tag|
       src = image_tag[:src]
       name = "datamigrate_v1_#{URI.parse(src).path.parameterize}"
       key = "listings/#{listing.title.parameterize}/menus/#{listing.menu.id}/images/#{name}"
