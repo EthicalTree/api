@@ -10,12 +10,12 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_14_225517) do
+ActiveRecord::Schema.define(version: 2018_04_26_005308) do
 
-  create_table "curated_lists", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "curated_lists", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.string "description"
-    t.integer "tag_id"
+    t.bigint "tag_id"
     t.integer "location"
     t.integer "order"
     t.boolean "hidden", default: true
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(version: 2018_04_14_225517) do
     t.datetime "updated_at", null: false
     t.boolean "featured"
     t.string "slug"
+    t.index ["tag_id"], name: "fk_rails_30f4d945f5"
   end
 
   create_table "delayed_jobs", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
@@ -40,7 +41,7 @@ ActiveRecord::Schema.define(version: 2018_04_14_225517) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
-  create_table "directory_locations", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "directory_locations", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.float "boundlat1"
     t.float "boundlng1"
@@ -53,7 +54,7 @@ ActiveRecord::Schema.define(version: 2018_04_14_225517) do
     t.string "timezone"
   end
 
-  create_table "ethicalities", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "ethicalities", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.string "slug"
     t.string "icon_key"
@@ -61,7 +62,7 @@ ActiveRecord::Schema.define(version: 2018_04_14_225517) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "images", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "images", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -70,31 +71,37 @@ ActiveRecord::Schema.define(version: 2018_04_14_225517) do
     t.integer "cover_offset_y", default: 0
   end
 
-  create_table "listing_ethicalities", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "listing_ethicalities", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "listing_id"
     t.integer "ethicality_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["ethicality_id"], name: "fk_rails_d9bdd7ec3d"
+    t.index ["listing_id"], name: "fk_rails_efbbfd4677"
   end
 
-  create_table "listing_images", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "listing_images", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "listing_id"
     t.integer "image_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["image_id"], name: "fk_rails_0e6d2aa2ed"
+    t.index ["listing_id"], name: "fk_rails_247befc35d"
   end
 
-  create_table "listing_tags", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "listing_tags", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "listing_id"
-    t.integer "tag_id"
+    t.bigint "tag_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["listing_id"], name: "fk_rails_66e3a27647"
+    t.index ["tag_id"], name: "fk_rails_f7ee40ab29"
   end
 
-  create_table "listings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "listings", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "title"
     t.string "slug"
-    t.text "bio"
+    t.text "bio", limit: 16777215
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "owner_id"
@@ -102,7 +109,7 @@ ActiveRecord::Schema.define(version: 2018_04_14_225517) do
     t.string "website"
   end
 
-  create_table "locations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "locations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "listing_id"
     t.float "lat"
     t.float "lng"
@@ -113,32 +120,37 @@ ActiveRecord::Schema.define(version: 2018_04_14_225517) do
     t.string "city"
     t.string "region"
     t.string "country"
+    t.index ["listing_id"], name: "fk_rails_01cf783517"
   end
 
-  create_table "menu_images", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
-    t.integer "menu_id"
+  create_table "menu_images", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "menu_id"
     t.integer "image_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["image_id"], name: "fk_rails_f68dd1a7ff"
+    t.index ["menu_id"], name: "fk_rails_bd919e3edc"
   end
 
-  create_table "menus", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "menus", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.integer "listing_id"
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["listing_id"], name: "fk_rails_0b1d0b7acf"
   end
 
-  create_table "operating_hours", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "operating_hours", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "day"
     t.time "open"
     t.time "close"
     t.integer "listing_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["listing_id"], name: "fk_rails_dc4815c034"
   end
 
-  create_table "plans", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "plans", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.bigint "listing_id"
     t.string "plan_type"
     t.decimal "price", precision: 16, scale: 2, default: "0.0"
@@ -147,14 +159,14 @@ ActiveRecord::Schema.define(version: 2018_04_14_225517) do
     t.index ["listing_id"], name: "index_plans_on_listing_id"
   end
 
-  create_table "tags", options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "tags", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "hashtag"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "use_type", default: 0
   end
 
-  create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=latin1", force: :cascade do |t|
+  create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "email", null: false
     t.string "first_name", default: "", null: false
     t.string "last_name", default: "", null: false
@@ -167,4 +179,16 @@ ActiveRecord::Schema.define(version: 2018_04_14_225517) do
     t.boolean "admin"
   end
 
+  add_foreign_key "curated_lists", "tags"
+  add_foreign_key "listing_ethicalities", "ethicalities"
+  add_foreign_key "listing_ethicalities", "listings"
+  add_foreign_key "listing_images", "images"
+  add_foreign_key "listing_images", "listings"
+  add_foreign_key "listing_tags", "listings"
+  add_foreign_key "listing_tags", "tags"
+  add_foreign_key "locations", "listings"
+  add_foreign_key "menu_images", "images"
+  add_foreign_key "menu_images", "menus"
+  add_foreign_key "menus", "listings"
+  add_foreign_key "operating_hours", "listings"
 end
