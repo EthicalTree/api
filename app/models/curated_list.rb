@@ -9,14 +9,21 @@ class CuratedList < ApplicationRecord
   validates :tag, presence: true
   validates :slug, uniqueness: true
 
-  def _listings(count=6)
-    Listing.joins(
+  def _listings(options={})
+    count = options[:count] || 6
+    location = options[:location]
+
+    listings = Location.listings.joins(
       "INNER JOIN listing_tags ON listings.id = listing_tags.listing_id"
     ).where(
       'listing_tags.tag_id': tag_id
-    ).order(
+    )
+
+    listings = Search.by_location(listings, location)
+
+    listings = listings.order(
       'RAND()'
-    ).limit(count).shuffle
+    ).limit(count)
   end
 
   def listings

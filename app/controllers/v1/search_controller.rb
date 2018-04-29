@@ -18,17 +18,15 @@ module V1
         'listings.title',
         'listings.bio',
         build_ethicality_statement,
-        build_likeness_statement,
-        '0 as distance'
+        build_likeness_statement
       ].compact
 
       joins = [
-        "INNER JOIN listings ON listings.id = locations.listing_id AND listings.visibility = 0",
         "LEFT JOIN plans ON plans.id = locations.listing_id",
         build_ethicality_join,
       ].compact
 
-      results = Location.select(fields).joins(joins).where.not(
+      results = Location.listings.select(fields).joins(joins).where.not(
         'locations.lat': nil,
         'locations.lng': nil,
         listing_id: featured.map {|l| l.id}
@@ -37,21 +35,7 @@ module V1
         'listings.id'
       )
 
-      if location.present?
-        directory_location = DirectoryLocation.find_by(name: location)
-
-        if directory_location.present?
-          results = results.in_bounds(directory_location.bounds, origin: directory_location.coordinates)
-        else
-          location = MapApi.build_from_address(location)[:location]
-          coords = [location['lat'], location['lng']]
-          results = results.within(5, units: :kms, origin: coords)
-        end
-
-      else
-        coords = [location_information[:latitude], location_information[:longitude]]
-        results = results.within(5, units: :kms, origin: coords)
-      end
+      results = Search.by_location results, location
 
       results = results.order(
         'eth_total DESC',
