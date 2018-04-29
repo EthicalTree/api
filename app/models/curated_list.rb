@@ -25,7 +25,7 @@ class CuratedList < ApplicationRecord
     })
 
     listings = listings.order(
-      'RAND()'
+      'distance DESC'
     ).limit(count)
   end
 
