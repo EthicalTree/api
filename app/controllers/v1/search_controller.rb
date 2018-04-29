@@ -55,11 +55,9 @@ module V1
       end
 
       results = results.page(page).per(12)
-      result_ids = results.map {|r| r.id}
-      listings = Listing.find(result_ids).index_by(&:id).slice(*result_ids).values
 
       result_json = {
-        listings: listings.map{|l| l.as_json_search},
+        listings: results.map{|l| l.listing.as_json_search},
         current_page: page,
         matches: results_that_match.length,
         page_count: results.total_pages
