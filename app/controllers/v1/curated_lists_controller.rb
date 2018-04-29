@@ -37,7 +37,11 @@ module V1
         'listing_tags.tag_id': list.tag.id
       )
 
-      listings = Search.by_location(listings, location)
+      listings = Search.by_location({
+        results: listings,
+        location: location
+      })
+
       listings = listings.order(
         'distance DESC'
       ).distinct.page(page).per(18)

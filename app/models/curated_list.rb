@@ -19,7 +19,10 @@ class CuratedList < ApplicationRecord
       'listing_tags.tag_id': tag_id
     )
 
-    listings = Search.by_location(listings, location)
+    listings = Search.by_location({
+      results: listings,
+      location: location
+    })
 
     listings = listings.order(
       'RAND()'

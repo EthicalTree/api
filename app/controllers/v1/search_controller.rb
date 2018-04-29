@@ -35,7 +35,11 @@ module V1
         'listings.id'
       )
 
-      results = Search.by_location results, location
+      results = Search.by_location({
+        results: results,
+        location: location,
+        filtered: true
+      })
 
       results = results.order(
         'eth_total DESC',
