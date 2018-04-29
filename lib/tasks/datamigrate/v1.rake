@@ -203,7 +203,7 @@ namespace :datamigrate do
       region: region,
       country: country
     })
-    #DirectoryLocation.create_locations lat, lng
+    DirectoryLocation.create_locations lat, lng
     listing.locations = [location]
 
     listing.ethicalities = ethicalities

@@ -18,7 +18,8 @@ module V1
         'listings.title',
         'listings.bio',
         build_ethicality_statement,
-        build_likeness_statement
+        build_likeness_statement,
+        '0 as distance'
       ].compact
 
       joins = [
@@ -54,7 +55,8 @@ module V1
 
       results = results.order(
         'eth_total DESC',
-        'likeness DESC'
+        'likeness DESC',
+        'distance DESC'
       ).distinct()
 
       results_that_match = results.having(
