@@ -43,7 +43,8 @@ namespace :datamigrate do
       address: 'post_address',
       city: 'post_city',
       region: 'post_region',
-      country: 'post_country'
+      country: 'post_country',
+      categories: 'gd_placecategory'
     },
     hours: {
       operating_hours: 'business_hours'
@@ -135,6 +136,7 @@ namespace :datamigrate do
     city = row[:post_city]
     region = row[:post_region]
     country = row[:post_country]
+    categories = row[:gd_placecategory].split(',').map {|c| c.present? ? c : nil}.compact
 
     bio = CGI.unescapeHTML(Sanitizer.sanitize(row[:post_content]))
 
@@ -211,6 +213,12 @@ namespace :datamigrate do
     # Tags
     tags = tags.map {|t| Tag.find_or_create_by(hashtag: Tag.strip_hashes(t))}
     listing.tags = (tags + listing.tags)
+
+    # Categories
+    listing.categories = categories.map do |c|
+      db_cat = db.query("SELECT name, slug FROM wpnn_terms WHERE term_id=#{c}").to_a[0]
+      category = Category.find_or_create_by(name: db_cat[:name], slug: db_cat[:slug])
+    end
 
     images = db.query("SELECT file,menu_order FROM #{TABLES[:images]} WHERE post_id='#{row[:post_id]}'").to_a
 

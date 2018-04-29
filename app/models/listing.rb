@@ -8,9 +8,11 @@ class Listing < ApplicationRecord
   has_many :listing_images
   has_many :listing_ethicalities
   has_many :listing_tags
+  has_many :listing_categories
   has_many :menus
   has_many :images, through: :listing_images, class_name: 'Image'
   has_many :tags, through: :listing_tags, class_name: 'Tag'
+  has_many :categories, through: :listing_categories, class_name: 'Category'
   has_many :ethicalities, through: :listing_ethicalities, class_name: 'Ethicality'
   has_many :operating_hours, class_name: 'OperatingHours'
 
@@ -149,5 +151,10 @@ end
 class ListingTag < ApplicationRecord
   belongs_to :listing
   belongs_to :tag
+end
+
+class ListingCategory < ApplicationRecord
+  belongs_to :listing
+  belongs_to :category
 end
 
