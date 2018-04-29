@@ -4,7 +4,18 @@ module V1
     before_action :authenticate_user, only: %i{update create destroy}
 
     def index
+      location = params[:location]
+      is_featured = params[:is_featured]
 
+      if is_featured
+        listings = Plan.featured_listings({
+          location: location
+        })
+
+        render json: listings.map {|l| l.as_json_search}, status: 200
+      else
+
+      end
     end
 
     def create

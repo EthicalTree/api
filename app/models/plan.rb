@@ -11,16 +11,27 @@ class Plan < ApplicationRecord
     }
   end
 
-  def self.featured_listings(count=4)
+  def self.featured_listings(options={})
+    count = options[:count] || 4
+    location = options[:location]
+
+    listings = Location.listings
+    listings = Search.by_location({
+      results: listings,
+      location: location,
+      by_radius: true,
+      filtered: true
+    }).joins('JOIN plans ON plans.listing_id = listings.id')
+
     cases = Plan.Types.map {|k,p| "WHEN plan_type='#{k}' THEN (RAND() * #{p[:weight]})"}
 
-    Plan.all.order(
+    listings.order(
       "CASE
         #{cases.join("\n")}
         ELSE 100
       END DESC"
-    ).limit(count).map do |p|
-      p.listing
+    ).limit(count).map do |l|
+      l.listing
     end.shuffle
   end
 

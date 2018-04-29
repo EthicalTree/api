@@ -40,14 +40,6 @@ class Listing < ApplicationRecord
     "https://#{$s3_bucket}.s3.amazonaws.com/#{key}"
   end
 
-  def featured_listings
-    if !plan.present?
-      Plan.featured_listings.map {|l| l.as_json_search}
-    else
-      []
-    end
-  end
-
   # For now we only support one menu, but might support in the future
   def menu
     if self.menus.empty?
@@ -75,9 +67,6 @@ class Listing < ApplicationRecord
           ]
         }},
       ],
-      methods: [
-        :featured_listings
-      ]
     })
   end
 

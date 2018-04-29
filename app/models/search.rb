@@ -4,6 +4,7 @@ class Search
     results = options[:results]
     location = options[:location]
     filtered = options[:filtered] || false
+    by_radius = options[:by_radius] || false
 
     if location.present?
       directory_location = DirectoryLocation.find_by(name: location)
@@ -13,10 +14,14 @@ class Search
         results = results.by_distance(origin: coords)
 
         if filtered
-          results = results.in_bounds(
-            directory_location.bounds,
-            origin: coords
-          )
+          if by_radius
+            results = results.within(5, units: :kms, origin: coords)
+          else
+            results = results.in_bounds(
+              directory_location.bounds,
+              origin: coords
+            )
+          end
         end
       else
         location = MapApi.build_from_address(location)[:location]

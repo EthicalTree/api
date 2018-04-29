@@ -7,8 +7,6 @@ module V1
       @query = search_params[:query].downcase
       @ethicalities = search_params[:ethicalities].split(',')
 
-      featured = Plan.featured_listings
-
       fields = [
         :id,
         :lat,
@@ -28,8 +26,7 @@ module V1
 
       results = Location.listings.select(fields).joins(joins).where.not(
         'locations.lat': nil,
-        'locations.lng': nil,
-        listing_id: featured.map {|l| l.id}
+        'locations.lng': nil
       ).group(
         'locations.id',
         'listings.id'
@@ -62,7 +59,6 @@ module V1
       listings = Listing.find(result_ids).index_by(&:id).slice(*result_ids).values
 
       result_json = {
-        featured: featured.map{|l| l.as_json_search},
         listings: listings.map{|l| l.as_json_search},
         current_page: page,
         matches: results_that_match.length,
