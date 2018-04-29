@@ -27,6 +27,7 @@ module V1
         slug: list.slug,
         listings: listings.map {|l| l.as_json_search},
         current_page: page,
+        featured_listings: Plan.featured_listings.map{|l| l.as_json_search},
         total_pages: listings.total_pages
       }
     end
