@@ -14,9 +14,16 @@ module V1
             include: {tag: { only: :hashtag }}
           )
 
-          json[:listings] = cl._listings({
-            location: location
-          }).map {|l| l.listing.as_json_search}
+          if cl.featured
+            json[:listings] = Plan.featured_listings({
+              count: 6,
+              location: location
+            }).map {|l| l.as_json_search}
+          else
+            json[:listings] = cl._listings({
+              location: location
+            }).map {|l| l.listing.as_json_search}
+          end
 
           json
         end
