@@ -1,7 +1,6 @@
 default: &default
   adapter: mysql2
   encoding: utf8mb4
-  databas: ethicaltree
   host: ethicaltree-mysql
   port: 3306
   username: root
@@ -9,7 +8,7 @@ default: &default
 
 development:
   <<: *default
-  database: ethicaltree
+  database: ethicaltree_prod
 
 test:
   <<: *default

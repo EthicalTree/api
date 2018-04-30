@@ -19,7 +19,7 @@ class Plan < ApplicationRecord
     listings = Search.by_location({
       results: listings,
       location: location,
-      by_radius: true,
+      radius: 25,
       filtered: true
     }).joins('JOIN plans ON plans.listing_id = listings.id')
 

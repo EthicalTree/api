@@ -21,11 +21,13 @@ class CuratedList < ApplicationRecord
 
     listings = Search.by_location({
       results: listings,
-      location: location
+      location: location,
+      radius: 25,
+      filtered: true
     })
 
     listings = listings.order(
-      'distance DESC'
+      'RAND()'
     ).limit(count)
   end
 
