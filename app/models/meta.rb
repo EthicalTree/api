@@ -1,4 +1,4 @@
-class Opengraph
+class Meta
 
   def self.get_meta_tags url
     @url = url
@@ -14,7 +14,10 @@ class Opengraph
       curated_list = CuratedList.find_by(slug: curated_list_slug)
       get_meta_for_curated_list curated_list
     else
-      ""
+      generate_meta({
+        name: 'EthicalTree',
+        description: 'Best of Ottawa restaurants, bakeries, cafés and stores that are Organic, Woman-owned, Fair Trade, Vegan and/or Vegetarian'
+      })
     end
   end
 
@@ -46,10 +49,14 @@ class Opengraph
       options.each {|k, v| options[k] = CGI::escapeHTML(v)}
 
       "
+        <title>#{name}</title>
+        <meta name=\"description\" content=\"#{options[:description]}\">
         <meta property=\"og:url\" content=\"#{@url}\">
         <meta property=\"og:title\" content=\"#{options[:name]}\">
         <meta property=\"og:description\" content=\"#{options[:description]}\">
         <meta property=\"og:image\" content=\"#{options[:image]}\">
+        <meta property=\"og:image:secure_url\" content=\"#{options[:image]}\">
+        <meta property=\"og:site_name\" content=\"EthicalTree\">
         <meta name=\"twitter:card\" content=\"summary_large_image\">
         <meta name=\"fb:app_id\" content=\"#{Rails.application.secrets[:fb_app_id]}\">
       "
