@@ -21,7 +21,11 @@ class Plan < ApplicationRecord
       location: location,
       radius: 50,
       filtered: true
-    }).joins('JOIN plans ON plans.listing_id = listings.id')
+    }).order(
+      'RAND()'
+    ).joins(
+      'JOIN plans ON plans.listing_id = listings.id'
+    )
 
     cases = Plan.Types.map {|k,p| "WHEN plan_type='#{k}' THEN (RAND() * #{p[:weight]})"}
 

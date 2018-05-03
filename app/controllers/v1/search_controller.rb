@@ -41,6 +41,7 @@ module V1
       results = results.order(
         'eth_total DESC',
         'likeness DESC',
+        'plans.id DESC',
         'distance DESC'
       ).distinct()
 
