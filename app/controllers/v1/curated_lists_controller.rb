@@ -38,11 +38,19 @@ module V1
       page = params[:page] || 1
       list = CuratedList.find_by(slug: params[:id])
 
-      listings = Location.listings.joins(
-        "INNER JOIN listing_tags ON listings.id = listing_tags.listing_id"
-      ).where(
-        'listing_tags.tag_id': list.tag.id
-      )
+      if list.featured
+        listings = Location.listings.joins(
+          'JOIN plans ON plans.listing_id = listings.id'
+        ).where(
+          'plans.listing_id IS NOT NULL'
+        )
+      else
+        listings = Location.listings.joins(
+          "INNER JOIN listing_tags ON listings.id = listing_tags.listing_id"
+        ).where(
+          'listing_tags.tag_id': list.tag.id
+        )
+      end
 
       listings = Search.by_location({
         results: listings,

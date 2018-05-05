@@ -12,7 +12,7 @@ class Plan < ApplicationRecord
   end
 
   def self.featured_listings(options={})
-    count = options[:count] || 4
+    count = options[:count]
     location = options[:location]
 
     listings = Location.listings
@@ -29,12 +29,18 @@ class Plan < ApplicationRecord
 
     cases = Plan.Types.map {|k,p| "WHEN plan_type='#{k}' THEN (RAND() * #{p[:weight]})"}
 
-    listings.order(
+    listings = listings.order(
       "CASE
         #{cases.join("\n")}
         ELSE 100
       END DESC"
-    ).limit(count).map do |l|
+    )
+
+    if count.present?
+      listings = listings.limit(count)
+    end
+
+    listings.map do |l|
       l.listing
     end.shuffle
   end
