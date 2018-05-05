@@ -26,7 +26,9 @@ class Search
         end
       end
     else
-      coords = [location_information[:latitude], location_information[:longitude]]
+      #coords = [location_information[:latitude], location_information[:longitude]]
+      location = MapApi.build_from_address("Ottawa, ON")[:location]
+      coords = [location['lat'], location['lng']]
       results = results.by_distance(origin: coords)
 
       if filtered
