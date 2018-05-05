@@ -38,11 +38,11 @@ module V1
         filtered: true
       })
 
-      results = results.order(
+      results = results.reorder(
         'eth_total DESC',
         'likeness DESC',
         'isnull(plans.listing_id) ASC',
-        'distance DESC'
+        'distance ASC'
       ).distinct()
 
       results_that_match = results.having(
