@@ -49,6 +49,17 @@ class Listing < ApplicationRecord
     self.menus.first
   end
 
+  def city
+    location = locations.first
+
+    if location
+      city = location.city || ''
+      city.downcase
+    else
+      ''
+    end
+  end
+
   def as_json_full
     # make sure a menu is created if it doesn't exist
     self.menu
@@ -77,6 +88,7 @@ class Listing < ApplicationRecord
         :slug,
         :title
       ],
+      methods: [:city],
       include: [
         {ethicalities: {only: [
           :icon_key,
