@@ -20,7 +20,7 @@ module V1
       ].compact
 
       joins = [
-        "LEFT JOIN plans ON plans.id = locations.listing_id",
+        "LEFT JOIN plans ON plans.listing_id = locations.listing_id",
         build_ethicality_join,
       ].compact
 
@@ -41,7 +41,7 @@ module V1
       results = results.order(
         'eth_total DESC',
         'likeness DESC',
-        'plans.id DESC',
+        'isnull(plans.listing_id) ASC',
         'distance DESC'
       ).distinct()
 
@@ -148,7 +148,7 @@ module V1
           WHEN (
             LOWER(listings.title) LIKE #{query} OR
             LOWER(listings.bio) LIKE #{query}
-          ) AND plans.id IS NOT NULL THEN 3
+          ) AND plans.listing_id IS NOT NULL THEN 3
           WHEN LOWER(listings.title) LIKE #{query} THEN 2
           WHEN LOWER(listings.bio) LIKE #{query} THEN 1
           ELSE 0
