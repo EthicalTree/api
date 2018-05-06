@@ -54,7 +54,8 @@ module V1
 
       listings = Search.by_location({
         results: listings,
-        location: location
+        location: location,
+        filtered: true
       })
 
       listings = listings.order(
