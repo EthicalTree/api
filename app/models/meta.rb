@@ -38,7 +38,6 @@ class Meta
       {
         name: curated_list.name,
         description: curated_list.description,
-        image: curated_list._listings.first.cover_image
       }
     end
   end
