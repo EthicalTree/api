@@ -32,7 +32,7 @@ module V1
         params[:curated_list].delete :hashtag
 
         @curated_list = CuratedList.find_or_create_by curated_list_params
-        @curated_list.tag = Tag.find_by(hashtag: Tag.strip_hashes(hashtag))
+        @curated_list.tag = Tag.find_or_create_by(hashtag: Tag.strip_hashes(hashtag))
 
         if @curated_list.save
           render json: { curated_list: @curated_list }, status: :ok
@@ -71,7 +71,7 @@ module V1
         end
 
         if hashtag.present?
-          @curated_list.tag = Tag.find_by(hashtag: Tag.strip_hashes(hashtag))
+          @curated_list.tag = Tag.find_or_create_by(hashtag: Tag.strip_hashes(hashtag))
         end
 
         if @curated_list.save

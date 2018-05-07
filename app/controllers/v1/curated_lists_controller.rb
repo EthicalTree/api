@@ -17,7 +17,8 @@ module V1
           if cl.featured
             json[:listings] = Plan.featured_listings({
               count: 6,
-              location: location
+              location: location,
+              radius: 50
             }).map {|l| l.as_json_search}
           else
             json[:listings] = cl._listings({
@@ -55,7 +56,8 @@ module V1
       listings = Search.by_location({
         results: listings,
         location: location,
-        filtered: true
+        filtered: true,
+        radius: 50
       })
 
       listings = listings.order(
