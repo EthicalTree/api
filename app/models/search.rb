@@ -11,10 +11,11 @@ class Search
 
       if directory_location.present?
         coords = directory_location.coordinates
-        results = results.by_distance(origin: coords)
 
         if filtered
           results = results.within(radius, units: :kms, origin: coords)
+        else
+          results = results.by_distance(origin: coords)
         end
       else
         location = MapApi.build_from_address(location)[:location]
