@@ -45,7 +45,7 @@ class Meta
   def self.generate_meta item
     if item.present?
       options = yield(item)
-      options.each {|k, v| options[k] = CGI::escapeHTML(v)}
+      options.each {|k, v| options[k] = CGI::escapeHTML(v || '')}
 
       "
         <title>#{name}</title>
