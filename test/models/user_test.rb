@@ -2,7 +2,7 @@ require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
   def setup
-    @subject = FactoryGirl.build :user
+    @subject = FactoryBot.build :user
   end
 
   should validate_presence_of(:email)

@@ -1,7 +1,7 @@
 class AccountMailerPreview < ActionMailer::Preview
 
   def confirm_email
-    user = FactoryGirl.build :user
+    user = FactoryBot.build :user
     AccountMailer.confirm_email user
   end
 

@@ -2,6 +2,16 @@ namespace :datamigrate do
 
   DBNAME = 'et_datamigrate_v1'
 
+  DAYS = {
+    mon: 'monday',
+    tue: 'tuesday',
+    wed: 'wednesday',
+    thu: 'thursday',
+    fri: 'friday',
+    sat: 'saturday',
+    sun: 'sunday'
+  }
+
   ETHICALITIES = {
     'Veg-friendly': 'vegetarian',
     'Vegetarian': 'vegetarian',
@@ -30,12 +40,10 @@ namespace :datamigrate do
       is_featured: 'is_featured',
       title: 'post_title',
       status: 'post_status',
-      featured_image: 'featured_image',
       lat: 'post_latitude',
       lng: 'post_longitude',
       operating_hours: 'geodir_timing',
       phone: 'geodir_contact',
-      cover_image: 'featured_image',
       menu: 'geodir_menu',
       tags: 'post_tags',
       ethical_criteria: 'geodir_ethicalcriteria',
@@ -85,14 +93,7 @@ namespace :datamigrate do
     puts 'Connecting to the db...'
     db = connect()
     puts 'Creating listings...'
-    create_listings(domain, db)
 
-    puts 'Done!'
-  end
-
-  private
-
-  def create_listings domain, db
     listing_fields = COLUMNS[:listing].values.map {|f| "#{TABLES[:listings]}.#{f}"}
     post_fields = COLUMNS[:post].values.map {|f| "#{TABLES[:posts]}.#{f}"}
     fields = (listing_fields + post_fields).join(',')
@@ -105,9 +106,72 @@ namespace :datamigrate do
           #{TABLES[:hours]}.meta_key='business_hours'
     ")
 
+    results = results.map do |row|
+      # categories
+      categories = row[:gd_placecategory].split(',').map {|c| c.present? ? c : nil}.compact
+      row[:categories] = categories.map do |c|
+        db.query("SELECT name, slug FROM wpnn_terms WHERE term_id=#{c}").to_a[0][:name]
+      end
+
+      # images
+      row[:images] = db.query("SELECT file,menu_order FROM #{TABLES[:images]} WHERE post_id='#{row[:post_id]}'").to_a.map do |i|
+        {
+          uuid: i[:file],
+          file: "https://#{domain}/wp-content/uploads/#{i[:file]}",
+          order: i[:menu_order]
+        }
+      end
+
+      row
+    end
+
+    create_listings(results)
+
+    puts 'Done!'
+  end
+
+  desc "Copies data from V1 csv"
+  task :v1_csv, [:csv_filename] => [:environment] do |task, args|
+    filename = args[:csv_filename]
+    results = []
+
+    CSV.foreach(filename, { headers: true, encoding: 'ISO8859-1' }) do |row|
+      result = row.to_h.symbolize_keys
+
+      result[:geodir_ethicalcriteria] = (result[:Ethicalities] || "").gsub("\;", ",")
+      result[:post_region] = 'Ontario'
+      result[:post_title] = to_utf8 result[:post_title]
+      result[:post_content] = to_utf8 result[:"Final Description"]
+      result[:post_tags] = (result[:"FinalTags"] || "").gsub("\;", ",")
+      result[:categories] = (result[:"Business Type"] || "").split(";")
+      result[:operating_hours] = result[:"FB hours (scraper)"]
+
+      image_keys = result.keys.select {|k| k.to_s.starts_with?('IMAGE')}
+      result[:images] = image_keys.map do |k|
+        file = result[k]
+        if file.present?
+          {
+            uuid: Digest::SHA256.hexdigest(file),
+            file: file,
+            order: k.to_s.gsub('IMAGE', '').to_i
+          }
+        end
+      end.compact
+
+      results.push(result)
+    end
+
+    byebug
+
+    create_listings results
+  end
+
+  private
+
+  def create_listings results
     results.each do |row|
       begin
-        listing = get_or_create_listing row, domain, db
+        listing = get_or_create_listing row
         listing.save!
         listing.images.each {|i| i.save}
         listing.menu.images.each {|i| i.save}
@@ -123,20 +187,20 @@ namespace :datamigrate do
     end
   end
 
-  def get_or_create_listing row, domain, db
+  def get_or_create_listing row
+    puts row[:post_title]
     title = row[:post_title]
     status = row[:post_status]
     website = row[:geodir_website] || ''
     lat = row[:post_latitude].to_f
     lng = row[:post_longitude].to_f
     ethicalities = row[:geodir_ethicalcriteria].split(',')
-    featured_image = row[:featured_image]
     tags = row[:post_tags].split(',')
     address = row[:post_address]
     city = row[:post_city]
     region = row[:post_region]
     country = row[:post_country]
-    categories = row[:gd_placecategory].split(',').map {|c| c.present? ? c : nil}.compact
+    categories = row[:categories]
 
     bio = CGI.unescapeHTML(Sanitizer.sanitize(row[:post_content]))
 
@@ -161,37 +225,59 @@ namespace :datamigrate do
     end
 
     # Business Hours
-    business_hours = PHP.unserialize row[:business_hours]
+    if row[:business_hours]
+      business_hours = PHP.unserialize row[:business_hours]
 
-    listing.operating_hours.delete_all
-    listing.operating_hours = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].map do |day|
-      is_open = business_hours["#{day}_closed"] == 'open'
-      open1 = business_hours["#{day}_open"]
-      close1 = business_hours["#{day}_close"]
-      open2 = business_hours["#{day}_open_2"]
-      close2 = business_hours["#{day}_close_2"]
-      results = [nil, nil]
+      listing.operating_hours.delete_all
+      listing.operating_hours = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'].map do |day|
+        is_open = business_hours["#{day}_closed"] == 'open'
+        open1 = business_hours["#{day}_open"]
+        close1 = business_hours["#{day}_close"]
+        open2 = business_hours["#{day}_open_2"]
+        close2 = business_hours["#{day}_close_2"]
+        results = [nil, nil]
 
-      if !is_open
-        next
-      end
+        if !is_open
+          next
+        end
 
-      if (open1.present? && close1.present?)
-        oh = OperatingHours.new day: day
-        oh.open = Time.parse(open1 + ' EDT').utc
-        oh.close = Time.parse(close1 + ' EDT').utc
-        results[0] = oh
-      end
+        if (open1.present? && close1.present?)
+          oh = OperatingHours.new day: day
+          oh.open = Time.parse(open1 + ' EDT').utc
+          oh.close = Time.parse(close1 + ' EDT').utc
+          results[0] = oh
+        end
 
-      if (open2.present? && close2.present?)
-        oh = OperatingHours.new day: day
-        oh.open = Time.parse(open2 + ' EDT').utc
-        oh.close = Time.parse(close2 + ' EDT').utc
-        results[1] = oh
-      end
+        if (open2.present? && close2.present?)
+          oh = OperatingHours.new day: day
+          oh.open = Time.parse(open2 + ' EDT').utc
+          oh.close = Time.parse(close2 + ' EDT').utc
+          results[1] = oh
+        end
 
-      results
-    end.flatten.compact
+        results
+      end.flatten.compact
+    elsif row[:operating_hours] && row[:operating_hours] != "0"
+      business_hours = JSON.parse row[:operating_hours].gsub("'", '"')
+      listing.operating_hours.delete_all
+
+      listing.operating_hours = business_hours.keys.map do |key|
+        d, i, status = key.split('_')
+        day = DAYS[d.to_sym]
+
+        if status == 'close'
+          next
+        end
+
+        if status == 'open'
+          oh = OperatingHours.new day: day
+          oh.open = Time.parse(business_hours[key] + ' EDT').utc
+          close_key = "#{d}_#{i}_close"
+          oh.close = Time.parse(business_hours[close_key] + ' EDT').utc
+          oh
+        end
+      end.compact
+    end
 
     # Ethicalities
     ethicalities = ethicalities.map {|e| Ethicality.find_by(slug: ETHICALITIES[e.to_s.to_sym])}.compact
@@ -215,19 +301,16 @@ namespace :datamigrate do
     listing.tags = (tags + listing.tags)
 
     # Categories
-    listing.categories = categories.map do |c|
-      db_cat = db.query("SELECT name, slug FROM wpnn_terms WHERE term_id=#{c}").to_a[0]
-      category = Category.find_or_create_by(name: db_cat[:name], slug: db_cat[:slug])
+    categories.each do |cat|
+      category = Category.find_or_create_by(name: cat)
     end
 
-    images = db.query("SELECT file,menu_order FROM #{TABLES[:images]} WHERE post_id='#{row[:post_id]}'").to_a
-
-    listing.images = images.map do |image_row|
-      name = "datamigrate_v1_#{image_row[:file].gsub('/', '_')}"
+    listing.images = row[:images].map do |image_row|
+      name = "datamigrate_v1_#{image_row[:uuid].gsub('/', '_')}"
       key = "listings/#{listing.title.parameterize}/images/#{name}"
       order = image_row[:menu_order]
 
-      res = HTTParty.get("https://#{domain}/wp-content/uploads/#{image_row[:file]}")
+      res = HTTParty.get(image_row[:file])
 
       $fog_bucket.files.create({
         key: key,
@@ -302,6 +385,10 @@ namespace :datamigrate do
       symbolize_keys: true,
       database: DBNAME
     }).dup)
+  end
+
+  def to_utf8(msg)
+    msg.encode("iso-8859-1").force_encoding("utf-8")
   end
 
 end
