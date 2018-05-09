@@ -1,6 +1,6 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
-  config.action_mailer.default_url_options = { :host => "beta.ethicaltree.com" }
+  config.action_mailer.default_url_options = { :host => "ethicaltree.com" }
 
   # Code is not reloaded between requests.
   config.cache_classes = true
@@ -68,7 +68,7 @@ Rails.application.configure do
   Rails.application.config.middleware.use ExceptionNotification::Rack,
   :email => {
     :email_prefix => "[EthicalTree Errors] ",
-    :sender_address => %{"EthicalTree" <noreply@beta.ethicaltree.com>},
+    :sender_address => %{"EthicalTree" <noreply@ethicaltree.com>},
     :exception_recipients => %w{wcurtiscollins@gmail.com}
   }
 
@@ -100,7 +100,7 @@ Rails.application.configure do
 # CORS settings
   config.middleware.insert_before 0, Rack::Cors do
     allow do
-      origins 'https://beta.ethicaltree.com'
+      origins 'https://ethicaltree.com'
       resource '*', :headers => :any, :methods => [:get, :post, :patch, :put, :delete, :options]
     end
   end

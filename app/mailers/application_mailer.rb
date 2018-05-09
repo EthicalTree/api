@@ -1,4 +1,4 @@
 class ApplicationMailer < ActionMailer::Base
-  default from: 'EthicalTree <noreply@beta.ethicaltree.com>'
+  default from: 'EthicalTree <noreply@ethicaltree.com>'
   layout 'mailer'
 end
