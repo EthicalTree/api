@@ -140,7 +140,7 @@ namespace :datamigrate do
 
       result[:geodir_ethicalcriteria] = (result[:Ethicalities] || "").gsub("\;", ",")
       result[:post_region] = 'Ontario'
-      result[:post_title] = to_utf8 result[:post_title]
+      result[:post_title] = to_utf8 result[:UniqueCount]
       result[:post_content] = to_utf8 result[:"Final Description"]
       result[:post_tags] = (result[:"FinalTags"] || "").gsub("\;", ",")
       result[:categories] = (result[:"Business Type"] || "").split(";")
@@ -160,8 +160,6 @@ namespace :datamigrate do
 
       results.push(result)
     end
-
-    byebug
 
     create_listings results
   end
