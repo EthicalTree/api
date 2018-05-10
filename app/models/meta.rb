@@ -2,7 +2,12 @@ class Meta
 
   def self.get_meta_tags url
     @url = url
-    uri = URI(@url)
+
+    begin
+      uri = URI.parse(@url)
+    rescue
+      uri = URI.parse(URI.escape(@url))
+    end
 
     listing_slug = uri.path.scan(/\/listings\/([\w-]+)\/?/)
     curated_list_slug = uri.path.scan(/\/collections\/([\w-]+)\/?/)
