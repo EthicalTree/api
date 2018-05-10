@@ -39,6 +39,10 @@ module V1
       page = params[:page] || 1
       list = CuratedList.find_by(slug: params[:id])
 
+      if !list.present?
+        return json_response({ message: 'Collection not found' }, :not_found)
+      end
+
       if list.featured
         listings = Location.listings.joins(
           'JOIN plans ON plans.listing_id = listings.id'
