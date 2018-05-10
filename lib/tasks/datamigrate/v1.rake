@@ -151,7 +151,7 @@ namespace :datamigrate do
         file = result[k]
         if file.present?
           {
-            uuid: Digest::SHA256.hexdigest(file),
+            uuid: "#{Digest::SHA256.hexdigest(file)}.png",
             file: file,
             order: k.to_s.gsub('IMAGE', '').to_i
           }
@@ -308,7 +308,11 @@ namespace :datamigrate do
       key = "listings/#{listing.title.parameterize}/images/#{name}"
       order = image_row[:menu_order]
 
-      res = HTTParty.get(image_row[:file])
+      begin
+        res = HTTParty.get(image_row[:file])
+      rescue
+
+      end
 
       $fog_bucket.files.create({
         key: key,
