@@ -9,10 +9,15 @@ module V1
 
     def create
       authorize! :update, @listing
-      location = Location.new location_params
-      @listing.locations = [location]
 
-      render json: { locations: @listing.locations.as_json }, status: :ok
+      if params[:location].present?
+        location = Location.new location_params
+        @listing.locations = [location]
+
+        render json: { locations: @listing.locations.as_json }, status: :ok
+      else
+        render json: { errors: ['You must specify a location for your listing'], status: :ok }
+      end
     end
 
     def show
