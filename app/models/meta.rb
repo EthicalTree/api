@@ -4,9 +4,13 @@ class Meta
     @url = url
 
     begin
-      uri = URI.parse(@url)
+      begin
+        uri = URI.parse(@url)
+      rescue
+        uri = URI.parse(URI.escape(@url))
+      end
     rescue
-      uri = URI.parse(URI.escape(@url))
+      return ""
     end
 
     listing_slug = uri.path.scan(/\/listings\/([\w-]+)\/?/)
