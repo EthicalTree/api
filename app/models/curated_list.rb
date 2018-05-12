@@ -44,8 +44,6 @@ class CuratedList < ApplicationRecord
   end
 
   def ensure_slug
-    if not self.slug
-      self.slug = self.name.parameterize separator: '-'
-    end
+    self.slug = self.name.parameterize separator: '-'
   end
 end
