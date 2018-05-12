@@ -35,7 +35,7 @@ module V1
     end
 
     def show
-      location = params[:location]
+      city = params[:city]
       page = params[:page] || 1
       list = CuratedList.find_by(slug: params[:id])
 
@@ -59,7 +59,7 @@ module V1
 
       listings = Search.by_location({
         results: listings,
-        location: location,
+        location: city,
         filtered: true,
         radius: 50
       })

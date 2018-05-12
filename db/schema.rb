@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_04_29_170025) do
+ActiveRecord::Schema.define(version: 2018_05_12_134155) do
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "slug"
@@ -59,6 +59,12 @@ ActiveRecord::Schema.define(version: 2018_04_29_170025) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "timezone"
+    t.string "neighbourhood"
+    t.string "city"
+    t.string "state"
+    t.string "country"
+    t.string "location_type"
+    t.index ["location_type"], name: "index_directory_locations_on_location_type"
   end
 
   create_table "ethicalities", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -187,7 +193,7 @@ ActiveRecord::Schema.define(version: 2018_04_29_170025) do
     t.string "first_name", default: "", null: false
     t.string "last_name", default: "", null: false
     t.string "password_digest"
-    t.timestamp "confirmed_at"
+    t.datetime "confirmed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "confirm_token"

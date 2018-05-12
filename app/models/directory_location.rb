@@ -4,22 +4,33 @@ class DirectoryLocation < ApplicationRecord
 
   acts_as_mappable
 
-  def self.build_location address
+  def sync_location_details
+    DirectoryLocation.build_locations lat, lng
+  end
+
+  def self.build_location address, type, details
     location = DirectoryLocation.find_by name: address
 
-    if !location
-      details = MapApi.build_from_address address
+    params = {
+      name: address,
+      lat: details[:location]["lat"],
+      lng: details[:location]["lng"],
+      boundlat1: details[:bounds][:northeast]["lat"],
+      boundlng1: details[:bounds][:northeast]["lng"],
+      boundlat2: details[:bounds][:southwest]["lat"],
+      boundlng2: details[:bounds][:southwest]["lng"],
+      timezone: details[:timezone],
+      city: details[:city] ? details[:city]["short_name"] : '',
+      neighbourhood: details[:sublocality] ? details[:sublocality]["short_name"] : '',
+      state: details[:state] ? details[:state]["short_name"] : '',
+      country: details[:country]["short_name"],
+      location_type: type
+    }
 
-      location = DirectoryLocation.new({
-        name: address,
-        lat: details[:location]["lat"],
-        lng: details[:location]["lng"],
-        boundlat1: details[:bounds][:northeast]["lat"],
-        boundlng1: details[:bounds][:northeast]["lng"],
-        boundlat2: details[:bounds][:southwest]["lat"],
-        boundlng2: details[:bounds][:southwest]["lng"],
-        timezone: details[:timezone]
-      })
+    if !location
+      location = DirectoryLocation.new(params)
+    else
+      location.update(params)
     end
 
     location
@@ -36,12 +47,12 @@ class DirectoryLocation < ApplicationRecord
 
     if details[:city].present? and details[:state].present?
       name = "#{details[:city]["long_name"]}, #{details[:state]["short_name"]}"
-      locations.append self.build_location(name)
+      locations.append self.build_location(name, 'city', details)
     end
 
     if details[:sublocality].present? and details[:city].present?
       name = "#{details[:sublocality]["long_name"]}, #{details[:city]["long_name"]}"
-      locations.append self.build_location(name)
+      locations.append self.build_location(name, 'neighbourhood', details)
     end
 
     locations

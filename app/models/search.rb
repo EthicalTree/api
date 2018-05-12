@@ -7,7 +7,12 @@ class Search
     radius = options[:radius] || 5
 
     if location.present?
-      directory_location = DirectoryLocation.find_by(name: location)
+      location = location.downcase
+
+      if directory_location = DirectoryLocation.find_by('lower(name)=?', location)
+      elsif directory_location = DirectoryLocation.find_by('lower(city)=? AND location_type="city"', location)
+      elsif directory_location = DirectoryLocation.find_by('lower(neighbourhood)=? AND location_type="neighbourhood"', location)
+      end
 
       if directory_location.present?
         coords = directory_location.coordinates
