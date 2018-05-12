@@ -50,11 +50,11 @@ module V1
 
       if params[:menu_id]
         image = @listing.menu.images.find(params[:id])
-        image.destroy
+        @listing.menu.images.delete(image)
         render json: { images: @listing.menu.images.as_json }, status: :ok
       else
         image = @listing.images.find(params[:id])
-        image.destroy
+        @listing.images.delete(image)
         render json: { images: @listing.images.as_json }, status: :ok
       end
 
