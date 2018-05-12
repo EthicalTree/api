@@ -19,7 +19,6 @@ class Plan < ApplicationRecord
     listings = Search.by_location({
       results: listings,
       location: location,
-      radius: 50,
       filtered: true
     }).order(
       'RAND()'

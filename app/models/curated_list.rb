@@ -22,7 +22,6 @@ class CuratedList < ApplicationRecord
     listings = Search.by_location({
       results: listings,
       location: location,
-      radius: 25,
       filtered: true
     })
 

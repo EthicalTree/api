@@ -4,7 +4,7 @@ class Search
     results = options[:results]
     location = options[:location]
     filtered = options[:filtered] || false
-    radius = options[:radius] || 5
+    radius = options[:radius] || 50
 
     if location.present?
       location = location.downcase

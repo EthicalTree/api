@@ -52,7 +52,7 @@ module V1
       if results_that_match.length > 0
         results = results_that_match
       else
-        results = results.order('RAND()').limit(12)
+        results = results.reorder('RAND()').limit(12)
       end
 
       results = results.page(page).per(12)
