@@ -17,11 +17,12 @@ class MapApi
     end
 
     {
-      country: extracted[:country],
-      state: extracted[:administrative_area_level_1],
-      city: extracted[:locality],
-      neighbourhood: extracted[:neighborhood],
-      sublocality: extracted[:sublocality],
+      address: details["formatted_address"],
+      country: extracted[:country] ? extracted[:country]["short_name"] : '',
+      state: extracted[:administrative_area_level_1] ? extracted[:administrative_area_level_1]["short_name"] : '',
+      city: extracted[:locality] ? extracted[:locality]["short_name"] : '',
+      neighbourhood: extracted[:neighborhood] ? extracted[:neighborhood]["short_name"] : '',
+      sublocality: extracted[:sublocality] ? extracted[:sublocality]["short_name"] : '',
       bounds: {
         northeast: bounds["northeast"],
         southwest: bounds["southwest"]

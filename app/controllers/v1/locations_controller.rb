@@ -12,7 +12,10 @@ module V1
 
       if params[:location].present?
         location = Location.new location_params
+
         DirectoryLocation.create_locations location.lat, location.lng
+        location.determine_location_details
+
         @listing.locations = [location]
 
         render json: { locations: @listing.locations.as_json }, status: :ok

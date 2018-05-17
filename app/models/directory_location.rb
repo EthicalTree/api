@@ -20,10 +20,10 @@ class DirectoryLocation < ApplicationRecord
       boundlat2: details[:bounds][:southwest]["lat"],
       boundlng2: details[:bounds][:southwest]["lng"],
       timezone: details[:timezone],
-      city: details[:city] ? details[:city]["short_name"] : '',
-      neighbourhood: details[:sublocality] ? details[:sublocality]["short_name"] : '',
-      state: details[:state] ? details[:state]["short_name"] : '',
-      country: details[:country]["short_name"],
+      city: details[:city],
+      neighbourhood: details[:sublocality],
+      state: details[:state],
+      country: details[:country],
       location_type: type
     }
 
@@ -46,12 +46,12 @@ class DirectoryLocation < ApplicationRecord
     end
 
     if details[:city].present? and details[:state].present?
-      name = "#{details[:city]["long_name"]}, #{details[:state]["short_name"]}"
+      name = "#{details[:city]}, #{details[:state]}"
       locations.append self.build_location(name, 'city', details)
     end
 
     if details[:sublocality].present? and details[:city].present?
-      name = "#{details[:sublocality]["long_name"]}, #{details[:city]["long_name"]}"
+      name = "#{details[:sublocality]}, #{details[:city]}"
       locations.append self.build_location(name, 'neighbourhood', details)
     end
 
