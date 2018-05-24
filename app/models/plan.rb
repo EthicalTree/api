@@ -16,11 +16,13 @@ class Plan < ApplicationRecord
     location = options[:location]
 
     listings = Location.listings
-    listings = Search.by_location({
+    listings, directory_location = Search.by_location({
       results: listings,
       location: location,
       filtered: true
-    }).order(
+    })
+
+    listings = listings.order(
       'RAND()'
     ).joins(
       'JOIN plans ON plans.listing_id = listings.id'
@@ -39,9 +41,11 @@ class Plan < ApplicationRecord
       listings = listings.limit(count)
     end
 
-    listings.map do |l|
+    listings = listings.map do |l|
       l.listing
     end.shuffle
+
+    [listings, directory_location]
   end
 
   validates :listing_id, presence: true

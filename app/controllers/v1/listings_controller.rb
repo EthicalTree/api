@@ -9,12 +9,15 @@ module V1
       is_featured = params[:is_featured]
 
       if is_featured
-        listings = Plan.featured_listings({
+        listings, directory_location = Plan.featured_listings({
           count: count,
           location: location
         })
 
-        render json: listings.map {|l| l.as_json_search}, status: 200
+        render json: {
+          listings: listings.map {|l| l.as_json_search},
+          location: directory_location.as_json
+        }
       else
 
       end

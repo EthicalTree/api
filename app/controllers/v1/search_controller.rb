@@ -32,7 +32,7 @@ module V1
         'listings.id'
       )
 
-      results = Search.by_location({
+      results, directory_location = Search.by_location({
         results: results,
         location: location,
         filtered: true
@@ -59,6 +59,7 @@ module V1
 
       result_json = {
         listings: results.map{|l| l.listing.as_json_search},
+        location: directory_location.as_json,
         current_page: page,
         matches: results_that_match.length,
         page_count: results.total_pages

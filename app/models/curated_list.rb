@@ -19,7 +19,7 @@ class CuratedList < ApplicationRecord
       'listing_tags.tag_id': tag_id
     )
 
-    listings = Search.by_location({
+    listings, directory_location = Search.by_location({
       results: listings,
       location: location,
       filtered: true
@@ -28,10 +28,13 @@ class CuratedList < ApplicationRecord
     listings = listings.order(
       'RAND()'
     ).limit(count)
+
+    [listings, directory_location]
   end
 
   def listings
-    self._listings.map {|l| l.as_json_search}
+    listings, _ = self._listings
+    listings.map {|l| l.as_json_search}
   end
 
   private

@@ -15,16 +15,21 @@ module V1
           )
 
           if cl.featured
-            json[:listings] = Plan.featured_listings({
+            listings, directory_location = Plan.featured_listings({
               count: 6,
               location: location
-            }).map {|l| l.as_json_search}
+            })
+
+            json[:listings] = listings.map {|l| l.as_json_search}
           else
-            json[:listings] = cl._listings({
+            listings, directory_location = cl._listings({
               location: location
-            }).map {|l| l.listing.as_json_search}
+            })
+
+            json[:listings] = listings.map {|l| l.listing.as_json_search}
           end
 
+          json[:location] = directory_location
           json
         end
       }
@@ -56,7 +61,7 @@ module V1
         )
       end
 
-      listings = Search.by_location({
+      listings, directory_location = Search.by_location({
         results: listings,
         location: location,
         filtered: true,
@@ -71,6 +76,7 @@ module V1
         name: list.name,
         slug: list.slug,
         listings: listings.map {|l| l.listing.as_json_search},
+        location: directory_location.as_json,
         current_page: page,
         total_pages: listings.total_pages
       }
