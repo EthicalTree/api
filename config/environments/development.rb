@@ -48,7 +48,7 @@ Rails.application.configure do
   # CORS settings
   config.middleware.insert_before 0, Rack::Cors do
     allow do
-      origins '*'
+      origins 'http://ethicaltree.local:3003', 'http://ethicaltree.local:3003', 'localhost:3003'
       resource '*', :headers => :any, :methods => [:get, :post, :patch, :put, :delete, :options]
     end
   end
