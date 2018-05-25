@@ -16,6 +16,7 @@ module V1
         'listings.slug',
         'listings.title',
         'listings.bio',
+        @query.present? ? 'tags.hashtag' : nil,
         build_ethicality_statement,
         build_likeness_statement
       ].compact
@@ -23,6 +24,7 @@ module V1
       joins = [
         "LEFT JOIN plans ON plans.listing_id = locations.listing_id",
         build_ethicality_join,
+        build_tag_join
       ].compact
 
       results = Location.listings.select(fields).joins(joins).where.not(
@@ -30,8 +32,12 @@ module V1
         'locations.lng': nil
       ).group(
         'locations.id',
-        'listings.id'
+        'listings.id',
       )
+
+      if @query.present?
+        results = results.group('tags.hashtag')
+      end
 
       results, directory_location = Search.by_location({
         results: results,
@@ -138,6 +144,18 @@ module V1
       end
     end
 
+    def build_tag_join
+      if @query.present?
+        query = Listing.connection.quote("%#{@query}%")
+
+        "LEFT JOIN listing_tags ON listing_tags.listing_id = listings.id
+         LEFT JOIN tags
+          ON listing_tags.tag_id = tags.id
+          AND tags.hashtag LIKE #{query}
+        "
+      end
+    end
+
     def build_ethicality_statement
       if @ethicalities.present?
         "COUNT(ethicalities.slug) as 'eth_total'"
@@ -154,9 +172,10 @@ module V1
           WHEN (
             LOWER(listings.title) LIKE #{query} OR
             LOWER(listings.bio) LIKE #{query}
-          ) AND plans.listing_id IS NOT NULL THEN 3
-          WHEN LOWER(listings.title) LIKE #{query} THEN 2
-          WHEN LOWER(listings.bio) LIKE #{query} THEN 1
+          ) AND plans.listing_id IS NOT NULL THEN 4
+          WHEN LOWER(listings.title) LIKE #{query} THEN 3
+          WHEN LOWER(listings.bio) LIKE #{query} THEN 2
+          WHEN tags.hashtag IS NOT NULL THEN 1
           ELSE 0
         END as 'likeness'"
       else
