@@ -7,7 +7,7 @@ class Plan < ApplicationRecord
       premium: { name: 'Premium', price: 57.00, weight: 200 },
       bronze: { name: 'Bronze', price: 69.00, weight: 100 },
       silver: { name: 'Silver', price: 129.00, weight: 200 },
-      gold: { name: 'Gold', price: 189.00, weight: 400 }
+      gold: { name: 'Gold', price: 199.00, weight: 400 }
     }
   end
 
