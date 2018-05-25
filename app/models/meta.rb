@@ -26,7 +26,7 @@ class Meta
       generate_meta({
         name: 'EthicalTree',
         description: 'Best of Ottawa restaurants, bakeries, cafés and stores that are Organic, Woman-owned, Fair Trade, Vegan and/or Vegetarian',
-        image: "https://#{Rails.application.secrets[:webhost]}/images/et-social.png",
+        image: "#{Config.cdn}/images/et-social.png",
         image_width: '1200',
         image_height: '628'
       }) {|item| item}
