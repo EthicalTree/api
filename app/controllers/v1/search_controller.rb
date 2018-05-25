@@ -11,6 +11,7 @@ module V1
         :id,
         :lat,
         :lng,
+        'listing_id',
         'listings.id',
         'listings.slug',
         'listings.title',
@@ -38,16 +39,20 @@ module V1
         filtered: true
       })
 
-      results = results.reorder(
-        'eth_total DESC',
-        'likeness DESC',
-        'isnull(plans.listing_id) ASC',
-        'distance ASC'
-      ).distinct()
+      if directory_location
+        results = results.reorder(
+          'eth_total DESC',
+          'likeness DESC',
+          'isnull(plans.listing_id) ASC',
+          'distance ASC'
+        ).distinct()
 
-      results_that_match = results.having(
-        "eth_total > 0 AND likeness > 0"
-      )
+        results_that_match = results.having(
+          "eth_total > 0 AND likeness > 0"
+        )
+      else
+        results_that_match = []
+      end
 
       if results_that_match.length > 0
         results = results_that_match
