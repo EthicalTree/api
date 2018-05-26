@@ -26,13 +26,21 @@ class Meta
 
     if listing_slug.present?
       if listing = Listing.find_by(slug: listing_slug[0][0])
+        cover_image = listing.cover_image
+
         meta.merge!({
           name: listing.title,
-          description: listing.bio,
-          image: listing.cover_image,
-          image_width: '',
-          image_height: ''
+          description: listing.bio
         })
+
+        if cover_image
+          details = cover_image.image_details
+          meta.merge!({
+            image: details[:url],
+            image_width: details[:width].to_s,
+            image_height: details[:height].to_s
+          })
+        end
       end
     elsif curated_list_slug.present?
       if curated_list = CuratedList.find_by(slug: curated_list_slug[0][0])
