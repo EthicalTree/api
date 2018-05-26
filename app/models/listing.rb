@@ -37,7 +37,7 @@ class Listing < ApplicationRecord
   def cover_image
     image = images.first
     key = if image.present? then image.key else '/defaults/opengraph-ethicaltree.png' end
-    "https://#{$s3_bucket}.s3.amazonaws.com/#{key}"
+    "https://#{$s3_images_bucket}.s3.amazonaws.com/#{key}"
   end
 
   # For now we only support one menu, but might support in the future

@@ -7,5 +7,6 @@ if config
     aws_secret_access_key: config[:secret_key]
   )
 
-  $fog_bucket = $fog.directories.new key: $s3_bucket
+  $fog_images = $fog.directories.new key: $s3_images_bucket
+  $fog_thumbnails = $fog.directories.new key: $s3_thumbnails_bucket
 end

@@ -314,7 +314,7 @@ namespace :datamigrate do
 
       end
 
-      $fog_bucket.files.create({
+      $fog_images.files.create({
         key: key,
         body: res.body,
         public: true
@@ -343,7 +343,7 @@ namespace :datamigrate do
           next
         end
 
-        $fog_bucket.files.create({
+        $fog_images.files.create({
           key: key,
           body: res.body,
           public: true

@@ -14,10 +14,10 @@ module V1
 
       if params[:menu_id]
         @listing.menu.images.push image
-        render json: { images: @listing.menu.images.as_json.rotate(-1) }, status: :ok
+        render json: { images: @listing.menu.images.as_json }, status: :ok
       else
         @listing.images.push image
-        render json: { images: @listing.images.as_json.rotate(-1) }, status: :ok
+        render json: { images: @listing.images.as_json }, status: :ok
       end
 
     end
@@ -50,14 +50,27 @@ module V1
 
       if params[:menu_id]
         image = @listing.menu.images.find(params[:id])
+        key = image.key
         @listing.menu.images.delete(image)
-        render json: { images: @listing.menu.images.as_json }, status: :ok
+        images = @listing.menu.images.as_json
       else
         image = @listing.images.find(params[:id])
+        key = image.key
         @listing.images.delete(image)
-        render json: { images: @listing.images.as_json }, status: :ok
+        images = @listing.images.as_json
       end
 
+      s3_image = $fog_images.files.get(key)
+      if s3_image
+        s3_image.destroy
+      end
+
+      s3_thumbnail = $fog_thumbnails.files.get(key)
+      if s3_thumbnail
+        s3_thumbnail.destroy
+      end
+
+      render json: { images: images }, status: :ok
     end
 
     private

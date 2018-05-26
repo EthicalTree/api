@@ -38,7 +38,7 @@ namespace :datamigrate do
       key = "listings/#{listing.title.parameterize}/menus/#{listing.menu.id}/images/#{img}"
 
       if !image = Image.find_by(key: key)
-        $fog_bucket.files.create({
+        $fog_images.files.create({
           key: key,
           body: image_file.read,
           public: true

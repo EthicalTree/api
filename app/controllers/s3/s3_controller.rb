@@ -17,7 +17,13 @@ module S3
         key = "listings/#{slug}/images/#{name}"
       end
 
-      url = $fog.put_object_url($s3_bucket, key, 15.minutes.from_now.to_time.to_i, headers, options)
+      url = $fog.put_object_url(
+        $s3_images_bucket,
+        key,
+        15.minutes.from_now.to_time.to_i,
+        headers,
+        options
+      )
 
       render json: { key: key, signedUrl: url}
     end

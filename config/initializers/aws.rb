@@ -7,6 +7,7 @@ if config
     credentials: Aws::Credentials.new(config[:access_key], config[:secret_key])
   })
 
-  $s3_bucket = config[:bucket]
+  $s3_images_bucket = config[:images_bucket]
+  $s3_thumbnails_bucket = config[:thumbnails_bucket]
 
 end
