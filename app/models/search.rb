@@ -27,7 +27,7 @@ class Search
     directory_location = Search.find_directory_location(location)
 
     if !directory_location.present?
-      return results
+      return nil
     end
 
     # Filter/Sort results

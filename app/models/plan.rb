@@ -16,13 +16,18 @@ class Plan < ApplicationRecord
     location = options[:location]
 
     listings = Location.listings
-    listings = Search.by_location({
+
+    search_listings = Search.by_location({
       results: listings,
       location: location,
       filtered: true
-    }).order(
-      'RAND()'
-    ).joins(
+    })
+
+    if search_listings
+      listings = search_listings
+    end
+
+    listings = listings.joins(
       'JOIN plans ON plans.listing_id = listings.id'
     )
 

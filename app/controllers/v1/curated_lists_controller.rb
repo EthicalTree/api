@@ -56,14 +56,18 @@ module V1
         )
       end
 
-      listings = Search.by_location({
+      search_listings = Search.by_location({
         results: listings,
         location: location,
         filtered: true,
         radius: 50
-      }).order(
-        'distance DESC'
-      ).distinct.page(page).per(18)
+      })
+
+      if search_listings
+        listings = search_listings.order('distance DESC')
+      end
+
+      listings = listings.distinct.page(page).per(18)
 
       render json: {
         name: list.name,

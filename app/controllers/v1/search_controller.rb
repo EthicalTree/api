@@ -11,12 +11,11 @@ module V1
         :id,
         :lat,
         :lng,
-        'locations.listing_id',
+        'listing_id',
         'listings.id',
         'listings.slug',
         'listings.title',
         'listings.bio',
-        'plans.listing_id',
         build_hashtag_statement,
         build_ethicality_statement,
         build_likeness_statement
@@ -30,29 +29,34 @@ module V1
 
       results = Location.listings.select(fields).joins(joins).where.not(
         'locations.lat': nil,
-        'locations.lng': nil
+        'locations.lng': nil,
+        'locations.listing_id': nil
       ).group(
         'locations.id',
         'listings.id',
-      )
+      ).distinct('listings.id')
 
-      results = Search.by_location({
+      located_results = Search.by_location({
         results: results,
         location: location,
         filtered: true
       })
 
-      results = results.reorder(
-        'eth_total DESC',
-        'likeness DESC',
-        'hashtag_count DESC',
-        'isnull(plans.listing_id) ASC',
-        'distance ASC'
-      ).distinct('listings.id')
+      if located_results
+        results = located_results.reorder(
+          'eth_total DESC',
+          'likeness DESC',
+          'hashtag_count DESC',
+          'isnull(plans.listing_id) ASC',
+          'distance ASC'
+        )
 
-      results_that_match = results.having(
-        "eth_total > 0 AND (likeness > 0 OR hashtag_count > 0)"
-      )
+        results_that_match = results.having(
+          "eth_total > 0 AND (likeness > 0 OR hashtag_count > 0)"
+        )
+      else
+        results_that_match = []
+      end
 
       if results_that_match.length > 0
         results = results_that_match
