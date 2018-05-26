@@ -8,6 +8,14 @@ class DirectoryLocation < ApplicationRecord
     DirectoryLocation.build_locations lat, lng
   end
 
+  def self.find_by_location location
+    if directory_location = DirectoryLocation.find_by('lower(name)=?', location)
+    elsif directory_location = DirectoryLocation.find_by('lower(city)=? AND location_type="city"', location)
+    elsif directory_location = DirectoryLocation.find_by('lower(neighbourhood)=? AND location_type="neighbourhood"', location)
+    end
+    directory_location
+  end
+
   def self.build_location address, type, details
     location = DirectoryLocation.find_by name: address
 

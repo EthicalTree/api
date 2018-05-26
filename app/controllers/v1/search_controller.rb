@@ -36,27 +36,23 @@ module V1
         'listings.id',
       )
 
-      results, directory_location = Search.by_location({
+      results = Search.by_location({
         results: results,
         location: location,
         filtered: true
       })
 
-      if directory_location
-        results = results.reorder(
-          'eth_total DESC',
-          'likeness DESC',
-          'hashtag_count DESC',
-          'isnull(plans.listing_id) ASC',
-          'distance ASC'
-        ).distinct('listings.id')
+      results = results.reorder(
+        'eth_total DESC',
+        'likeness DESC',
+        'hashtag_count DESC',
+        'isnull(plans.listing_id) ASC',
+        'distance ASC'
+      ).distinct('listings.id')
 
-        results_that_match = results.having(
-          "eth_total > 0 AND (likeness > 0 OR hashtag_count > 0)"
-        )
-      else
-        results_that_match = []
-      end
+      results_that_match = results.having(
+        "eth_total > 0 AND (likeness > 0 OR hashtag_count > 0)"
+      )
 
       if results_that_match.length > 0
         results = results_that_match
@@ -68,7 +64,6 @@ module V1
 
       result_json = {
         listings: results.map{|l| l.listing.as_json_search},
-        location: directory_location.as_json,
         current_page: page,
         matches: results_that_match.length,
         page_count: results.total_pages

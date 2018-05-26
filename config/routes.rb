@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     resources :curated_lists
     resources :plans
     resources :tags
+    resources :directory_locations
 
     resources :listings do
       resources :menus do

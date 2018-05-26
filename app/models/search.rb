@@ -1,10 +1,20 @@
 class Search
 
   def self.find_directory_location location
-    if directory_location = DirectoryLocation.find_by('lower(name)=?', location)
-    elsif directory_location = DirectoryLocation.find_by('lower(city)=? AND location_type="city"', location)
-    elsif directory_location = DirectoryLocation.find_by('lower(neighbourhood)=? AND location_type="neighbourhood"', location)
+    if !location.present?
+      location = 'Ottawa'
     end
+
+    # Get a DirectoryLocation object
+    location = location.downcase
+    directory_location = DirectoryLocation.find_by_location(location)
+
+    if !directory_location.present?
+      location = MapApi.build_from_address(location)
+      city = location ? location[:city] : ''
+      directory_location = DirectoryLocation.find_by_location(city.downcase)
+    end
+
     directory_location
   end
 
@@ -14,22 +24,10 @@ class Search
     filtered = options[:filtered] || false
     radius = options[:radius] || 50
 
-    if !location.present?
-      location = 'Ottawa'
-    end
-
-    # Get a DirectoryLocation object
-    location = location.downcase
     directory_location = Search.find_directory_location(location)
 
     if !directory_location.present?
-      location = MapApi.build_from_address(location)
-      city = location ? location[:city] : ''
-      directory_location = Search.find_directory_location(city.downcase)
-    end
-
-    if !directory_location.present?
-      return [results, nil]
+      return results
     end
 
     # Filter/Sort results
@@ -41,7 +39,7 @@ class Search
       results = results.by_distance(origin: coords)
     end
 
-    [results, directory_location]
+    results
   end
 
 end
