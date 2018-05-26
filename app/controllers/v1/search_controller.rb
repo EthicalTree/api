@@ -11,20 +11,21 @@ module V1
         :id,
         :lat,
         :lng,
-        'listing_id',
+        'locations.listing_id',
         'listings.id',
         'listings.slug',
         'listings.title',
         'listings.bio',
-        @query.present? ? 'tags.hashtag' : nil,
+        'plans.listing_id',
+        build_hashtag_statement,
         build_ethicality_statement,
         build_likeness_statement
       ].compact
 
       joins = [
         "LEFT JOIN plans ON plans.listing_id = locations.listing_id",
+        build_tag_join,
         build_ethicality_join,
-        build_tag_join
       ].compact
 
       results = Location.listings.select(fields).joins(joins).where.not(
@@ -34,10 +35,6 @@ module V1
         'locations.id',
         'listings.id',
       )
-
-      if @query.present?
-        results = results.group('tags.hashtag')
-      end
 
       results, directory_location = Search.by_location({
         results: results,
@@ -49,12 +46,13 @@ module V1
         results = results.reorder(
           'eth_total DESC',
           'likeness DESC',
+          'hashtag_count DESC',
           'isnull(plans.listing_id) ASC',
           'distance ASC'
-        ).distinct()
+        ).distinct('listings.id')
 
         results_that_match = results.having(
-          "eth_total > 0 AND likeness > 0"
+          "eth_total > 0 AND (likeness > 0 OR hashtag_count > 0)"
         )
       else
         results_that_match = []
@@ -149,9 +147,8 @@ module V1
         query = Listing.connection.quote("%#{@query}%")
 
         "LEFT JOIN listing_tags ON listing_tags.listing_id = listings.id
-         LEFT JOIN tags
-          ON listing_tags.tag_id = tags.id
-          AND tags.hashtag LIKE #{query}
+         LEFT JOIN tags ON tags.id = listing_tags.tag_id AND
+          tags.hashtag LIKE #{query}
         "
       end
     end
@@ -175,11 +172,18 @@ module V1
           ) AND plans.listing_id IS NOT NULL THEN 4
           WHEN LOWER(listings.title) LIKE #{query} THEN 3
           WHEN LOWER(listings.bio) LIKE #{query} THEN 2
-          WHEN tags.hashtag IS NOT NULL THEN 1
           ELSE 0
         END as 'likeness'"
       else
         "1 as 'likeness'"
+      end
+    end
+
+    def build_hashtag_statement
+      if @query.present?
+        'COUNT(tags.hashtag) AS hashtag_count'
+      else
+        '1 as hashtag_count'
       end
     end
 
