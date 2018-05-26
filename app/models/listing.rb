@@ -38,6 +38,18 @@ class Listing < ApplicationRecord
     images.first
   end
 
+  def ethicalities_string
+    ethicalities.map {|e| e.titleize}.join(', ')
+  end
+
+  def address
+    if self.locations.length > 0
+      self.locations.first.formatted_address
+    else
+      ''
+    end
+  end
+
   # For now we only support one menu, but might support in the future
   def menu
     if self.menus.empty?
@@ -72,10 +84,13 @@ class Listing < ApplicationRecord
         { menus: { include: [:images] } },
         { operating_hours: {
           methods: [
-            :label
+            :label,
           ]
         }},
       ],
+      methods: [
+        :address
+      ]
     })
   end
 

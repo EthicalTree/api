@@ -71,6 +71,7 @@ module V1
 
       render json: {
         name: list.name,
+        description: list.description,
         slug: list.slug,
         listings: listings.map {|l| l.listing.as_json_search},
         current_page: page,

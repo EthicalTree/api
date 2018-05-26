@@ -15,17 +15,17 @@ class Meta
 
     meta = {
       name: 'EthicalTree',
-      description: 'Best of Ottawa restaurants, bakeries, cafés and stores that are Organic, Woman-owned, Fair Trade, Vegan and/or Vegetarian',
+      description: 'Best of Ottawa restaurants, bakeries, cafés and stores that are Organic, Woman-owned, Fair Trade, Vegan or Vegetarian',
       image: "#{Config.cdn}/images/et-social.png",
       image_width: '1200',
       image_height: '628'
     }
 
-    listing_slug = uri.path.scan(/\/listings\/\w+\/([\w-]+)\/?/)
-    curated_list_slug = uri.path.scan(/\/collections\/\w+\/([\w-]+)\/?/)
+    listing_slug = uri.path.scan(/\/listings\/(\w+)\/([\w-]+)\/?/)
+    curated_list_slug = uri.path.scan(/\/collections\/(\w+)\/([\w-]+)\/?/)
 
     if listing_slug.present?
-      if listing = Listing.find_by(slug: listing_slug[0][0])
+      if listing = Listing.find_by(slug: listing_slug[0][1])
         cover_image = listing.cover_image
 
         meta.merge!({
@@ -43,7 +43,8 @@ class Meta
         end
       end
     elsif curated_list_slug.present?
-      if curated_list = CuratedList.find_by(slug: curated_list_slug[0][0])
+      if curated_list = CuratedList.find_by(slug: curated_list_slug[0][1])
+
         meta.merge!({
           name: curated_list.name,
           description: curated_list.description,
@@ -60,7 +61,6 @@ class Meta
       item.each {|k, v| item[k] = CGI::escapeHTML(v || '')}
 
       "
-        <title>#{name}</title>
         <meta name=\"description\" content=\"#{item[:description]}\">
         <meta property=\"og:url\" content=\"#{@url}\">
         <meta property=\"og:title\" content=\"#{item[:name]}\">
