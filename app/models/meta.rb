@@ -20,6 +20,7 @@ class Meta
       image_width: '1200',
       image_height: '628'
     }
+    cover_image = nil
 
     listing_slug = uri.path.scan(/\/listings\/(\w+)\/([\w-]+)\/?/)
     collection_slug = uri.path.scan(/\/collections\/(\w+)\/([\w-]+)\/?/)
@@ -32,24 +33,26 @@ class Meta
           name: listing.title,
           description: listing.bio
         })
-
-        if cover_image
-          details = cover_image.image_details
-          meta.merge!({
-            image: details[:url],
-            image_width: details[:width].to_s,
-            image_height: details[:height].to_s
-          })
-        end
       end
     elsif collection_slug.present?
       if collection = Collection.find_by(slug: collection_slug[0][1])
+        cover_image = collection.cover_image
 
         meta.merge!({
           name: collection.name,
           description: collection.description,
         })
       end
+    end
+
+    if cover_image
+      details = cover_image.image_details
+
+      meta.merge!({
+        image: details[:url],
+        image_width: details[:width].to_s,
+        image_height: details[:height].to_s
+      })
     end
 
     generate_meta(meta)

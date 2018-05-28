@@ -1,12 +1,12 @@
 class Image < ApplicationRecord
   default_scope { order(order: :asc) }
 
-  def url expiry=15.minutes.from_now.to_time.to_i
-    $fog_images.files.new(key: self.key).url(expiry)
+  def url
+    "https://#{$s3_images_bucket}.s3.amazonaws.com/#{self.key}"
   end
 
-  def thumbnail_url expiry=15.minutes.from_now.to_time.to_i
-    $fog_thumbnails.files.new(key: self.key).url(expiry)
+  def thumbnail_url
+    "https://#{$s3_thumbnails_bucket}.s3.amazonaws.com/#{self.key}"
   end
 
   def serializable_hash options={}
@@ -26,7 +26,8 @@ class Image < ApplicationRecord
     end
 
     {
-      url: "https://#{$s3_images_bucket}.s3.amazonaws.com/#{self.key}",
+      url: self.url,
+      thumbnail_url: self.thumbnail_url,
       width: self.width,
       height: self.height
     }
