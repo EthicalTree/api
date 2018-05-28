@@ -36,13 +36,13 @@ module V1
     def show
       location = params[:location]
       page = params[:page] || 1
-      list = Collection.find_by(slug: params[:id])
+      collection = Collection.find_by(slug: params[:id])
 
-      if !list.present?
+      if !collection.present?
         return json_response({ message: 'Collection not found' }, :not_found)
       end
 
-      if list.featured
+      if collection.featured
         listings = Location.listings.joins(
           'JOIN plans ON plans.listing_id = listings.id'
         ).where(
@@ -52,7 +52,7 @@ module V1
         listings = Location.listings.joins(
           "INNER JOIN listing_tags ON listings.id = listing_tags.listing_id"
         ).where(
-          'listing_tags.tag_id': list.tag.id
+          'listing_tags.tag_id': collection.tag.id
         )
       end
 
@@ -70,9 +70,10 @@ module V1
       listings = listings.distinct.page(page).per(18)
 
       render json: {
-        name: list.name,
-        description: list.description,
-        slug: list.slug,
+        name: collection.name,
+        description: collection.description,
+        slug: collection.slug,
+        cover_image: collection.cover_image,
         listings: listings.map {|l| l.listing.as_json_search},
         current_page: page,
         total_pages: listings.total_pages
