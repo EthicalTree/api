@@ -6,15 +6,23 @@ module S3
       options = {path_style: true}
       headers = {"Content-Type" => params[:contentType], "x-amz-acl" => "public-read"}
 
+      type = params[:type]
       slug = params[:slug]
-      menu_id = params[:menuId]
 
       name = "#{SecureRandom.uuid}-#{params[:objectName]}"
 
-      if slug && menu_id
-        key = "listings/#{slug}/menu/#{menu_id}/#{name}"
-      else
+      if type == 'listing'
+        authorize! :update, Listing
         key = "listings/#{slug}/images/#{name}"
+      elsif type == 'menu'
+        authorize! :update, Listing
+        menu_id = params[:menuId]
+        key = "listings/#{slug}/menu/#{menu_id}/#{name}"
+      elsif type == 'collection'
+        authorize! :update, Collection
+        key = "collections/#{slug}/images/#{name}"
+      else
+        return render json: {}, status: :not_found
       end
 
       url = $fog.put_object_url(
@@ -28,6 +36,7 @@ module S3
       render json: { key: key, signedUrl: url}
     end
   end
+
 end
 
 

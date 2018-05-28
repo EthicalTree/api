@@ -1,14 +1,14 @@
 module V1
-  class CuratedListsController < APIController
+  class CollectionsController < APIController
     def index
       location = params[:location]
 
-      results = CuratedList.where({
+      results = Collection.where({
         hidden: false
       }).order(:order)
 
       render json: {
-        curated_lists: results.map do |cl|
+        collections: results.map do |cl|
           json = cl.as_json(
             only: [ :name, :id, :slug ],
             include: {tag: { only: :hashtag }}
@@ -36,7 +36,7 @@ module V1
     def show
       location = params[:location]
       page = params[:page] || 1
-      list = CuratedList.find_by(slug: params[:id])
+      list = Collection.find_by(slug: params[:id])
 
       if !list.present?
         return json_response({ message: 'Collection not found' }, :not_found)

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_26_165606) do
+ActiveRecord::Schema.define(version: 2018_05_26_210938) do
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "slug"
@@ -19,7 +19,14 @@ ActiveRecord::Schema.define(version: 2018_05_26_165606) do
     t.datetime "updated_at", null: false
   end
 
-  create_table "curated_lists", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "collection_images", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.integer "collection_id"
+    t.integer "image_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  create_table "collections", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "name"
     t.string "description"
     t.bigint "tag_id"
@@ -203,7 +210,7 @@ ActiveRecord::Schema.define(version: 2018_05_26_165606) do
     t.boolean "admin"
   end
 
-  add_foreign_key "curated_lists", "tags"
+  add_foreign_key "collections", "tags"
   add_foreign_key "listing_ethicalities", "ethicalities"
   add_foreign_key "listing_ethicalities", "listings"
   add_foreign_key "listing_images", "images"

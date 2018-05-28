@@ -22,7 +22,7 @@ class Meta
     }
 
     listing_slug = uri.path.scan(/\/listings\/(\w+)\/([\w-]+)\/?/)
-    curated_list_slug = uri.path.scan(/\/collections\/(\w+)\/([\w-]+)\/?/)
+    collection_slug = uri.path.scan(/\/collections\/(\w+)\/([\w-]+)\/?/)
 
     if listing_slug.present?
       if listing = Listing.find_by(slug: listing_slug[0][1])
@@ -42,12 +42,12 @@ class Meta
           })
         end
       end
-    elsif curated_list_slug.present?
-      if curated_list = CuratedList.find_by(slug: curated_list_slug[0][1])
+    elsif collection_slug.present?
+      if collection = Collection.find_by(slug: collection_slug[0][1])
 
         meta.merge!({
-          name: curated_list.name,
-          description: curated_list.description,
+          name: collection.name,
+          description: collection.description,
         })
       end
     end

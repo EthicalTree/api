@@ -1,6 +1,8 @@
 FROM ruby:2.5.0-alpine
 
+ENV TZ America/Toronto
 ENV HOME /app
+
 ADD ./Gemfile /app/
 ADD ./Gemfile.lock /app/
 

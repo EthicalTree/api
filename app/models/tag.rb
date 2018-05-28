@@ -4,7 +4,7 @@ class Tag < ApplicationRecord
 
   has_many :listing_tags
   has_many :listings, through: :listing_tags, class_name: 'Listing'
-  has_many :curated_lists
+  has_many :collections
 
   validates :hashtag, uniqueness: true
   validates :hashtag, presence: true

@@ -1,25 +1,20 @@
 module V1
   class ImagesController < APIController
-    before_action :require_listing
-
     def index
 
     end
 
     def create
-      authorize! :update, @listing
+      authorize_for_type :update, params[:type]
+
       image = Image.new image_params
-      image.order = @listing.images.count + 1
+      image.order = @images.count + 1
       image.save
+      @images.push image
 
-      if params[:menu_id]
-        @listing.menu.images.push image
-        render json: { images: @listing.menu.images.as_json }, status: :ok
-      else
-        @listing.images.push image
-        render json: { images: @listing.images.as_json }, status: :ok
-      end
-
+      render(json: {
+        images: @images.reload
+      }, status: :ok)
     end
 
     def show
@@ -27,38 +22,32 @@ module V1
     end
 
     def update
-      authorize! :update, @listing
-      image = @listing.images.find(params[:id])
+      type = params[:type]
+      authorize_for_type :update, type
+      image = @images.find(params[:id])
 
-      make_cover = params[:make_cover]
-      offset_y = params[:offset_y] || image.cover_offset_y
+      if type == 'listing'
+        offset_y = params[:offset_y] || image.cover_offset_y
 
-      if offset_y != image.cover_offset_y
-        image.update(cover_offset_y: offset_y)
+        if offset_y != image.cover_offset_y
+          image.update(cover_offset_y: offset_y)
+        end
       end
 
-      if make_cover
-        @listing.images.update_all(order: 1)
+      if params[:make_cover]
+        @images.update_all(order: 1)
         image.update(order: 0)
       end
 
-      render json: { images: @listing.images.as_json }, status: :ok
+      render json: { images: @images.reload }, status: :ok
     end
 
     def destroy
-      authorize! :update, @listing
+      authorize_for_type :update, params[:type]
+      image = @images.find_by(id: params[:id])
 
-      if params[:menu_id]
-        image = @listing.menu.images.find(params[:id])
-        key = image.key
-        @listing.menu.images.delete(image)
-        images = @listing.menu.images.as_json
-      else
-        image = @listing.images.find(params[:id])
-        key = image.key
-        @listing.images.delete(image)
-        images = @listing.images.as_json
-      end
+      key = image.key
+      @images.delete(image)
 
       s3_image = $fog_images.files.get(key)
       if s3_image
@@ -70,10 +59,28 @@ module V1
         s3_thumbnail.destroy
       end
 
-      render json: { images: images }, status: :ok
+      render json: { images: @images.reload }, status: :ok
     end
 
     private
+
+    def authorize_for_type auth, type
+      if type == 'listing'
+        require_listing
+        authorize! auth, @listing
+        @images = @listing.images
+      elsif type == 'menu'
+        require_listing
+        authorize! auth, @listing
+        @images = @listing.menu.images
+      elsif type == 'collection'
+        require_collection
+        authorize! auth, Collection
+        @images = @collection.images
+      else
+        raise 'Unsupported image type'
+      end
+    end
 
     def image_params
       params.require(:image).permit(
@@ -83,6 +90,10 @@ module V1
 
     def require_listing
       @listing = Listing.published.find_by!(slug: params[:listing_id])
+    end
+
+    def require_collection
+      @collection = Collection.find_by!(slug: params[:collection_id])
     end
   end
 end

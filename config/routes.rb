@@ -17,10 +17,13 @@ Rails.application.routes.draw do
     post :search_suggestions, to: 'search#suggestions'
 
     resources :ethicalities
-    resources :curated_lists
     resources :plans
     resources :tags
     resources :directory_locations
+
+    resources :collections do
+      resources :images
+    end
 
     resources :listings do
       resources :menus do
@@ -38,7 +41,7 @@ Rails.application.routes.draw do
       resources :users
       resources :tags
       resources :listings
-      resources :curated_lists
+      resources :collections
       resources :locations
     end
   end
@@ -46,6 +49,7 @@ Rails.application.routes.draw do
   # S3
   namespace :s3 do
     get :sign, to: 's3#sign'
+    get :sign_collection, to: 's3#sign_collection'
   end
 
   # Status

@@ -19,7 +19,7 @@ class AccessPolicy
       can :manage, User
       can :manage, Listing
       can :manage, Tag
-      can :manage, CuratedList
+      can :manage, Collection
       can :manage, DirectoryLocation
     end
 

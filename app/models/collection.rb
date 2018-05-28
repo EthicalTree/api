@@ -1,9 +1,12 @@
-class CuratedList < ApplicationRecord
+class Collection < ApplicationRecord
   enum location: [:front_page]
 
   belongs_to :tag
   after_save :ensure_unique_order
   before_save :ensure_slug
+
+  has_many :collection_images
+  has_many :images, through: :collection_images, class_name: 'Image'
 
   validates :name, presence: true
   validates :tag, presence: true
@@ -36,15 +39,41 @@ class CuratedList < ApplicationRecord
     listings
   end
 
+  def cover_image
+    self.images.first
+  end
+
+  def hashtag
+    self.tag ? self.tag.hashtag : ''
+  end
+
   def listings
     listings, _ = self._listings
     listings.map {|l| l.as_json_search}
   end
 
+  def serializable_hash options={}
+    super({
+      methods: [
+        :cover_image,
+        :hashtag
+      ]
+    }.merge(options))
+  end
+
+  def as_json_full
+    as_json({
+      include: [
+        :tag,
+        :images
+      ],
+    })
+  end
+
   private
 
   def ensure_unique_order
-    CuratedList.all.order(:order).each_with_index do |cl, i|
+    Collection.all.order(:order).each_with_index do |cl, i|
       cl.update_column(:order, i+1)
     end
   end
@@ -53,3 +82,10 @@ class CuratedList < ApplicationRecord
     self.slug = self.name.parameterize separator: '-'
   end
 end
+
+class CollectionImage < ApplicationRecord
+  belongs_to :collection
+  belongs_to :image
+end
+
+
