@@ -17,9 +17,11 @@ namespace :datamigrate do
     'Vegetarian': 'vegetarian',
     'Vegan': 'vegan',
     'Fair Trade options': 'fair_trade',
+    'Fair Trade': 'fair_trade',
     'Fair trade': 'fair_trade',
     'Owned by a woman': 'woman_owned',
     'Woman-owned': 'woman_owned',
+    'Woman-Owned': 'woman_owned',
     'Organic options': 'organic',
     'Organic': 'organic'
   }
@@ -131,8 +133,9 @@ namespace :datamigrate do
   end
 
   desc "Copies data from V1 csv"
-  task :v1_csv, [:csv_filename] => [:environment] do |task, args|
+  task :v1_csv, [:csv_filename, :only] => [:environment] do |task, args|
     filename = args[:csv_filename]
+    only = args[:only]
     results = []
 
     CSV.foreach(filename, { headers: true, encoding: 'ISO8859-1' }) do |row|
@@ -161,15 +164,73 @@ namespace :datamigrate do
       results.push(result)
     end
 
-    create_listings results
+    create_listings results, only: only
+  end
+
+  desc "Update images from our CSV import"
+  task :v1_csv_update_images, [:csv_filename] => [:environment] do |task, args|
+    filename = args[:csv_filename]
+
+    CSV.foreach(filename, { headers: true }) do |row|
+      result = row.to_h.symbolize_keys
+      name = result[:name]
+      slug = name.parameterize
+      hours = (result[:hours] || '').gsub("'", '"')
+      images = result[:images]
+      should_replace = result[:facebook_uri].starts_with?('pages/')
+
+      listing = Listing.find_by(slug: slug)
+
+      if !listing
+        next
+      end
+
+      puts slug
+
+      if hours.present?
+        save_facebook_business_hours(listing, JSON.parse(hours), dry=true)
+      end
+
+      if images.present?
+        if should_replace
+          cover = listing.cover_image
+          if cover
+            listing.images.each do |i|
+              if i.id != cover.id
+                i.delete!
+              end
+            end
+            listing.reload
+          end
+        end
+
+        listing.images.concat(images.split('|').map do |k|
+          ext = File.extname(k.split('?')[0] || '')
+          ext = ext.present? ? ext : 'jpg'
+          uuid = "#{Digest::SHA256.hexdigest(k)}.#{ext}"
+          name = "datamigrate_v1_#{uuid.gsub('/', '_')}"
+          key = "listings/#{listing.title.parameterize}/images/#{name}"
+          order = 1
+
+          build_image k, key, order
+        end.compact)
+      end
+
+    end
+
   end
 
   private
 
-  def create_listings results
+  def create_listings results, options={}
     results.each do |row|
       begin
-        listing = get_or_create_listing row
+        listing = get_or_create_listing row, options
+
+        if !listing
+          next
+        end
+
         listing.save!
         listing.images.each {|i| i.save}
         listing.menu.images.each {|i| i.save}
@@ -185,7 +246,7 @@ namespace :datamigrate do
     end
   end
 
-  def get_or_create_listing row
+  def get_or_create_listing row, options={}
     puts row[:post_title]
     title = row[:post_title]
     status = row[:post_status]
@@ -194,19 +255,37 @@ namespace :datamigrate do
     lng = row[:post_longitude].to_f
     ethicalities = row[:geodir_ethicalcriteria].split(',')
     tags = row[:post_tags].split(',')
+    location = row[:location]
     address = row[:post_address]
     city = row[:post_city]
     region = row[:post_region]
     country = row[:post_country]
     categories = row[:categories]
 
+    only = options[:only]
+
     bio = CGI.unescapeHTML(Sanitizer.sanitize(row[:post_content]))
 
     listing = Listing.find_by(slug: title.parameterize)
 
-    if !listing
+    if !listing && only
+      return
+    elsif !listing
       listing = Listing.new
     end
+
+    # Ethicalities
+    # TODO: separate each type of data into a function and wrap all of them
+    if !only || only == 'ethicalities'
+      ethicalities = ethicalities.map {|e| Ethicality.find_by(slug: ETHICALITIES[e.to_s.to_sym])}.compact
+      listing.ethicalities = ethicalities
+
+      if only == 'ethicalities'
+        return listing
+      end
+    end
+
+    puts 'HEY'
 
     listing.update_attributes({
       title: title,
@@ -257,42 +336,33 @@ namespace :datamigrate do
       end.flatten.compact
     elsif row[:operating_hours] && row[:operating_hours] != "0"
       business_hours = JSON.parse row[:operating_hours].gsub("'", '"')
-      listing.operating_hours.delete_all
-
-      listing.operating_hours = business_hours.keys.map do |key|
-        d, i, status = key.split('_')
-        day = DAYS[d.to_sym]
-
-        if status == 'close'
-          next
-        end
-
-        if status == 'open'
-          oh = OperatingHours.new day: day
-          oh.open = Time.parse(business_hours[key] + ' EDT').utc
-          close_key = "#{d}_#{i}_close"
-          oh.close = Time.parse(business_hours[close_key] + ' EDT').utc
-          oh
-        end
-      end.compact
+      save_facebook_business_hours(listing, business_hours)
     end
 
-    # Ethicalities
-    ethicalities = ethicalities.map {|e| Ethicality.find_by(slug: ETHICALITIES[e.to_s.to_sym])}.compact
+    if location
+      location.update_attributes({
+        lat: location['latitude'],
+        lng: location['longitude'],
+        timezone: 'America/Toronto',
+        address: location['street'],
+        city: location['city'],
+        region: 'Ontario',
+        country: location['country'],
+      })
+    else
+      location.update_attributes({
+        lat: lat,
+        lng: lng,
+        timezone: 'America/Toronto',
+        address: address,
+        city: city,
+        region: region,
+        country: country
+      })
+    end
 
-    location.update_attributes({
-      lat: lat,
-      lng: lng,
-      timezone: 'America/Toronto',
-      address: address,
-      city: city,
-      region: region,
-      country: country
-    })
     DirectoryLocation.create_locations lat, lng
     listing.locations = [location]
-
-    listing.ethicalities = ethicalities
 
     # Tags
     tags = tags.map {|t| Tag.find_or_create_by(hashtag: Tag.strip_hashes(t))}
@@ -307,25 +377,9 @@ namespace :datamigrate do
       name = "datamigrate_v1_#{image_row[:uuid].gsub('/', '_')}"
       key = "listings/#{listing.title.parameterize}/images/#{name}"
       order = image_row[:menu_order]
+      original = image_row[:file]
 
-      begin
-        res = HTTParty.get(image_row[:file])
-      rescue
-
-      end
-
-      $fog_images.files.create({
-        key: key,
-        body: res.body,
-        public: true
-      })
-
-      if !image = Image.find_by(key: key)
-        image = Image.new(key: key)
-      end
-
-      image.order = order
-      image
+      build_image(original, key, order)
     end.compact
 
     # generate the menu if it doens't exist
@@ -356,6 +410,56 @@ namespace :datamigrate do
     end.compact
 
     listing
+  end
+
+  def save_facebook_business_hours listing, business_hours, dry=false
+    if !dry
+      listing.operating_hours.delete_all
+    end
+
+    operating_hours = business_hours.keys.map do |key|
+      d, i, status = key.split('_')
+      day = DAYS[d.to_sym]
+
+      if status == 'close'
+        next
+      end
+
+      if status == 'open'
+        oh = OperatingHours.new day: day
+        oh.open = Time.parse(business_hours[key] + ' EDT').utc
+        close_key = "#{d}_#{i}_close"
+        oh.close = Time.parse(business_hours[close_key] + ' EDT').utc
+        oh
+      end
+    end.compact
+
+    if !dry
+      listing.operating_hours = operating_hours
+    end
+
+    operating_hours
+  end
+
+  def build_image original, key, order
+    begin
+      res = HTTParty.get(original)
+    rescue
+
+    end
+
+    $fog_images.files.create({
+      key: key,
+      body: res.body,
+      public: true
+    })
+
+    if !image = Image.find_by(key: key)
+      image = Image.new(key: key)
+    end
+
+    image.order = order
+    image
   end
 
   def extract res
