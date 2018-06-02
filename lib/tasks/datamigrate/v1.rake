@@ -285,8 +285,6 @@ namespace :datamigrate do
       end
     end
 
-    puts 'HEY'
-
     listing.update_attributes({
       title: title,
       bio: bio.truncate(1999),
