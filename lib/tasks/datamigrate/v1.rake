@@ -168,8 +168,13 @@ namespace :datamigrate do
   end
 
   desc "Update images from our CSV import"
-  task :v1_csv_update_images, [:csv_filename] => [:environment] do |task, args|
+  task :v1_csv_update_images, [:csv_filename, :matcher_csv] => [:environment] do |task, args|
     filename = args[:csv_filename]
+    matcher_filename = args[:matcher_csv]
+    matcher_entries = CSV.read(matcher_filename, encoding: 'ISO8859-1')
+
+    good = []
+    bad = 0
 
     CSV.foreach(filename, { headers: true }) do |row|
       result = row.to_h.symbolize_keys
@@ -177,27 +182,71 @@ namespace :datamigrate do
       slug = name.parameterize
       hours = (result[:hours] || '').gsub("'", '"')
       images = result[:images]
+      uri = result[:facebook_uri]
       should_replace = result[:facebook_uri].starts_with?('pages/')
+      phone = ''
 
       listing = Listing.find_by(slug: slug)
 
       if !listing
+        if uri.present?
+          match = matcher_entries.select {|r| to_utf8(r[29] || '').include?(uri)}
+        else
+          match = []
+        end
+
+        if match.length > 0
+          listing = Listing.find_by(slug: match[0][74].parameterize)
+          phone = match[0][25] || ''
+
+          if !listing
+            bad += 1
+            next
+          end
+        else
+          bad += 1
+          next
+        end
+      end
+
+      if good.include?(listing.slug)
         next
       end
+
+      good.push(listing.slug)
+
+      writer << ["https://ethicaltree.com/listings/toronto/#{listing.slug}", "https://www.facebook.com/#{uri}"]
+
+      next
+
+      listing.facebook_uri = uri
+      listing.phone = phone.gsub(/[\(\)\ \-\+\.]/, '')
+      listing.phone = listing.phone.to_i.to_s
+
+      if listing.phone.to_i == 0
+        listing.phone = ''
+      end
+
+      listing.save
 
       puts slug
 
       if hours.present?
-        save_facebook_business_hours(listing, JSON.parse(hours), dry=true)
+        save_facebook_business_hours(listing, JSON.parse(hours), dry=false)
       end
 
       if images.present?
         if should_replace
           cover = listing.cover_image
+          old_images = listing.images.to_a
+
           if cover
-            listing.images.each do |i|
+            listing.images = [cover]
+            listing.save
+
+            old_images.each do |i|
               if i.id != cover.id
-                i.delete!
+                i.destroy
               end
             end
             listing.reload
@@ -212,12 +261,15 @@ namespace :datamigrate do
           key = "listings/#{listing.title.parameterize}/images/#{name}"
           order = 1
 
-          build_image k, key, order
+          if (!listing.images.find_by(key: key))
+            build_image k, key, order
+          end
         end.compact)
+        listing.save
       end
-
     end
 
+    puts "Good: #{good.length}, Bad: #{bad}"
   end
 
   private
@@ -434,6 +486,7 @@ namespace :datamigrate do
 
     if !dry
       listing.operating_hours = operating_hours
+      listing.save
     end
 
     operating_hours

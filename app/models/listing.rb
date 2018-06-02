@@ -5,7 +5,7 @@ class Listing < ApplicationRecord
 
   has_one :plan
   has_many :locations, dependent: :destroy
-  has_many :listing_images
+  has_many :listing_images, dependent: :destroy
   has_many :listing_ethicalities
   has_many :listing_tags
   has_many :listing_categories

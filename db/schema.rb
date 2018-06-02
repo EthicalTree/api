@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_26_210938) do
+ActiveRecord::Schema.define(version: 2018_06_02_200846) do
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "slug"
@@ -138,6 +138,8 @@ ActiveRecord::Schema.define(version: 2018_05_26_210938) do
     t.integer "owner_id"
     t.integer "visibility", default: 0
     t.string "website"
+    t.string "phone"
+    t.string "facebook_uri"
   end
 
   create_table "locations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
