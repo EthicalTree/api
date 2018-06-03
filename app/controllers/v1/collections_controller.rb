@@ -2,10 +2,13 @@ module V1
   class CollectionsController < APIController
     def index
       location = params[:location]
+      where = params[:where] || ''
 
-      results = Collection.where({
-        hidden: false
-      }).order(:order)
+      results = Collection.where({ hidden: false }).order(:order)
+
+      if where.present?
+        results = results.where({ location: where })
+      end
 
       render json: {
         collections: results.map do |cl|
