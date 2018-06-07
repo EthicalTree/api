@@ -171,29 +171,27 @@ namespace :datamigrate do
   task :v1_csv_update_images, [:csv_filename, :matcher_csv] => [:environment] do |task, args|
     filename = args[:csv_filename]
     matcher_filename = args[:matcher_csv]
-    matcher_entries = CSV.read(matcher_filename, encoding: 'ISO8859-1')
 
     good = []
     bad = 0
 
     CSV.foreach(filename, { headers: true }) do |row|
       result = row.to_h.symbolize_keys
-      name = result[:name]
+      name = result[:post_title]
       slug = name.parameterize
       hours = (result[:hours] || '').gsub("'", '"')
       images = result[:images]
-      uri = result[:facebook_uri]
-      should_replace = result[:facebook_uri].starts_with?('pages/')
-      phone = ''
+      uri = result[:geodir_facebook]
+      phone = result[:geodir_contact] || ''
+
+      if uri.present? && uri.starts_with?('https://www.facebook.com/')
+        uri = uri.gsub('https://www.facebook.com/', '')
+      end
 
       listing = Listing.find_by(slug: slug)
 
       if !listing
-        if uri.present?
-          match = matcher_entries.select {|r| to_utf8(r[29] || '').include?(uri)}
-        else
-          match = []
-        end
+        match = []
 
         if match.length > 0
           listing = Listing.find_by(slug: match[0][74].parameterize)
@@ -215,9 +213,7 @@ namespace :datamigrate do
 
       good.push(listing.slug)
 
-      writer << ["https://ethicaltree.com/listings/toronto/#{listing.slug}", "https://www.facebook.com/#{uri}"]
-
-      next
+      puts "#{slug} - #{uri} - #{phone}"
 
       listing.facebook_uri = uri
       listing.phone = phone.gsub(/[\(\)\ \-\+\.]/, '')
@@ -228,6 +224,8 @@ namespace :datamigrate do
       end
 
       listing.save
+
+      next
 
       puts slug
 
