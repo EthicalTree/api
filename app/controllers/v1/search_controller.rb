@@ -101,7 +101,7 @@ module V1
 
       results = results.by_distance(origin: latlng).limit(6)
 
-      render json: results.map {|r| r.name}, status: :ok
+      render json: results.as_json, status: :ok
     end
 
     def suggestions
