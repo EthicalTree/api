@@ -43,6 +43,8 @@ module V1
       })
 
       if located_results
+        located = true
+
         results = located_results.reorder(
           'eth_total DESC',
           'likeness DESC',
@@ -55,6 +57,7 @@ module V1
           "eth_total > 0 AND (likeness > 0 OR hashtag_count > 0)"
         )
       else
+        located = false
         results_that_match = []
       end
 
@@ -68,6 +71,7 @@ module V1
 
       result_json = {
         listings: results.map{|l| l.listing.as_json_search},
+        located: located,
         current_page: page,
         matches: results_that_match.length,
         page_count: results.total_pages
