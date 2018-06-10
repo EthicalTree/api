@@ -66,7 +66,7 @@ module V1
       })
 
       if search_listings
-        listings = search_listings.order('distance DESC')
+        listings = search_listings
       end
 
       listings = listings.distinct.page(page).per(18)
