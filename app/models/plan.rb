@@ -20,7 +20,6 @@ class Plan < ApplicationRecord
     search_listings = Search.by_location({
       results: listings,
       location: location,
-      filtered: true
     })
 
     if search_listings

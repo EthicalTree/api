@@ -3,7 +3,7 @@ module V1
 
     def index
       location = params[:location]
-      dl = Search.find_directory_location(location)
+      dl, _ = Search.find_directory_location(location)
       city = dl.present? ? dl.city : nil
       render json: { city: city }, status: :ok
     end

@@ -34,24 +34,24 @@ module V1
       ).group(
         'locations.id',
         'listings.id',
-      ).distinct('listings.id')
+      ).distinct(
+        'listings.id'
+      ).order(
+        'eth_total DESC',
+        'likeness DESC',
+        'hashtag_count DESC',
+        'isnull(plans.listing_id) ASC'
+      )
 
       located_results = Search.by_location({
         results: results,
         location: location,
-        filtered: true
       })
 
       if located_results
         located = true
 
-        results = located_results.reorder(
-          'eth_total DESC',
-          'likeness DESC',
-          'hashtag_count DESC',
-          'isnull(plans.listing_id) ASC',
-          'distance ASC'
-        )
+        results = located_results
 
         results_that_match = results.having(
           "eth_total > 0 AND (likeness > 0 OR hashtag_count > 0)"
@@ -63,8 +63,6 @@ module V1
 
       if results_that_match.length > 0
         results = results_that_match
-      else
-        results = results.reorder('RAND()').limit(12)
       end
 
       results = results.page(page).per(12)

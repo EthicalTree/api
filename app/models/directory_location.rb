@@ -4,8 +4,19 @@ class DirectoryLocation < ApplicationRecord
 
   acts_as_mappable
 
+  def format_address
+    if location_type == 'neighbourhood'
+      "#{neighbourhood}, #{city}, #{state}, #{country}"
+    elsif location_type == 'city'
+      "#{city}, #{state}, #{country}"
+    else
+      "#{name}"
+    end
+  end
+
   def sync_location_details
-    DirectoryLocation.build_locations lat, lng
+    details = MapApi.build_from_address format_address
+    DirectoryLocation.build_location name, location_type, details
   end
 
   def self.find_by_location location
@@ -44,10 +55,8 @@ class DirectoryLocation < ApplicationRecord
     location
   end
 
-  def self.build_locations lat, lng
+  def self.build_locations details
     locations = []
-
-    details = MapApi.build_from_coordinates lat, lng
 
     if !details.present?
       return []
@@ -64,6 +73,14 @@ class DirectoryLocation < ApplicationRecord
     end
 
     locations
+  end
+
+  def self.build_locations_for_lat_lng lat, lng
+    DirectoryLocation.build_locations MapApi.build_from_coordinates lat, lng
+  end
+
+  def self.build_locations_for_address address
+    DirectoryLocation.build_locations MapApi.build_from_address address
   end
 
   def self.create_locations lat, lng

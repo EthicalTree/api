@@ -8,7 +8,7 @@ module V1
         authorize! :read, DirectoryLocation
 
         query = params[:query]
-        page = params[:page] or 1
+        page = params[:page] || 1
 
         if query.present?
           results = DirectoryLocation.where("name LIKE :query", query: "%#{query.downcase}%")

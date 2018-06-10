@@ -11,10 +11,13 @@ class MapApi
 
     bounds = details["geometry"]["viewport"]
     location = details["geometry"]["location"]
+
     extracted = details["address_components"].reduce({}) do |a, c|
       c["types"].each {|t| a[t.to_sym] = c}
       a
     end
+
+    latlng = { lat: location["lat"], lng: location["lng"] }
 
     {
       address: details["formatted_address"],
@@ -28,6 +31,7 @@ class MapApi
         southwest: bounds["southwest"]
       },
       location: location,
+      latlng: latlng,
       timezone: self.get_timezone_details(location["lat"], location["lng"])
     }
   end
