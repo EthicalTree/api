@@ -2,6 +2,7 @@ module V1
   class CollectionsController < APIController
     def index
       location = params[:location]
+      page = params[:page] || 1
       where = params[:where] || ''
 
       results = Collection.where({ hidden: false }).order(:order)
@@ -10,7 +11,11 @@ module V1
         results = results.where({ location: where })
       end
 
+      results = results.distinct.page(page).per(12)
+
       render json: {
+        current_page: page,
+        total_pages: results.total_pages,
         collections: results.map do |cl|
           json = cl.as_json(
             only: [ :name, :id, :slug ],
