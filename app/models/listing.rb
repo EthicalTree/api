@@ -42,6 +42,14 @@ class Listing < ApplicationRecord
     ethicalities.map {|e| e.titleize}.join(', ')
   end
 
+  def timezone
+    if self.locations.length > 0
+      self.locations.first.timezone
+    else
+      ''
+    end
+  end
+
   def address
     if self.locations.length > 0
       self.locations.first.formatted_address
@@ -89,7 +97,8 @@ class Listing < ApplicationRecord
         }},
       ],
       methods: [
-        :address
+        :address,
+        :timezone
       ]
     })
   end
@@ -101,7 +110,7 @@ class Listing < ApplicationRecord
         :slug,
         :title
       ],
-      methods: [:city],
+      methods: [:city, :timezone],
       include: [
         {ethicalities: {only: [
           :icon_key,

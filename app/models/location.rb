@@ -17,6 +17,7 @@ class Location < ApplicationRecord
       city: location_info[:city],
       country: location_info[:country],
       region: location_info[:state],
+      timezone: location_info[:timezone]
     })
 
   end
