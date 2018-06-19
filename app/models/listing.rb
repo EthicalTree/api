@@ -98,6 +98,7 @@ class Listing < ApplicationRecord
       ],
       methods: [
         :address,
+        :city,
         :timezone
       ]
     })
