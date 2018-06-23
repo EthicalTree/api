@@ -35,3 +35,4 @@ should return a json blob of data
 
 Docker compose will automatically create your database in the `./db-data` directory. If you ever remove that directory then you will lose all your local data.
 
+initially to get the database up run `make load-db`
