@@ -4,6 +4,21 @@ module V1
     def search
       page = search_params[:page].to_i
       location = search_params[:location]
+
+      swlat = search_params[:swlat]
+      swlng = search_params[:swlng]
+      nelat = search_params[:nelat]
+      nelng = search_params[:nelng]
+
+      if [swlat, swlng, nelat, nelng].all? {|p| p.present?}
+        location = {
+          swlat: swlat.to_f,
+          swlng: swlng.to_f,
+          nelat: nelat.to_f,
+          nelng: nelng.to_f,
+        }
+      end
+
       @query = search_params[:query].downcase
       @ethicalities = search_params[:ethicalities].split(',')
 
@@ -125,7 +140,11 @@ module V1
         :query,
         :ethicalities,
         :page,
-        :location
+        :location,
+        :swlat,
+        :swlng,
+        :nelat,
+        :nelng
       )
     end
 

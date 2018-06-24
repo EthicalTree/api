@@ -3,6 +3,10 @@ class Search
   def self.find_directory_location location
     specific_location = nil
 
+    if location.is_a?(Hash)
+      return [nil, nil]
+    end
+
     if !location.present?
       location = 'Ottawa'
     end
@@ -33,18 +37,22 @@ class Search
 
     directory_location, specific_location = Search.find_directory_location(location)
 
-    if !directory_location.present?
-      return nil
-    end
-
-    # Filter/Sort results
-    coords = directory_location.coordinates
-
     if specific_location.present?
       coords = [specific_location[:lat], specific_location[:lng]]
       results = results.within(radius, units: :kms, origin: coords).reorder('distance ASC')
     else
-      results = results.in_bounds(directory_location.bounds, origin: coords)
+      if location.is_a?(Hash)
+        swlat, swlng, nelat, nelng = location.values_at(:swlat, :swlng, :nelat, :nelng)
+        sw = Geokit::LatLng.new(swlat, swlng)
+        ne = Geokit::LatLng.new(nelat, nelng)
+        bounds = Geokit::Bounds.new(sw, ne)
+      elsif directory_location.present?
+        bounds = directory_location.bounds
+      else
+        return nil
+      end
+
+      results = results.in_bounds(bounds)
     end
 
     results
