@@ -30,14 +30,12 @@ class DirectoryLocation < ApplicationRecord
   def self.build_location address, type, details
     location = DirectoryLocation.find_by name: address
 
+    if (!details.present?)
+      return location
+    end
+
     params = {
       name: address,
-      lat: details[:location]["lat"],
-      lng: details[:location]["lng"],
-      boundlat1: details[:bounds][:northeast]["lat"],
-      boundlng1: details[:bounds][:northeast]["lng"],
-      boundlat2: details[:bounds][:southwest]["lat"],
-      boundlng2: details[:bounds][:southwest]["lng"],
       timezone: details[:timezone],
       city: details[:city],
       neighbourhood: details[:sublocality],
@@ -47,7 +45,14 @@ class DirectoryLocation < ApplicationRecord
     }
 
     if !location
-      location = DirectoryLocation.new(params)
+      location = DirectoryLocation.new(params.merge({
+        lat: details[:location]["lat"],
+        lng: details[:location]["lng"],
+        boundlat1: details[:bounds][:northeast]["lat"],
+        boundlng1: details[:bounds][:northeast]["lng"],
+        boundlat2: details[:bounds][:southwest]["lat"],
+        boundlng2: details[:bounds][:southwest]["lng"],
+      }))
     else
       location.update(params)
     end
@@ -64,12 +69,14 @@ class DirectoryLocation < ApplicationRecord
 
     if details[:city].present? and details[:state].present?
       name = "#{details[:city]}, #{details[:state]}"
-      locations.append self.build_location(name, 'city', details)
+      city_details = MapApi.build_from_address(name)
+      locations.append self.build_location(name, 'city', city_details)
     end
 
     if details[:sublocality].present? and details[:city].present?
       name = "#{details[:sublocality]}, #{details[:city]}"
-      locations.append self.build_location(name, 'neighbourhood', details)
+      neighbourhood_details = MapApi.build_from_address(name)
+      locations.append self.build_location(name, 'neighbourhood', neighbourhood_details)
     end
 
     locations
