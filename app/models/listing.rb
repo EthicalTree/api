@@ -84,6 +84,7 @@ class Listing < ApplicationRecord
 
     as_json({
       include: [
+        :categories,
         :ethicalities,
         :tags,
         :images,
