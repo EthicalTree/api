@@ -13,7 +13,7 @@ class APIController < ActionController::API
         HTTParty.get('https://canihazip.com/s').body
       end
     else
-      request.remote_ip
+      request.env['HTTP_X_FORWARDED_FOR'] || request.remote_ip
     end
   end
 
