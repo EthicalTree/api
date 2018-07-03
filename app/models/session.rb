@@ -1,6 +1,6 @@
 class Session
   @@GEOSERVICES = [
-    'https://freegeoip.net/json/%s'
+    "http://api.ipstack.com/%s?access_key=#{Rails.application.secrets[:ipstack_api_key]}"
   ]
 
   attr_accessor :email, :password
@@ -12,8 +12,12 @@ class Session
     end
 
     r = JSON.parse(location_json)
+    city = r['city'] || ''
+    directory_location, _ = Search.find_directory_location(city)
 
     {
+      city: city,
+      directory_location: directory_location ? directory_location.name : 'Toronto, ON',
       latitude: r["latitude"],
       longitude: r["longitude"],
       time_zone: r["time_zone"]

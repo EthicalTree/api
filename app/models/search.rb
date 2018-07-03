@@ -8,7 +8,7 @@ class Search
     end
 
     if !location.present?
-      location = 'Ottawa'
+      location = 'Toronto'
     end
 
     # Get a DirectoryLocation object
