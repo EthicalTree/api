@@ -16,7 +16,7 @@ class Session
     directory_location, _ = Search.find_directory_location(city)
 
     {
-      city: city,
+      city: directory_location ? directory_location.city : 'Toronto',
       directory_location: directory_location ? directory_location.name : 'Toronto, ON',
       latitude: r["latitude"],
       longitude: r["longitude"],
