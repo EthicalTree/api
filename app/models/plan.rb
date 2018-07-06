@@ -3,11 +3,19 @@ class Plan < ApplicationRecord
 
   def self.Types
     {
+      # old
       trial: { name: 'Trial', price: 0.00, weight: 100 },
       premium: { name: 'Premium', price: 57.00, weight: 200 },
       bronze: { name: 'Bronze', price: 69.00, weight: 100 },
       silver: { name: 'Silver', price: 129.00, weight: 200 },
-      gold: { name: 'Gold', price: 199.00, weight: 400 }
+      gold: { name: 'Gold', price: 199.00, weight: 400 },
+
+      # new
+      free: { name: 'Free', price: 0.00, weight: 100 },
+      basic: { name: 'Basic', price: 119.00, weight: 200 },
+      starter: { name: 'Starter', price: 199.00, weight: 100 },
+      standard: { name: 'Standard', price: 349.00, weight: 200 },
+      enhanced: { name: 'Enhanced', price: 599.00, weight: 400 }
     }
   end
 
