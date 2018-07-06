@@ -11,10 +11,9 @@ class Plan < ApplicationRecord
       gold: { name: 'Gold', price: 199.00, weight: 400 },
 
       # new
-      free: { name: 'Free', price: 0.00, weight: 100 },
-      basic: { name: 'Basic', price: 119.00, weight: 200 },
-      starter: { name: 'Starter', price: 199.00, weight: 100 },
-      standard: { name: 'Standard', price: 349.00, weight: 200 },
+      basic: { name: 'Basic', price: 119.00, weight: 100 },
+      starter: { name: 'Starter', price: 199.00, weight: 200 },
+      standard: { name: 'Standard', price: 349.00, weight: 300 },
       enhanced: { name: 'Enhanced', price: 599.00, weight: 400 }
     }
   end
