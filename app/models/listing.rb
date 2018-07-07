@@ -98,13 +98,13 @@ class Listing < ApplicationRecord
         { operating_hours: {
           methods: [
             :label,
-            :location
           ]
         }},
       ],
       methods: [
         :address,
         :city,
+        :location,
         :timezone
       ]
     })
