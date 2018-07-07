@@ -78,6 +78,10 @@ class Listing < ApplicationRecord
     end
   end
 
+  def location
+    locations.first
+  end
+
   def as_json_full
     # make sure a menu is created if it doesn't exist
     self.menu
@@ -94,6 +98,7 @@ class Listing < ApplicationRecord
         { operating_hours: {
           methods: [
             :label,
+            :location
           ]
         }},
       ],
@@ -112,7 +117,7 @@ class Listing < ApplicationRecord
         :slug,
         :title
       ],
-      methods: [:city, :timezone],
+      methods: [:city, :location, :timezone],
       include: [
         {ethicalities: {only: [
           :icon_key,
