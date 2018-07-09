@@ -61,6 +61,7 @@ module V1
       located_results = Search.by_location({
         results: results,
         location: location,
+        location_information: location_information
       })
 
       if located_results
