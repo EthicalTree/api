@@ -15,6 +15,7 @@ class Collection < ApplicationRecord
   def _listings(options={})
     count = options[:count] || 6
     location = options[:location]
+    location_information = options[:location_information]
 
     listings = Location.listings.joins(
       "INNER JOIN listing_tags ON listings.id = listing_tags.listing_id"
@@ -25,6 +26,7 @@ class Collection < ApplicationRecord
     search_listings = Search.by_location({
       results: listings,
       location: location,
+      location_information: location_information,
     })
 
     if search_listings

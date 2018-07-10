@@ -11,7 +11,8 @@ module V1
       if is_featured
         listings = Plan.featured_listings({
           count: count,
-          location: location
+          location: location,
+          location_information: location_information
         })
 
         render json: {

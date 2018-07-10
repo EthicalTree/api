@@ -21,12 +21,14 @@ class Plan < ApplicationRecord
   def self.featured_listings(options={})
     count = options[:count]
     location = options[:location]
+    location_information = options[:location_information]
 
     listings = Location.listings
 
     search_listings = Search.by_location({
       results: listings,
       location: location,
+      location_information: location_information,
     })
 
     if search_listings
@@ -66,4 +68,3 @@ class Plan < ApplicationRecord
     Plan.Types[self.plan_type.to_sym]
   end
 end
-
