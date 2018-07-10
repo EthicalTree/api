@@ -12,3 +12,8 @@
 :queues:
   - default
   - mailers
+
+:schedule:
+  db_backup:
+    cron: '* * * * *'
+    class: DbBackup

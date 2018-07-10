@@ -344,9 +344,9 @@ namespace :datamigrate do
 
     # Locations
     if listing.locations.present?
-      location = listing.locations[0]
+      listing_location = listing.locations[0]
     else
-      location = Location.new
+      listing_location = Location.new
     end
 
     # Business Hours
@@ -387,27 +387,15 @@ namespace :datamigrate do
       save_facebook_business_hours(listing, business_hours)
     end
 
-    if location
-      location.update_attributes({
-        lat: location['latitude'],
-        lng: location['longitude'],
-        timezone: 'America/Toronto',
-        address: location['street'],
-        city: location['city'],
-        region: 'Ontario',
-        country: location['country'],
-      })
-    else
-      location.update_attributes({
-        lat: lat,
-        lng: lng,
-        timezone: 'America/Toronto',
-        address: address,
-        city: city,
-        region: region,
-        country: country
-      })
-    end
+    listing_location.update_attributes({
+      lat: lat,
+      lng: lng,
+      timezone: 'America/Toronto',
+      address: address,
+      city: city,
+      region: region,
+      country: country
+    })
 
     DirectoryLocation.create_locations lat, lng
     listing.locations = [location]
