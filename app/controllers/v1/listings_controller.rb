@@ -28,6 +28,7 @@ module V1
       @listing.owner_id = current_user.id
 
       if @listing.save
+        ListingMailer.listing_created(@listing).deliver_later
         json_with_permissions @listing, :as_json_full
       else
         render json: { errors: @listing.errors.full_messages }
