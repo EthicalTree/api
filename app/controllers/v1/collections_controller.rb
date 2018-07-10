@@ -67,7 +67,7 @@ module V1
       search_listings = Search.by_location({
         results: listings,
         location: location,
-        latlng: location_information,
+        location_information: location_information,
         radius: 50
       })
 
