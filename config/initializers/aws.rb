@@ -9,5 +9,5 @@ if config
 
   $s3_images_bucket = config[:images_bucket]
   $s3_thumbnails_bucket = config[:thumbnails_bucket]
-
+  $s3_db_backups_bucket = config[:db_backups_bucket]
 end

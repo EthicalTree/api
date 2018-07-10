@@ -9,4 +9,5 @@ if config
 
   $fog_images = $fog.directories.new key: $s3_images_bucket
   $fog_thumbnails = $fog.directories.new key: $s3_thumbnails_bucket
+  $fog_db_backups = $fog.directories.new key: $s3_db_backups_bucket
 end
