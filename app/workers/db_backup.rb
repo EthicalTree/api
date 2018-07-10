@@ -9,7 +9,7 @@ class DbBackup
 
     backup_filename = "#{settings['database']}-#{Time.now.strftime('%Y%m%d')}.sql"
     output_file = File.join(app_root, "tmp", backup_filename)
-    password_flag = settings['password'].present? ? "-p#{settings['password']}" : ""
+    password_flag = settings['password'].present? ? "-p'#{settings['password']}'" : ""
 
     cmd = "/usr/bin/env mysqldump -h #{settings['host']} -u #{settings['username']} #{password_flag} #{settings['database']} > #{output_file}"
     system(cmd)
