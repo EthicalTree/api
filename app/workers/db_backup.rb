@@ -12,6 +12,7 @@ class DbBackup
     password_flag = settings['password'].present? ? "-p#{settings['password']}" : ""
 
     cmd = "/usr/bin/env mysqldump -h #{settings['host']} -u #{settings['username']} #{password_flag} #{settings['database']} > #{output_file}"
+    puts cmd
 
     system(cmd)
 
