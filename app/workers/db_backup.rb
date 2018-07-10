@@ -4,6 +4,10 @@ class DbBackup
   include Sidekiq::Worker
 
   def perform(*args)
+    if Rails.env != 'production'
+      return
+    end
+
     app_root = File.join(File.dirname(__FILE__), "..", "..")
     settings = Rails.configuration.database_configuration[Rails.env]
 
