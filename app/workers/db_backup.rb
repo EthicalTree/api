@@ -13,12 +13,14 @@ class DbBackup
 
     cmd = "/usr/bin/env mysqldump -h #{settings['host']} -u #{settings['username']} #{password_flag} #{settings['database']} > #{output_file}"
 
+    system(cmd)
+
     $fog_db_backups.files.create({
       key: backup_filename,
       body: File.read(output_file),
       public: false
     })
 
-    system(cmd)
+    File.delete(output_file) if File.exist?(output_file)
   end
 end
