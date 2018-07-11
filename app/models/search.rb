@@ -33,7 +33,7 @@ class Search
   def self.by_location options={}
     results = options[:results]
     location = options[:location]
-    location_information = options[:location_information]
+    location_information = options[:location_information] || {}
     radius = options[:radius] || 50
 
     if location == 'Near Me'
