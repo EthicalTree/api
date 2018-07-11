@@ -25,7 +25,8 @@ module V1
           if cl.featured
             json[:listings] = Plan.featured_listings({
               count: 6,
-              location: location
+              location: location,
+              location_information: location_information
             }).map {|l| l.as_json_search}
           else
             json[:listings] = cl._listings({
