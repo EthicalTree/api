@@ -33,7 +33,12 @@ class Search
   def self.by_location options={}
     results = options[:results]
     location = options[:location]
+    location_information = options[:location_information]
     radius = options[:radius] || 50
+
+    if location == 'Near Me'
+      location = location_information[:directory_location]
+    end
 
     directory_location, specific_location = Search.find_directory_location(location)
 

@@ -29,7 +29,8 @@ module V1
             }).map {|l| l.as_json_search}
           else
             json[:listings] = cl._listings({
-              location: location
+              location: location,
+              location_information: location_information
             }).map {|l| l.listing.as_json_search}
           end
 
@@ -67,6 +68,7 @@ module V1
       search_listings = Search.by_location({
         results: listings,
         location: location,
+        location_information: location_information,
         radius: 50
       })
 
