@@ -65,7 +65,6 @@ module V1
         )
       end
 
-      puts('flag', location_information)
       search_listings = Search.by_location({
         results: listings,
         location: location,
