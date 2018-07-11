@@ -30,6 +30,7 @@ gem 'olive_branch'
 gem 'redis'
 gem 'hiredis'
 gem 'sidekiq'
+gem 'sidekiq-scheduler'
 
 # For data migration
 gem 'php-serialize'
