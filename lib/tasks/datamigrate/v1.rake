@@ -270,6 +270,97 @@ namespace :datamigrate do
     puts "Good: #{good.length}, Bad: #{bad}"
   end
 
+  desc "Fix images after DB Disaster of July 10, 2018"
+  task :v1_csv_image_recovery, [:csv_filename, :matcher_csv] => [:environment] do |task, args|
+    filename = args[:csv_filename]
+    matcher_filename = args[:matcher_csv]
+
+    CSV.foreach(filename, { headers: true, encoding: 'ISO8859-1' }) do |row|
+      result = row.to_h.symbolize_keys
+
+      name = result[:post_title]
+      slug = name.parameterize
+      listing = Listing.find_by(slug: slug)
+
+      if !listing
+        match = []
+
+        if match.length > 0
+          listing = Listing.find_by(slug: match[0][74].parameterize)
+          phone = match[0][25] || ''
+
+          if !listing
+            next
+          end
+        else
+          next
+        end
+      end
+
+      image_keys = result.keys.select {|k| k.to_s.starts_with?('IMAGE')}
+      image_keys.map do |k|
+        k = result[k]
+
+        if !k.present?
+          next
+        end
+
+        ext = File.extname(k.split('?')[0] || '')
+        ext = ext.present? ? ext : 'jpg'
+        uuid = "#{Digest::SHA256.hexdigest(k)}.#{ext}"
+        name = "datamigrate_v1_#{uuid.gsub('/', '_')}"
+        key = "listings/#{listing.title.parameterize}/images/#{name}"
+        order = 1
+
+        image = listing.images.find_by(key: key)
+
+        if image
+          image_exists = $fog_images.files.head(key)
+
+          if !image_exists
+            puts key
+            #build_image k, key, order
+          end
+        end
+      end
+    end
+  end
+
+  desc "Fix images after DB Disaster of July 10, 2018"
+  task :v1_get_broken_images, [] => [:environment] do |task, args|
+    broken = []
+
+    Listing.all.each do |listing|
+      is_broken = false
+      is_menu_broken = false
+
+      listing.images.each do |image|
+        thing = $fog_images.files.head(image.key)
+        if !thing || thing.content_length == 162
+          is_broken = true
+        end
+      end
+
+      listing.menu.images.each do |image|
+        thing = $fog_images.files.head(image.key)
+        if !thing || thing.content_length == 162
+          is_menu_broken = true
+        end
+      end
+
+      if is_broken || is_menu_broken
+        broken.push [listing.slug, is_broken, is_menu_broken]
+      end
+    end
+
+    CSV.open('./data/broken_images.csv', 'w') do |writer|
+      writer << ["Listing", "broken", "menu_broken"]
+      broken.each do |b|
+        writer << b
+      end
+    end
+  end
+
   private
 
   def create_listings results, options={}
