@@ -1,5 +1,5 @@
 redis_config = {
-  url: 'redis://ethicaltree-redis:6379/0',
+  url: 'redis://ethicaltree-redis-master:6379/0',
   password: Rails.application.secrets[:redis][:password]
 }
 

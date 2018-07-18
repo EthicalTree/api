@@ -44,7 +44,7 @@ services:
 
   redis:
     image: redis:latest
-    container_name: ethicaltree-redis
+    container_name: ethicaltree-redis-master
     ports:
       - 6400:6379
     command: >

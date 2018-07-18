@@ -15,7 +15,7 @@ module EthicalTree
     config.active_job.queue_adapter = :sidekiq
 
     # Caching
-    redis_url = 'redis://ethicaltree-redis:6379/0'
+    redis_url = 'redis://ethicaltree-redis-master:6379/0'
     config.cache_store = :redis_cache_store, {
       url: redis_url,
       namespace: "ethicaltree_cache_#{Rails.env}",
