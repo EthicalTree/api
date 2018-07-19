@@ -15,5 +15,8 @@
 
 :schedule:
   db_backup:
-    cron: '0 0 * * *'
-    class: DbBackup
+    cron: '* * * * *'
+    class: ETDbBackup
+  blog_db_backup:
+    cron: '* * * * *'
+    class: BlogDbBackup
