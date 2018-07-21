@@ -7,7 +7,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile.local
-    command: ash -c "rm -f /app/tmp/pids/server.pid && bundle exec rails s -b 0.0.0.0 -p 80"
+    command: ash -c "rm -f /app/tmp/pids/server.pid && bundle install && bundle exec rails s -b 0.0.0.0 -p 80"
     depends_on:
       - db
       - redis
@@ -21,7 +21,7 @@ services:
     build:
       context: .
       dockerfile: ./docker/Dockerfile.local
-    command: ash -c "bundle exec sidekiq"
+    command: ash -c "bundle install && bundle exec sidekiq"
     depends_on:
       - redis
     volumes:
