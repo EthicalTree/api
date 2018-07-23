@@ -271,34 +271,57 @@ namespace :datamigrate do
   end
 
   desc "Fix images after DB Disaster of July 10, 2018"
-  task :v1_csv_image_recovery, [:csv_filename, :matcher_csv] => [:environment] do |task, args|
+  task :v1_csv_image_recovery, [:csv_filename, :to_nuke_csv] => [:environment] do |task, args|
     filename = args[:csv_filename]
-    matcher_filename = args[:matcher_csv]
+    to_nuke_csv = args[:to_nuke_csv]
+    to_nuke = CSV.read(to_nuke_csv, { headers: true })['Listing']
+
+    founds = {
+      fb: 0,
+      slug: 0,
+      not_found: 0
+    }
+
+    nuke_count = 0
 
     CSV.foreach(filename, { headers: true, encoding: 'ISO8859-1' }) do |row|
       result = row.to_h.symbolize_keys
 
-      name = result[:post_title]
+      name = result[:name]
+      facebook_uri = result[:facebook_uri]
       slug = name.parameterize
-      listing = Listing.find_by(slug: slug)
+
+      listing = Listing.find_by(facebook_uri: facebook_uri)
 
       if !listing
-        match = []
-
-        if match.length > 0
-          listing = Listing.find_by(slug: match[0][74].parameterize)
-          phone = match[0][25] || ''
-
-          if !listing
-            next
-          end
-        else
-          next
-        end
+        listing = Listing.find_by(facebook_uri: "#{facebook_uri}/")
       end
 
-      image_keys = result.keys.select {|k| k.to_s.starts_with?('IMAGE')}
-      image_keys.map do |k|
+      if !listing
+        listing = Listing.find_by(slug: slug)
+
+        if !listing
+          founds[:not_found] += 1
+          next
+        end
+
+        founds[:slug] += 1
+      else
+        founds[:fb] += 1
+      end
+
+      should_nuke = to_nuke.include?(listing.slug)
+
+      if should_nuke
+        nuke_count += 1
+      end
+
+      if should_nuke
+        listing.images.delete_all
+      end
+
+      image_keys = result.keys.select {|k| k.to_s.starts_with?('Image-')}
+      images = image_keys.map do |k|
         k = result[k]
 
         if !k.present?
@@ -314,19 +337,29 @@ namespace :datamigrate do
 
         image = listing.images.find_by(key: key)
 
-        if image
-          image_exists = $fog_images.files.head(key)
-
-          if !image_exists
-            puts key
-            #build_image k, key, order
-          end
+        if (!image)
+          image = build_image k, key, order
         end
+
+        image
+      end.compact
+
+      if should_nuke
+        listing.images = images
+      else
+        listing.images.merge(images)
       end
+      listing.save
     end
+
+    puts "Facebook: #{founds[:fb]}"
+    puts "Slug: #{founds[:slug]}"
+    puts "NOT FOUND: #{founds[:not_found]}"
+
+    puts "Nuking: #{nuke_count}"
   end
 
-  desc "Fix images after DB Disaster of July 10, 2018"
+  desc "Determine if any of the images are broken (show 404 response as uploaded)"
   task :v1_get_broken_images, [] => [:environment] do |task, args|
     broken = []
 
@@ -573,7 +606,8 @@ namespace :datamigrate do
     begin
       res = HTTParty.get(original)
     rescue
-
+      puts "IMG_ERR: #{original} | #{key}"
+      return nil
     end
 
     $fog_images.files.create({
