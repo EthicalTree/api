@@ -1,6 +1,6 @@
 class Search
 
-  def self.find_directory_location location
+  def self.find_directory_location location, options={}
     specific_location = nil
 
     if location.is_a?(Hash)
@@ -27,19 +27,26 @@ class Search
       directory_location = DirectoryLocation.find_by_location(city.downcase)
     end
 
+    if options[:is_city_scope] && directory_location
+      directory_location = directory_location.get_city
+    end
+
     [directory_location, specific_location]
   end
 
   def self.by_location options={}
-    results = options[:results]
+    is_city_scope = options[:is_city_scope]
     location = options[:location]
     location_information = options[:location_information]
     radius = options[:radius] || 50
+    results = options[:results]
 
     if location == 'Near Me'
       specific_location = location_information
     else
-      directory_location, specific_location = Search.find_directory_location(location)
+      directory_location, specific_location = Search.find_directory_location(location, {
+        is_city_scope: is_city_scope
+      })
     end
 
     if specific_location.present?

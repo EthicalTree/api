@@ -14,6 +14,7 @@ class Collection < ApplicationRecord
 
   def _listings(options={})
     count = options[:count] || 6
+    is_city_scope = options[:is_city_scope]
     location = options[:location]
     location_information = options[:location_information]
 
@@ -24,6 +25,7 @@ class Collection < ApplicationRecord
     )
 
     search_listings = Search.by_location({
+      is_city_scope: is_city_scope,
       results: listings,
       location: location,
       location_information: location_information,

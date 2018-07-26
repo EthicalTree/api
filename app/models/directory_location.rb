@@ -4,6 +4,14 @@ class DirectoryLocation < ApplicationRecord
 
   acts_as_mappable
 
+  def get_city
+    if location_type == 'city'
+      self
+    else
+      DirectoryLocation.find_by(city: self.city, location_type: 'city')
+    end
+  end
+
   def format_address
     if location_type == 'neighbourhood'
       "#{neighbourhood}, #{city}, #{state}, #{country}"

@@ -17,6 +17,3 @@
   db_backup:
     cron: '0 0 * * *'
     class: ETDbBackup
-  blog_db_backup:
-    cron: '0 0 * * *'
-    class: BlogDbBackup
