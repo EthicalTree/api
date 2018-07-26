@@ -17,7 +17,29 @@ class APIController < ActionController::API
     end
   end
 
+  def session_get(key)
+    if current_user
+      Rails.cache.fetch("#{current_user.id}_#{key}")
+    end
+  end
+
+  def session_set(key, value)
+    if current_user
+      Rails.cache.write("#{current_user.id}_#{key}", value)
+    end
+  end
+
+  def set_location_information(addr)
+    session_set('browser_latitude', addr.latitude)
+    session_set('browser_longitude', addr.longitude)
+    session_set('browser_city', addr.city)
+  end
+
   def location_information
-    Session.session_location(remote_ip)
+    {
+      lat: session_get('browser_latitude'),
+      lng: session_get('browser_longitude'),
+      city: session_get('browser_city'),
+    }
   end
 end

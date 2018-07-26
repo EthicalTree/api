@@ -37,10 +37,10 @@ class Search
     radius = options[:radius] || 50
 
     if location == 'Near Me'
-      location = location_information[:directory_location]
+      specific_location = location_information
+    else
+      directory_location, specific_location = Search.find_directory_location(location)
     end
-
-    directory_location, specific_location = Search.find_directory_location(location)
 
     if specific_location.present?
       coords = [specific_location[:lat], specific_location[:lng]]

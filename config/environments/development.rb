@@ -13,10 +13,6 @@ Rails.application.configure do
   # Show full error reports.
   config.consider_all_requests_local = true
 
-  # Enable/disable caching. By default caching is disabled.
-  config.cache_store = :mem_cache_store
-  # config.cache_store = [:null_store]
-
   # Don't care if the mailer can't send.
   config.action_mailer.raise_delivery_errors = false
   config.action_mailer.perform_caching = false
