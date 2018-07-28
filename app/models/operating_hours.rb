@@ -6,10 +6,20 @@ class OperatingHours < ApplicationRecord
     find_by day: today
   end
 
+  def open_at_24_hour
+    open.strftime('%H:%M')
+  end
+
+  def closed_at_24_hour
+    close.strftime('%H:%M')
+  end
+
   def as_json_full
     as_json({
       methods: [
         :label,
+        :open_at_24_hour,
+        :closed_at_24_hour
       ]
     })
   end

@@ -98,6 +98,8 @@ class Listing < ApplicationRecord
         { operating_hours: {
           methods: [
             :label,
+            :open_at_24_hour,
+            :closed_at_24_hour
           ]
         }},
       ],
@@ -136,11 +138,15 @@ class Listing < ApplicationRecord
         {plan: {only: [
           :id
         ]}},
-        {operating_hours: {only: [
-          :day,
-          :open,
-          :close
-        ]}}
+        {operating_hours: {
+          only: [
+            :day,
+          ],
+          methods: [
+            :open_at_24_hour,
+            :closed_at_24_hour
+          ]
+        }}
       ]
     })
   end
