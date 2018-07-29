@@ -217,14 +217,15 @@ module V1
 
     def filter_open_now(collection)
       # make sure the collection has a join of "operating_hours"
+      # TODO replace America/New_York with a solution for multiple timezones
+      # once we have cities outside the eastern timezone
       collection.where(
         "operating_hours.day = :today AND
             operating_hours.open <= :now AND
             operating_hours.close > :now",
-        today: Timezone.now.strftime('%A').downcase,
-        now: Timezone.now
+        today: Timezone.now('America/New_York').strftime('%A').downcase,
+        now: Timezone.now('America/New_York')
       )
     end
-
   end
 end
