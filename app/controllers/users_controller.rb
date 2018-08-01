@@ -2,7 +2,10 @@ class UsersController < APIController
   before_action :authenticate_user, only: :show
 
   def create
-    if @user = User.where(email: user_params[:email], confirmed_at: nil).first
+    claim_listing_slug = params[:claim_listing_slug]
+    claim_id = params[:claim_id]
+
+    if @user = User.where(email: user_params[:email]).first
       @user.attributes = {password: '', password_confirmation: '', password_digest: ''}
       @user.attributes = user_params
       @user.regenerate_token
@@ -10,8 +13,34 @@ class UsersController < APIController
       @user = User.new user_params
     end
 
-    if @user.save
-      AccountMailer.confirm_email(@user).deliver_later
+    if claim_listing_slug.present?
+      if listing = Listing.find_by(slug: claim_listing_slug)
+        if ['pending_verification', 'claimed'].include? listing.claim_status
+          @user.errors.add(:base, 'Sorry, this listing has already been claimed.')
+        else
+          @user.confirmed_at = DateTime.current
+          @user.save
+
+          listing.owner = @user
+
+          if claim_id == listing.claim_id
+            listing.claim_status = :claimed
+          else
+            listing.claim_status = :pending_verification
+          end
+
+          listing.save
+
+          AccountMailer.listing_claimed(@user, listing).deliver_later
+        end
+      end
+    else
+      if @user.save
+        AccountMailer.confirm_email(@user).deliver_later
+      end
+    end
+
+    if !@user.errors.any?
       render json: {}, status: :ok
     else
       render json: { errors: @user.errors.full_messages }

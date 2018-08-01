@@ -43,6 +43,28 @@ class User < ApplicationRecord
     "https://#{domain}/forgot_password/#{self.forgot_password_token}"
   end
 
+  def display_name
+    "#{first_name} #{last_name}".strip
+  end
+
+  def display_name_with_email
+    if display_name.present?
+      "#{display_name} (#{email})"
+    else
+      email
+    end
+  end
+
+  def serializable_hash options={}
+    super((options || {}).merge({
+      except: [:password_digest, :confirm_token],
+      methods: [
+        :display_name,
+        :display_name_with_email
+      ]
+    }))
+  end
+
 private
 
   def confirmation_token

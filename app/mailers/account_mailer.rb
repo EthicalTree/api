@@ -10,4 +10,10 @@ class AccountMailer < ApplicationMailer
     mail(to: @user.email, subject: 'Forgot your password')
   end
 
+  def listing_claimed user, listing
+    @user = user
+    @listing = listing
+    mail(to: @user.email, subject: 'Thanks for claiming your listing')
+  end
+
 end
