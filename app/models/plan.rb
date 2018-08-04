@@ -22,7 +22,6 @@ class Plan < ApplicationRecord
     count = options[:count]
     is_city_scope = options[:is_city_scope]
     location = options[:location]
-    location_information = options[:location_information]
 
     listings = Location.listings
 
@@ -30,7 +29,6 @@ class Plan < ApplicationRecord
       is_city_scope: is_city_scope,
       results: listings,
       location: location,
-      location_information: location_information,
     })
 
     if search_listings

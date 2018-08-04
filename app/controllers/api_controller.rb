@@ -29,17 +29,7 @@ class APIController < ActionController::API
     end
   end
 
-  def set_location_information(addr)
-    session_set('browser_latitude', addr.latitude)
-    session_set('browser_longitude', addr.longitude)
-    session_set('browser_city', addr.city)
-  end
-
-  def location_information
-    {
-      lat: session_get('browser_latitude'),
-      lng: session_get('browser_longitude'),
-      city: session_get('browser_city'),
-    }
+  def ip_location_information
+      Session.session_location(remote_ip)
   end
 end

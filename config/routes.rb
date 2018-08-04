@@ -3,7 +3,6 @@ Rails.application.routes.draw do
   # Sessions
   post :login, to: 'user_token#create'
   post :forgot_password, to: 'users#forgot_password'
-  post :set_location, to: 'sessions#set_location'
   resources :sessions, only: %i{index}
 
   # Signup

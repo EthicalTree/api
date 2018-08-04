@@ -12,7 +12,6 @@ module V1
         listings = Plan.featured_listings({
           count: count,
           location: location,
-          location_information: location_information
         })
 
         render json: {

@@ -26,13 +26,11 @@ module V1
             json[:listings] = Plan.featured_listings({
               count: 6,
               location: location,
-              location_information: location_information,
               is_city_scope: true
             }).map {|l| l.as_json_search}
           else
             json[:listings] = cl._listings({
               location: location,
-              location_information: location_information,
               is_city_scope: true
             }).map {|l| l.listing.as_json_search}
           end
@@ -71,7 +69,6 @@ module V1
       search_listings = Search.by_location({
         is_city_scope: true,
         location: location,
-        location_information: location_information,
         radius: 50,
         results: listings,
       })
