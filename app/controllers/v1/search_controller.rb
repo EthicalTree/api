@@ -21,7 +21,7 @@ module V1
 
       @query = search_params[:query].downcase
       @ethicalities = search_params[:ethicalities].split(',')
-      @open_now = JSON.parse(search_params[:openNow])
+      @open_now = JSON.parse(search_params[:open_now])
 
       fields = [
         :id,
@@ -146,7 +146,7 @@ module V1
       params.permit(
         :query,
         :ethicalities,
-        :openNow,
+        :open_now,
         :page,
         :location,
         :swlat,
