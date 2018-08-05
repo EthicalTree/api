@@ -9,7 +9,7 @@ module V1
 
         query = params[:query]
         page = params[:page].to_i or 1
-        filter = params[:filter]
+        filters = params[:filters].split(',')
 
         if query.present?
           results = Listing.where("LOWER(title) LIKE :query", query: "%#{query.downcase}%")
@@ -17,8 +17,12 @@ module V1
           results = Listing.all
         end
 
-        if filter == 'plans'
+        if filters.include? 'plans'
           results = results.joins(:plan)
+        end
+
+        if filters.include? 'pending_claims'
+          results = results.where(claim_status: :pending_verification)
         end
 
         results = results.order('title').page(page).per(25)
@@ -42,27 +46,42 @@ module V1
         authorize! :update, Listing
 
         @listing = Listing.find params[:id]
-        @listing.assign_attributes({
-          visibility: listing_params[:visibility]
-        })
 
-        if listing_params[:plan_type].present?
-          price = listing_params[:price]
+        if listing_params[:regenerate_claim_id]
+          @listing.regenerate_claim_id
+        elsif listing_params[:owner_id]
+          owner = User.find(listing_params[:owner_id])
 
-          if price.present?
-            price = BigDecimal(price)
+          if owner.present?
+            @listing.owner = owner
+            @listing.claim_status = :claimed
+          end
+        else
+
+          if listing_params[:visibility].present?
+            @listing.assign_attributes({
+              visibility: listing_params[:visibility]
+            })
           end
 
-          plan = Plan.find_or_create_by listing_id: @listing.id
-          plan.assign_attributes({
-            listing_id: @listing.id,
-            plan_type: listing_params[:plan_type],
-            price: price
-          })
+          if listing_params[:plan_type].present?
+            price = listing_params[:price]
 
-          plan.save
-        elsif @listing.plan.present?
-          @listing.plan.delete
+            if price.present?
+              price = BigDecimal(price)
+            end
+
+            plan = Plan.find_or_create_by listing_id: @listing.id
+            plan.assign_attributes({
+              listing_id: @listing.id,
+              plan_type: listing_params[:plan_type],
+              price: price
+            })
+
+            plan.save
+          elsif @listing.plan.present?
+            @listing.plan.delete
+          end
         end
 
         if @listing.save
@@ -80,10 +99,12 @@ module V1
 
       def listing_params
         params.require(:listing).permit(
-          :visibility,
+          :id,
+          :owner_id,
           :plan_type,
           :price,
-          :id
+          :regenerate_claim_id,
+          :visibility,
         )
       end
     end

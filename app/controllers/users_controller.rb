@@ -2,12 +2,26 @@ class UsersController < APIController
   before_action :authenticate_user, only: :show
 
   def create
-    if @user = User.where(email: user_params[:email], confirmed_at: nil).first
+    claim_listing_slug = params[:claim_listing_slug]
+    claim_id = params[:claim_id]
+
+    if @user = User.where(email: user_params[:email]).first
       @user.attributes = {password: '', password_confirmation: '', password_digest: ''}
       @user.attributes = user_params
       @user.regenerate_token
     else
       @user = User.new user_params
+    end
+
+    if claim_listing_slug.present?
+      if listing = Listing.find_by(slug: claim_listing_slug)
+        if ['pending_verification', 'claimed'].include? listing.claim_status
+          @user.errors.add(:base, 'Sorry, this listing has already been claimed.')
+        elsif listing.claim_id == claim_id
+          # automatically confirm user if they were given the claim_id of the listing
+          @user.confirmed_at = DateTime.current
+        end
+      end
     end
 
     if @user.save

@@ -9,6 +9,7 @@ module V1
 
         query = params[:query]
         page = params[:page] or 1
+        page_size = params[:page_size] or 25
 
         if query.present?
           results = User.where("LOWER(email)LIKE :query", query: "%#{query.downcase}%")
@@ -16,7 +17,7 @@ module V1
           results = User.all
         end
 
-        results = results.order('email').page(page).per(25)
+        results = results.order('email').page(page).per(page_size)
         render json: {
           users: results.as_json,
           current_page: page,

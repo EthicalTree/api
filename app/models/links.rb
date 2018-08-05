@@ -12,4 +12,8 @@ class Links
     Links.get_link("/listings/#{city}/#{listing.slug}")
   end
 
+  def self.listing_claim listing
+    "#{Links.listing(listing)}?claim=true&claimId=#{listing.claim_id}"
+  end
+
 end
