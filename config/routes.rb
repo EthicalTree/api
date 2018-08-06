@@ -43,6 +43,7 @@ Rails.application.routes.draw do
       resources :listings
       resources :collections
       resources :locations
+      resources :exports, only: %i{index}
     end
   end
 
