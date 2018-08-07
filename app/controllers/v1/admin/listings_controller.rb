@@ -44,17 +44,21 @@ module V1
 
       def update
         authorize! :update, Listing
+        owner_id = listing_params[:owner_id]
 
         @listing = Listing.find params[:id]
 
         if listing_params[:regenerate_claim_id]
           @listing.regenerate_claim_id
-        elsif listing_params[:owner_id]
-          owner = User.find(listing_params[:owner_id])
+        elsif owner_id
+          owner = User.find_by(id: owner_id)
 
           if owner.present?
             @listing.owner = owner
             @listing.claim_status = :claimed
+          else
+            @listing.owner = nil
+            @listing.claim_status = :unclaimed
           end
         else
 
