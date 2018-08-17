@@ -51,10 +51,8 @@ end
 
 group :development do
   gem 'thin'
-  gem 'spring'
   gem 'web-console'
   gem 'listen', '~> 3.0.5'
-  gem 'spring-watcher-listen'
   gem 'letter_opener'
   gem "launchy", "~> 2.4"
   gem 'dogapi', '~> 1.23.0'
