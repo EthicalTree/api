@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_28_190057) do
+ActiveRecord::Schema.define(version: 2018_08_17_211354) do
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "slug"
@@ -212,6 +212,8 @@ ActiveRecord::Schema.define(version: 2018_07_28_190057) do
     t.string "confirm_token"
     t.string "forgot_password_token"
     t.boolean "admin"
+    t.string "contact_number"
+    t.string "position"
   end
 
   add_foreign_key "collections", "tags"

@@ -43,13 +43,21 @@ class User < ApplicationRecord
     "https://#{domain}/forgot_password/#{self.forgot_password_token}"
   end
 
-  def display_name
+  def full_name
     "#{first_name} #{last_name}".strip
   end
 
+  def display_name
+    if full_name.present?
+      full_name
+    else
+      email
+    end
+  end
+
   def display_name_with_email
-    if display_name.present?
-      "#{display_name} (#{email})"
+    if full_name.present?
+      "#{full_name} (#{email})"
     else
       email
     end
