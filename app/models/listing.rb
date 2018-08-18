@@ -2,6 +2,7 @@ class Listing < ApplicationRecord
   include Accessible
 
   enum visibility: [:published, :unpublished]
+  enum claim_status: [:unclaimed, :pending_verification, :claimed]
 
   has_one :plan
   has_many :locations, dependent: :destroy
@@ -20,6 +21,7 @@ class Listing < ApplicationRecord
 
   before_validation :ensure_slug
   before_save :lower_website
+  before_save :ensure_claim_id
 
   validates :title, presence: true
   validates :slug, uniqueness: true
@@ -32,6 +34,10 @@ class Listing < ApplicationRecord
 
   def self.search_fields
     return @@search_fields
+  end
+
+  def regenerate_claim_id
+    self.claim_id = SecureRandom.uuid
   end
 
   def cover_image
@@ -56,6 +62,10 @@ class Listing < ApplicationRecord
     else
       ''
     end
+  end
+
+  def claim_url
+    Links.listing_claim(self)
   end
 
   # For now we only support one menu, but might support in the future
@@ -87,6 +97,7 @@ class Listing < ApplicationRecord
     self.menu
 
     as_json({
+      except: [:claim_id],
       include: [
         :categories,
         :ethicalities,
@@ -98,6 +109,8 @@ class Listing < ApplicationRecord
         { operating_hours: {
           methods: [
             :label,
+            :open_at_24_hour,
+            :closed_at_24_hour
           ]
         }},
       ],
@@ -117,6 +130,7 @@ class Listing < ApplicationRecord
         :slug,
         :title
       ],
+      except: [:claim_id],
       methods: [:city, :location, :timezone],
       include: [
         {ethicalities: {only: [
@@ -136,11 +150,15 @@ class Listing < ApplicationRecord
         {plan: {only: [
           :id
         ]}},
-        {operating_hours: {only: [
-          :day,
-          :open,
-          :close
-        ]}}
+        {operating_hours: {
+          only: [
+            :day,
+          ],
+          methods: [
+            :open_at_24_hour,
+            :closed_at_24_hour
+          ]
+        }}
       ]
     })
   end
@@ -148,7 +166,11 @@ class Listing < ApplicationRecord
   def as_json_admin
     as_json({
       include: [
-        { plan: { methods: [:type] } }
+        { plan: { methods: [:type] } },
+        :owner
+      ],
+      methods: [
+        :claim_url
       ]
     })
   end
@@ -158,6 +180,12 @@ class Listing < ApplicationRecord
   def ensure_slug
     if not self.slug
       self.slug = self.title.parameterize
+    end
+  end
+
+  def ensure_claim_id
+    if not self.claim_id
+      self.regenerate_claim_id
     end
   end
 

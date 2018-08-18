@@ -24,6 +24,7 @@ module V1
 
       @query = search_params[:query].downcase
       @ethicalities = search_params[:ethicalities].split(',')
+      @open_now = JSON.parse(search_params[:open_now])
 
       fields = [
         :id,
@@ -40,6 +41,7 @@ module V1
       ].compact
 
       joins = [
+        'LEFT JOIN operating_hours ON operating_hours.listing_id = locations.listing_id',
         "LEFT JOIN plans ON plans.listing_id = locations.listing_id",
         build_tag_join,
         build_ethicality_join,
@@ -76,6 +78,10 @@ module V1
         results_that_match = results.having(
           "eth_total > 0 AND (likeness > 0 OR hashtag_count > 0)"
         )
+
+        if @open_now
+          results_that_match = filter_open_now(results_that_match)
+        end
       else
         located = false
         results_that_match = []
@@ -153,6 +159,7 @@ module V1
       params.permit(
         :query,
         :ethicalities,
+        :open_now,
         :page,
         :location,
         :swlat,
@@ -221,5 +228,17 @@ module V1
       end
     end
 
+    def filter_open_now(collection)
+      # make sure the collection has a join of "operating_hours"
+      # TODO replace America/New_York with a solution for multiple timezones
+      # once we have cities outside the eastern timezone
+      collection.where(
+        "operating_hours.day = :today AND
+            operating_hours.open <= :now AND
+            operating_hours.close > :now",
+        today: Timezone.now('America/New_York').strftime('%A').downcase,
+        now: Timezone.now('America/New_York')
+      )
+    end
   end
 end

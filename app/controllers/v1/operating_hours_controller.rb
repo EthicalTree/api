@@ -17,8 +17,8 @@ module V1
         value["hours"].each do |v|
           hour = OperatingHours.new do |oh|
             oh.day = day
-            oh.open = Time.parse(v[:open_str] + ' UTC')
-            oh.close = Time.parse(v[:close_str] + ' UTC')
+            oh.open = Time.parse(v[:open_24_hour] + ' UTC')
+            oh.close = Time.parse(v[:close_24_hour] + ' UTC')
             oh.listing_id = @listing.id
           end
 
@@ -45,7 +45,7 @@ module V1
 
     def operating_hours_params
       content = {
-        hours: [:open_str, :close_str]
+        hours: [:open_24_hour, :close_24_hour]
       }
 
       params.require(:operating_hour).permit(

@@ -40,11 +40,33 @@ module V1
     end
 
     def update
-      authorize! :update, @listing
-      @listing.assign_attributes listing_params
+      claim = listing_params[:claim]
+      claim_id = listing_params[:claim_id]
+
+      if claim == true
+        if ['pending_verification', 'claimed'].include? @listing.claim_status
+          @listing.errors.add(:base, 'Sorry, this listing has already been claimed.')
+        else
+          @listing.owner = current_user
+
+          if claim_id == @listing.claim_id
+            @listing.claim_status = :claimed
+          else
+            @listing.claim_status = :pending_verification
+          end
+        end
+      else
+        authorize! :update, @listing
+        @listing.assign_attributes listing_params
+      end
 
       if @listing.save
-        json_with_permissions @listing, :as_json
+        if claim == true
+          AccountMailer.listing_claimed(current_user, @listing).deliver_later
+          render json: { claimed: true }
+        else
+          json_with_permissions @listing, :as_json
+        end
       else
         render json: { errors: @listing.errors.full_messages }
       end
@@ -58,6 +80,8 @@ module V1
 
     def listing_params
       params.require(:listing).permit(
+        :claim,
+        :claim_id,
         :title,
         :phone,
         :bio,
