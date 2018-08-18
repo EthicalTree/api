@@ -10,9 +10,6 @@ module V1
       nelat = search_params[:nelat]
       nelng = search_params[:nelng]
 
-      lat = search_params[:lat]
-      lng = search_params[:lng]
-
       if [swlat, swlng, nelat, nelng].all? {|p| p.present?}
         location = {
           swlat: swlat.to_f,
@@ -66,8 +63,6 @@ module V1
       located_results = Search.by_location({
         results: results,
         location: location,
-        lat: lat,
-        lng: lng,
       })
 
       if located_results

@@ -39,13 +39,12 @@ class Search
     location = options[:location]
     radius = options[:radius] || 50
     results = options[:results]
-    lat = options[:lat]
-    lng = options[:lng]
 
-    if location == 'Near Me'
-      specific_location = { lat: lat, lng: lng }
-      directory_location = nil
-    else
+    # if location is a latlng string then use it as a specific location
+    specific_location = LatLng.parse(location)
+    directory_location = nil
+
+    if !specific_location
       directory_location, specific_location = Search.find_directory_location(location, {
         is_city_scope: is_city_scope
       })
