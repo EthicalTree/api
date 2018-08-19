@@ -1,4 +1,6 @@
 class Menu < ApplicationRecord
+  include HasImages
+
   belongs_to :listing
 
   has_many :menu_images

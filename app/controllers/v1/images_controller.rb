@@ -8,12 +8,13 @@ module V1
       authorize_for_type :update, params[:type]
 
       image = Image.new image_params
-      image.order = @images.count + 1
+      image.order = @source.images.count + 1
       image.save
-      @images.push image
+      @source.images.push image
+      @source.rebuild_image_order
 
       render(json: {
-        images: @images.reload
+        images: @source.images.reload
       }, status: :ok)
     end
 
@@ -23,8 +24,11 @@ module V1
 
     def update
       type = params[:type]
+      shift = params[:shift]
       authorize_for_type :update, type
-      image = @images.find(params[:id])
+      @source.rebuild_image_order
+
+      image = @source.images.find(params[:id])
 
       if type == 'listing'
         offset_y = params[:offset_y] || image.cover_offset_y
@@ -35,19 +39,22 @@ module V1
       end
 
       if params[:make_cover]
-        @images.update_all(order: 1)
-        image.update(order: 0)
+        @source.make_cover_image image
       end
 
-      render json: { images: @images.reload }, status: :ok
+      if shift && ['previous', 'next'].include?(shift)
+        @source.shift_image image, shift
+      end
+
+      render json: { images: @source.images.reload }, status: :ok
     end
 
     def destroy
       authorize_for_type :update, params[:type]
-      image = @images.find_by(id: params[:id])
+      image = @source.images.find_by(id: params[:id])
 
       key = image.key
-      @images.delete(image)
+      @source.images.delete(image)
 
       s3_image = $fog_images.files.get(key)
       if s3_image
@@ -59,7 +66,9 @@ module V1
         s3_thumbnail.destroy
       end
 
-      render json: { images: @images.reload }, status: :ok
+      @source.rebuild_image_order
+
+      render json: { images: @source.images.reload }, status: :ok
     end
 
     private
@@ -68,15 +77,15 @@ module V1
       if type == 'listing'
         require_listing
         authorize! auth, @listing
-        @images = @listing.images
+        @source = @listing
       elsif type == 'menu'
         require_listing
         authorize! auth, @listing
-        @images = @listing.menu.images
+        @source = @listing.menu
       elsif type == 'collection'
         require_collection
         authorize! auth, Collection
-        @images = @collection.images
+        @source = @collection
       else
         raise 'Unsupported image type'
       end

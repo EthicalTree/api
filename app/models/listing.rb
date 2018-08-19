@@ -1,5 +1,6 @@
 class Listing < ApplicationRecord
   include Accessible
+  include HasImages
 
   enum visibility: [:published, :unpublished]
   enum claim_status: [:unclaimed, :pending_verification, :claimed]
@@ -92,6 +93,7 @@ class Listing < ApplicationRecord
     locations.first
   end
 
+
   def as_json_full
     # make sure a menu is created if it doesn't exist
     self.menu
@@ -174,6 +176,7 @@ class Listing < ApplicationRecord
       ]
     })
   end
+
 
   private
 
