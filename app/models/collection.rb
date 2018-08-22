@@ -1,4 +1,6 @@
 class Collection < ApplicationRecord
+  include HasImages
+
   enum location: [:front_page]
 
   belongs_to :tag
