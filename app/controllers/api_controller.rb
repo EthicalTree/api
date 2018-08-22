@@ -17,8 +17,20 @@ class APIController < ActionController::API
     end
   end
 
-  def location_information
-    Session.session_location(remote_ip)
+  def session_get(key)
+    if current_user
+      Rails.cache.fetch("#{current_user.id}_#{key}")
+    end
+  end
+
+  def session_set(key, value)
+    if current_user
+      Rails.cache.write("#{current_user.id}_#{key}", value)
+    end
+  end
+
+  def ip_location_information
+      Session.session_location(remote_ip)
   end
 
   def ensure_admin

@@ -37,17 +37,18 @@ class Search
   def self.by_location options={}
     is_city_scope = options[:is_city_scope]
     location = options[:location]
-    location_information = options[:location_information]
     radius = options[:radius] || 50
     results = options[:results]
 
-    if location == 'Near Me'
-      location = location_information[:directory_location]
-    end
+    # if location is a latlng string then use it as a specific location
+    specific_location = LatLng.parse(location)
+    directory_location = nil
 
-    directory_location, specific_location = Search.find_directory_location(location, {
-      is_city_scope: is_city_scope
-    })
+    if !specific_location
+      directory_location, specific_location = Search.find_directory_location(location, {
+        is_city_scope: is_city_scope
+      })
+    end
 
     if specific_location.present?
       coords = [specific_location[:lat], specific_location[:lng]]

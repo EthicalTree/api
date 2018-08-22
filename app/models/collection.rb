@@ -16,7 +16,6 @@ class Collection < ApplicationRecord
     count = options[:count] || 6
     is_city_scope = options[:is_city_scope]
     location = options[:location]
-    location_information = options[:location_information]
 
     listings = Location.listings.joins(
       "INNER JOIN listing_tags ON listings.id = listing_tags.listing_id"
@@ -28,7 +27,6 @@ class Collection < ApplicationRecord
       is_city_scope: is_city_scope,
       results: listings,
       location: location,
-      location_information: location_information,
     })
 
     if search_listings

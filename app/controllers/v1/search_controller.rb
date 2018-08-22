@@ -63,7 +63,6 @@ module V1
       located_results = Search.by_location({
         results: results,
         location: location,
-        location_information: location_information
       })
 
       if located_results
@@ -101,8 +100,17 @@ module V1
     end
 
     def locations
-      latlng = [location_information[:latitude], location_information[:longitude]]
+      ip_latlng = [ip_location_information[:latitude], ip_location_information[:longitude]]
+
       query = params[:query]
+      lat = params[:lat]
+      lng = params[:lng]
+
+      if lat and lng
+        latlng = [lat, lng]
+      else
+        latlng = ip_latlng
+      end
 
       results = DirectoryLocation.select(:name)
 
