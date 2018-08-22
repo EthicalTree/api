@@ -45,7 +45,7 @@ module V1
 
       if claim == true
         if ['pending_verification', 'claimed'].include? @listing.claim_status
-          @listing.errors.add(:base, 'Sorry, this listing has already been claimed.')
+          raise Exceptions::BadRequest.new('Sorry, this listing has already been claimed.')
         else
           @listing.owner = current_user
 

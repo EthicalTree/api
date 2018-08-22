@@ -1,4 +1,33 @@
-<p>Thanks for claiming your listing!</p>
+<p>Hi <%= @user.display_name %>,</p>
+
+<p>Congratulations, you’ve successfully claimed <%= @listing.title %>!</p>
+
+<p>
+  If you haven’t already done so, click below to edit your
+  business page details and images. EthicalTree prioritizes
+  up-to-date businesses in search results, and users are more
+  likely to visit your business and enjoy their experience
+  if they see accurate information upfront. Verified and
+  updated business pages receive 3.2x more traffic at no
+  additional cost.
+</p>
+
+<p>
+  <a href="<%= Links.listing(@listing) %>">Click here to edit your page</a>
+</p>
+
+<p>
+  Interested in converting more EthicalTree users into
+  <%= @listing.title %> customers? We offer very affordable
+  advertising packages. Businesses on our Standard Package
+  receive an average of over 200 customer leads every month!
+</p>
+
+<p>
+  Please email
+  <a href="mailto:clientcare@ethicaltree.com">clientcare@ethicaltree.com</a>
+  to learn more about how we can help your business reach new loyal customers.
+</p>
 
 <p>Sincerely,</p>
 <p>EthicalTree</p>

@@ -3,10 +3,6 @@ class APIController < ActionController::API
   include ExceptionHandler
   include Knock::Authenticable
 
-  def not_found
-    render status: 404
-  end
-
   def remote_ip
     if Rails.env == 'development'
       Rails.cache.fetch('development/ip_address') do
@@ -35,7 +31,7 @@ class APIController < ActionController::API
 
   def ensure_admin
     if !current_user || !current_user.admin?
-      raise ApplicationController::NotAuthorized
+      raise Exceptions::NotAuthorized
     end
   end
 end

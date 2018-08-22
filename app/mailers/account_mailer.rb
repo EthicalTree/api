@@ -13,7 +13,7 @@ class AccountMailer < ApplicationMailer
   def listing_claimed user, listing
     @user = user
     @listing = listing
-    mail(to: @user.email, subject: 'Thanks for claiming your listing')
+    mail(to: @user.email, subject: "Claim Success - #{listing.title}")
   end
 
 end
