@@ -16,4 +16,16 @@ class Links
     "#{Links.listing(listing)}?claim=true&claimId=#{listing.claim_id}"
   end
 
+  def self.ga options
+    query = {
+      v: 1,
+      tid: Rails.application.secrets[:ga_code],
+      t: 'event',
+      ec: 'email',
+      ea: 'open',
+    }.merge(options)
+
+    "https://www.google-analytics.com/collect?#{query.to_query}"
+  end
+
 end

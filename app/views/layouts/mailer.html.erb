@@ -10,4 +10,8 @@
   <body>
     <%= yield %>
   </body>
+
+  <% if @ga_link.present? %>
+    <img src="<%= @ga_link %>" />
+  <% end %>
 </html>

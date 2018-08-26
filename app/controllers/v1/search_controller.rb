@@ -60,7 +60,7 @@ module V1
         'isnull(plans.listing_id) ASC'
       )
 
-      located_results = Search.by_location({
+      located_results = Search::by_location({
         results: results,
         location: location,
       })

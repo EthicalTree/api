@@ -13,7 +13,15 @@ class AccountMailer < ApplicationMailer
   def listing_claimed user, listing
     @user = user
     @listing = listing
-    mail(to: @user.email, subject: "Claim Success - #{listing.title}")
+    subject = "Claim Success - #{listing.title}"
+
+    @ga_link = Links.ga({
+      uid: @user.id,
+      dp: '/email/listing_claimed',
+      dt: subject,
+    })
+
+    mail(to: @user.email, subject: subject)
   end
 
 end

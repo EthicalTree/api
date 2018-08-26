@@ -25,7 +25,7 @@ class Collection < ApplicationRecord
       'listing_tags.tag_id': tag_id
     )
 
-    search_listings = Search.by_location({
+    search_listings = Search::by_location({
       is_city_scope: is_city_scope,
       results: listings,
       location: location,

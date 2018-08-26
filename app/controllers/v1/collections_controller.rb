@@ -66,7 +66,7 @@ module V1
         )
       end
 
-      search_listings = Search.by_location({
+      search_listings = Search::by_location({
         is_city_scope: true,
         location: location,
         radius: 50,
