@@ -33,9 +33,9 @@ module EthicalTree
 
     # Roles and Policies
     config.autoload_paths += %W(#{config.root}/app/policies #{config.root}/app/roles)
+    config.autoload_paths += %W(#{config.root}/app/lib)
 
     # Automatically convert case
     config.middleware.use OliveBranch::Middleware
-
   end
 end

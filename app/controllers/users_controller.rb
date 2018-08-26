@@ -4,6 +4,7 @@ class UsersController < APIController
   def create
     claim_listing_slug = params[:claim_listing_slug]
     claim_id = params[:claim_id]
+    errors = []
 
     if @user = User.where(email: user_params[:email]).first
       @user.attributes = {password: '', password_confirmation: '', password_digest: ''}
@@ -17,6 +18,8 @@ class UsersController < APIController
       if listing = Listing.find_by(slug: claim_listing_slug)
         if ['pending_verification', 'claimed'].include? listing.claim_status
           raise Exceptions::BadRequest.new('Sorry, this listing has already been claimed.')
+        elsif !user_params[:contact_number].present?
+          errors.push('Contact Number must be present')
         elsif listing.claim_id == claim_id
           # automatically confirm user if they were given the claim_id of the listing
           @user.confirmed_at = DateTime.current
@@ -24,14 +27,17 @@ class UsersController < APIController
       end
     end
 
-    if @user.save
+    if @user.valid? && !errors.present?
+      @user.save
+
       if !@user.confirmed_at
         AccountMailer.confirm_email(@user).deliver_later
       end
 
       render json: {}, status: :ok
     else
-      render json: { errors: @user.errors.full_messages }
+      errors += @user.errors.full_messages
+      render json: { errors: errors }
     end
   end
 
