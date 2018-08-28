@@ -4,12 +4,20 @@ module Export
     def get_possible_fields
       {
         id: 'ID',
+        description: 'Description',
         slug: 'Slug',
         title: 'Title',
         plan_info: ['Plan Type', 'Plan Price', 'Plan Price (Override)'],
-        claim_id: 'Claim ID',
-        claim_url: 'Claim URL',
-        visibility: 'Visibility'
+        claim: ['Claim ID', 'Claim URL', 'Claim Owner'],
+        visibility: 'Visibility',
+        website: 'Website',
+        phone_number: 'Phone Number',
+        tags: 'Tags',
+        address: 'Address',
+        city: 'City',
+        images: 'Images',
+        menu_images: 'Menu Images',
+        facebook_uri: 'Facebook URI'
       }
     end
 
@@ -21,6 +29,10 @@ module Export
 
     def id item
       item.id
+    end
+
+    def description item
+      item.bio
     end
 
     def slug item
@@ -37,20 +49,50 @@ module Export
       if plan
         [plan.type[:name], "#{plan.type[:price]}", "#{plan.price}"]
       else
-        ['', '']
+        ['', '', '']
       end
     end
 
-    def claim_id item
-      item.claim_id
-    end
-
-    def claim_url item
-      item.claim_url
+    def claim item
+      owner = item.owner ? item.owner.display_name_with_email : ''
+      [item.claim_id, item.claim_url, owner]
     end
 
     def visibility item
       item.visibility
     end
+
+    def website item
+      item.website
+    end
+
+    def phone_number item
+      item.phone
+    end
+
+    def tags item
+      item.tags.map {|t| t.hashtag}.join(',')
+    end
+
+    def address item
+      item.address
+    end
+
+    def city item
+      item.city
+    end
+
+    def images item
+      item.images.count
+    end
+
+    def menu_images item
+      item.menu.images.count
+    end
+
+    def facebook_uri item
+      item.facebook_uri
+    end
+
   end
 end
