@@ -21,7 +21,6 @@ class Links
       v: 1,
       tid: Rails.application.secrets[:ga_code],
       t: 'event',
-      ec: 'email',
       ea: 'open',
     }.merge(options)
 

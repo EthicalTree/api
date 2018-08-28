@@ -1,4 +1,4 @@
-<p>Hi <%= @user.display_name %>,</p>
+<p>Hi <%= @user.display_name(only_first: true) %>,</p>
 
 <p>Congratulations, you’ve successfully claimed <%= @listing.title %>!</p>
 

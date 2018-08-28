@@ -47,8 +47,12 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}".strip
   end
 
-  def display_name
-    if full_name.present?
+  def display_name options={}
+    only_first = options[:only_first]
+
+    if only_first && first_name.present?
+      first_name
+    elsif full_name.present?
       full_name
     else
       email

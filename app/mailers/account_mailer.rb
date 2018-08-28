@@ -17,7 +17,7 @@ class AccountMailer < ApplicationMailer
 
     @ga_link = Links.ga({
       uid: @user.id,
-      dp: '/email/listing_claimed',
+      ec: 'ClaimSuccessEmail',
       dt: subject,
     })
 
