@@ -12,6 +12,7 @@ module Export
         visibility: 'Visibility',
         website: 'Website',
         phone_number: 'Phone Number',
+        ethicalities: 'Ethicalities',
         tags: 'Tags',
         address: 'Address',
         city: 'City',
@@ -68,6 +69,10 @@ module Export
 
     def phone_number item
       item.phone
+    end
+
+    def ethicalities item
+      item.ethicalities.map {|e| e.slug }.join(',')
     end
 
     def tags item
