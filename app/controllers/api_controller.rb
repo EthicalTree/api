@@ -25,10 +25,6 @@ class APIController < ActionController::API
     end
   end
 
-  def ip_location_information
-      Session.session_location(remote_ip)
-  end
-
   def ensure_admin
     if !current_user || !current_user.admin?
       raise Exceptions::NotAuthorized

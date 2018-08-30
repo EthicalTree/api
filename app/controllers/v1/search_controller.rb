@@ -100,17 +100,7 @@ module V1
     end
 
     def locations
-      ip_latlng = [ip_location_information[:latitude], ip_location_information[:longitude]]
-
       query = params[:query]
-      lat = params[:lat]
-      lng = params[:lng]
-
-      if lat and lng
-        latlng = [lat, lng]
-      else
-        latlng = ip_latlng
-      end
 
       results = DirectoryLocation.select(:name)
 
@@ -127,8 +117,7 @@ module V1
         )
       end
 
-      results = results.by_distance(origin: latlng).limit(6)
-
+      results = results.limit(6)
       render json: results.as_json, status: :ok
     end
 
