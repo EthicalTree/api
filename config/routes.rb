@@ -13,13 +13,11 @@ Rails.application.routes.draw do
   # API
   namespace :v1 do
     get :search, to: 'search#search'
-    get :locations, to: 'search#locations'
-    post :search_suggestions, to: 'search#suggestions'
 
     resources :ethicalities
     resources :plans
     resources :tags
-    resources :directory_locations
+    resources :directory_locations, path: :locations
 
     resources :collections do
       resources :images

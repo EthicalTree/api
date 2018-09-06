@@ -4,18 +4,24 @@ module Search
   class << self
 
     def find_directory_location location, options={}
-      specific_location = nil
-
       if location.is_a?(Hash)
         return [nil, nil]
+      end
+
+      if location.is_a?(String)
+        location = location.downcase
       end
 
       if !location.present?
         location = 'Toronto'
       end
 
-      # Get a DirectoryLocation object
-      location = location.downcase
+      specific_location = LatLng::parse(location)
+
+      if specific_location
+        location = specific_location
+      end
+
       directory_location = DirectoryLocation.find_by_location(location)
 
       if !directory_location.present?

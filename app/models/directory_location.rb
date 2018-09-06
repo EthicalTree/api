@@ -28,10 +28,14 @@ class DirectoryLocation < ApplicationRecord
   end
 
   def self.find_by_location location
-    if directory_location = DirectoryLocation.find_by('lower(name)=?', location)
+    if location.is_a?(Hash)
+      directory_location = DirectoryLocation.by_distance(origin: [location[:lat], location[:lng]]).first
+    elsif directory_location = DirectoryLocation.find_by(id: location)
+    elsif directory_location = DirectoryLocation.find_by('lower(name)=?', location)
     elsif directory_location = DirectoryLocation.find_by('lower(city)=? AND location_type="city"', location)
     elsif directory_location = DirectoryLocation.find_by('lower(neighbourhood)=? AND location_type="neighbourhood"', location)
     end
+
     directory_location
   end
 
