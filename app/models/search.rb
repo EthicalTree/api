@@ -19,15 +19,13 @@ module Search
       directory_location, latlng_location = DirectoryLocation.find_by_location(location)
 
       if !directory_location.present?
-        location = MapApi.build_from_address(location)
-        city = ''
+        location_obj = MapApi.build_from_address(location)
 
-        if location
-          latlng_location = location[:latlng]
-          city = location[:city]
+        if location_obj
+          latlng_location = location_obj[:latlng]
+          directory_location, _ = DirectoryLocation.find_by_location("#{latlng_location[:lat]},#{latlng_location[:lng]}")
+          directory_location.name = location
         end
-
-        directory_location = DirectoryLocation.find_by_location(city.downcase)
       end
 
       if options[:is_city_scope] && directory_location
