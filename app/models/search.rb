@@ -4,37 +4,35 @@ module Search
   class << self
 
     def find_directory_location location, options={}
-      specific_location = nil
-
       if location.is_a?(Hash)
         return [nil, nil]
+      end
+
+      if location.is_a?(String)
+        location = location.downcase
       end
 
       if !location.present?
         location = 'Toronto'
       end
 
-      # Get a DirectoryLocation object
-      location = location.downcase
-      directory_location = DirectoryLocation.find_by_location(location)
+      directory_location, latlng_location = DirectoryLocation.find_by_location(location)
 
       if !directory_location.present?
-        location = MapApi.build_from_address(location)
-        city = ''
+        location_obj = MapApi.build_from_address(location)
 
-        if location
-          specific_location = location[:latlng]
-          city = location[:city]
+        if location_obj
+          latlng_location = location_obj[:latlng]
+          directory_location, _ = DirectoryLocation.find_by_location("#{latlng_location[:lat]},#{latlng_location[:lng]}")
+          directory_location.name = location
         end
-
-        directory_location = DirectoryLocation.find_by_location(city.downcase)
       end
 
       if options[:is_city_scope] && directory_location
         directory_location = directory_location.get_city
       end
 
-      [directory_location, specific_location]
+      [directory_location, latlng_location]
     end
 
     def by_location options={}
@@ -43,18 +41,12 @@ module Search
       radius = options[:radius] || 50
       results = options[:results]
 
-      # if location is a latlng string then use it as a specific location
-      specific_location = LatLng::parse(location)
-      directory_location = nil
+      directory_location, latlng_location = Search::find_directory_location(location, {
+        is_city_scope: is_city_scope
+      })
 
-      if !specific_location
-        directory_location, specific_location = Search::find_directory_location(location, {
-          is_city_scope: is_city_scope
-        })
-      end
-
-      if specific_location.present?
-        coords = [specific_location[:lat], specific_location[:lng]]
+      if latlng_location.present?
+        coords = [latlng_location[:lat], latlng_location[:lng]]
         results = results.within(radius, units: :kms, origin: coords).reorder('distance ASC')
       else
         if location.is_a?(Hash)

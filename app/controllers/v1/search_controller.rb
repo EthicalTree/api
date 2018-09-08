@@ -99,44 +99,6 @@ module V1
       render json: result_json, status: :ok
     end
 
-    def locations
-      query = params[:query]
-
-      results = DirectoryLocation.select(:name)
-
-      if query.present?
-        results = results.where(
-          "name LIKE :query",
-          query: "%#{query}%"
-        ).order(
-          "CASE
-            WHEN name LIKE #{Listing.connection.quote("#{query}%")} THEN 1
-            WHEN name LIKE #{Listing.connection.quote("%#{query}%")} THEN 3
-            ELSE 2
-          END, name"
-        )
-      end
-
-      results = results.limit(6)
-      render json: results.as_json, status: :ok
-    end
-
-    def suggestions
-      query = params[:query]
-
-      ethicalities = Ethicality.where(
-        "name LIKE :query",
-        query: "%#{query}%"
-      )
-
-      results = [{
-        title: 'Ethical Preference',
-        suggestions: ethicalities.map {|e| e.as_json.merge({ type: 'ethicality' })}
-      }]
-
-      render json: results, status: :ok
-    end
-
     private
 
     def search_params
