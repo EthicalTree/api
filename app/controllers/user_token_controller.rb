@@ -1,7 +1,7 @@
 class UserTokenController < Knock::AuthTokenController
   def create
     if !entity.confirmed_at
-      render json: { errors: ["User has not confirmed their email address"] }
+      render json: { error: 'user-not-confirmed' }
     else
       render json: auth_token, status: :created
     end

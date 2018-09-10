@@ -42,7 +42,10 @@ class UsersController < APIController
   end
 
   def confirm_email
-    @user = User.find_by confirm_token: params[:token]
+    @user = User.find_by({
+      email: params[:email].gsub(' ', '+'),
+      confirm_token: params[:token]
+    })
 
     if @user
       @user.update confirmed_at: DateTime.current
