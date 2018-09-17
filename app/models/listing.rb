@@ -112,7 +112,8 @@ class Listing < ApplicationRecord
           methods: [
             :label,
             :open_at_24_hour,
-            :closed_at_24_hour
+            :closed_at_24_hour,
+            :hours
           ]
         }},
       ],

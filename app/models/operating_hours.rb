@@ -14,12 +14,17 @@ class OperatingHours < ApplicationRecord
     close.strftime('%H:%M')
   end
 
+  def hours
+    "#{open.strftime('%I:%M %P')} - #{close.strftime('%I:%M %P')}"
+  end
+
   def as_json_full
     as_json({
       methods: [
         :label,
         :open_at_24_hour,
-        :closed_at_24_hour
+        :closed_at_24_hour,
+        :hours
       ]
     })
   end
