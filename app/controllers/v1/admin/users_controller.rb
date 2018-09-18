@@ -51,14 +51,18 @@ module V1
       end
 
       def destroy
-
+        authorize! :destroy, User
+        @user = User.find params[:id]
+        @user.delete
+        render json: {}
       end
 
       private
 
       def user_params
         params.require(:user).permit(
-          :admin
+          :admin,
+          :confirmed_at
         )
       end
     end
