@@ -61,8 +61,7 @@ module V1
 
       def user_params
         params.require(:user).permit(
-          :admin,
-          :confirmed_at
+          :admin
         )
       end
     end
