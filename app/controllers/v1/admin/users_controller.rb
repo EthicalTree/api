@@ -51,7 +51,10 @@ module V1
       end
 
       def destroy
-
+        authorize! :destroy, User
+        @user = User.find params[:id]
+        @user.delete
+        render json: {}
       end
 
       private
