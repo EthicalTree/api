@@ -23,6 +23,8 @@ module V1
       @ethicalities = search_params[:ethicalities].split(',')
       @open_now = JSON.parse(search_params[:open_now])
 
+      @regex_query = build_regex_query(@query)
+
       fields = [
         :id,
         :lat,
@@ -130,12 +132,12 @@ module V1
     end
 
     def build_tag_join
-      if @query.present?
-        query = Listing.connection.quote("%#{@query}%")
+      if @query.present? and @regex_query.present?
+        query = Listing.connection.quote(@regex_query)
 
         "LEFT JOIN listing_tags ON listing_tags.listing_id = listings.id
          LEFT JOIN tags ON tags.id = listing_tags.tag_id AND
-          tags.hashtag LIKE #{query}
+          tags.hashtag RLIKE #{query}
         "
       end
     end
@@ -149,16 +151,16 @@ module V1
     end
 
     def build_likeness_statement
-      if @query.present?
-        query = Listing.connection.quote("%#{@query}%")
+      if @query.present? and @regex_query.present?
+        query = Listing.connection.quote(@regex_query)
 
         "CASE
           WHEN (
-            LOWER(listings.title) LIKE #{query} OR
-            LOWER(listings.bio) LIKE #{query}
+            LOWER(listings.title) RLIKE #{query} OR
+            LOWER(listings.bio) RLIKE #{query}
           ) AND plans.listing_id IS NOT NULL THEN 4
-          WHEN LOWER(listings.title) LIKE #{query} THEN 3
-          WHEN LOWER(listings.bio) LIKE #{query} THEN 2
+          WHEN LOWER(listings.title) RLIKE #{query} THEN 3
+          WHEN LOWER(listings.bio) RLIKE #{query} THEN 2
           ELSE 0
         END as 'likeness'"
       else
@@ -185,6 +187,10 @@ module V1
         today: Timezone.now('America/New_York').strftime('%A').downcase,
         now: Timezone.now('America/New_York')
       )
+    end
+
+    def build_regex_query(query)
+      "(#{query.tr(' ', '|')})"
     end
   end
 end
