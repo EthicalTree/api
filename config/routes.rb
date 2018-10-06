@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     resources :ethicalities
     resources :plans
     resources :tags
+    resources :seo_paths, only: %i{index}
     resources :directory_locations, path: :locations
 
     resources :collections do
@@ -41,7 +42,9 @@ Rails.application.routes.draw do
       resources :listings
       resources :collections
       resources :locations
+      resources :seo_paths
       resources :exports, only: %i{index}
+      resources :imports, only: %i{create}
     end
   end
 

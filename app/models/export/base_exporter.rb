@@ -1,8 +1,5 @@
 module Export
   class BaseExporter
-    attr_accessor :FIELDS
-    @FIELDS = {}
-
     def initialize format, fields
       @format = format
       @fields = fields
