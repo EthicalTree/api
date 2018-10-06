@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_17_211354) do
+ActiveRecord::Schema.define(version: 2018_10_06_104353) do
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "slug"
@@ -182,6 +182,8 @@ ActiveRecord::Schema.define(version: 2018_08_17_211354) do
     t.integer "listing_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.time "open_time"
+    t.time "close_time"
     t.index ["listing_id"], name: "fk_rails_dc4815c034"
   end
 

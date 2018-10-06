@@ -180,8 +180,8 @@ module V1
       # once we have cities outside the eastern timezone
       collection.where(
         "operating_hours.day = :today AND
-            operating_hours.open <= :now AND
-            operating_hours.close > :now",
+            operating_hours.open_time <= :now AND
+            operating_hours.close_time > :now",
         today: Timezone.now('America/New_York').strftime('%A').downcase,
         now: Timezone.now('America/New_York')
       )

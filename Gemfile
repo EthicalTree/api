@@ -46,6 +46,7 @@ group :development, :test do
   gem 'byebug'
   gem 'pry-byebug', require: false
   gem 'simplecov'
+  gem 'ruby-progressbar'
 end
 
 group :development do
