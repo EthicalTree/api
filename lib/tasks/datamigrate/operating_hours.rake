@@ -9,19 +9,18 @@ namespace :operating_hours do
     operating_hours.each do |oh|
       if !oh.listing_id
         oh.delete
-        break
+      else
+        differential = oh.updated_at.dst? ? 5.hours : 4.hours
+
+        oh.open_time = oh.open - differential
+        oh.close_time = oh.close - differential
+
+        if !oh.save
+          puts "#{oh.listing.slug}: #{oh.errors.full_messages}"
+        end
+
+        progress.increment
       end
-
-      differential = oh.updated_at.dst? ? 5.hours : 4.hours
-
-      oh.open_time = oh.open - differential
-      oh.close_time = oh.close - differential
-
-      if !oh.save
-        puts "#{oh.listing.slug}: #{oh.errors.full_messages}"
-      end
-
-      progress.increment
     end
   end
 end
