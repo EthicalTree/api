@@ -34,9 +34,14 @@ module V1
 
       def update
         authorize! :update, User
+        verified = params[:user][:verified]
 
         @user = User.find params[:id]
         @user.assign_attributes user_params
+
+        if verified == true || verified == false
+          @user.confirmed_at = verified ? DateTime.now : nil
+        end
 
         if @user.save
           render json: {}
@@ -46,7 +51,10 @@ module V1
       end
 
       def destroy
-
+        authorize! :destroy, User
+        @user = User.find params[:id]
+        @user.delete
+        render json: {}
       end
 
       private
