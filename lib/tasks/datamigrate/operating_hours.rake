@@ -9,7 +9,7 @@ namespace :operating_hours do
     operating_hours.each do |oh|
       if !oh.listing_id
         oh.delete
-        return
+        break
       end
 
       differential = oh.updated_at.dst? ? 5.hours : 4.hours
