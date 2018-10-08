@@ -17,8 +17,8 @@ module V1
         value["hours"].each do |v|
           hour = OperatingHours.new do |oh|
             oh.day = day
-            oh.open = Time.parse(v[:open_24_hour] + ' UTC')
-            oh.close = Time.parse(v[:close_24_hour] + ' UTC')
+            oh.open_time = Time.parse(v[:open_24_hour] + ' UTC')
+            oh.close_time = Time.parse(v[:close_24_hour] + ' UTC')
             oh.listing_id = @listing.id
           end
 
