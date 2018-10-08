@@ -1,7 +1,7 @@
 class Meta
 
-  def self.get_meta_tags url
-    @url = url
+  def self.get_meta_tags protocol, webhost, path
+    @url = "#{protocol}://#{webhost}/#{path}"
 
     begin
       begin
@@ -55,26 +55,53 @@ class Meta
       })
     end
 
-    generate_meta(meta)
+    generate_meta(meta, path)
   end
 
   private
 
-  def self.generate_meta item
-      item.each {|k, v| item[k] = CGI::escapeHTML(v || '')}
+  def self.match_seo_path path
+    base_path = path.gsub(/\?.*/, '').downcase
 
+    seo_path = (
+      SeoPath.where('lower(path) = ?', base_path).first ||
+      SeoPath.where('lower(path) = ?', base_path.chomp('/')).first
+    )
+
+    if seo_path.present?
+      seo_path
+    else
+      nil
+    end
+  end
+
+  def self.generate_meta item, path
+
+    if seo_match = match_seo_path(path)
+      seo_meta = "
+        <title>#{seo_match.title}</title>
+        <meta name=\"description\" content=\"#{seo_match.description}\">
       "
+    else
+      seo_meta = "
         <meta name=\"description\" content=\"#{item[:description]}\">
-        <meta property=\"og:url\" content=\"#{@url}\">
-        <meta property=\"og:title\" content=\"#{item[:name]}\">
-        <meta property=\"og:description\" content=\"#{item[:description]}\">
-        <meta property=\"og:image\" content=\"#{item[:image]}\">
-        <meta property=\"og:image:secure_url\" content=\"#{item[:image]}\">
-        <meta property=\"og:image:width\" content=\"#{item[:image_width]}\">
-        <meta property=\"og:image:height\" content=\"#{item[:image_height]}\">
-        <meta property=\"og:site_name\" content=\"EthicalTree\">
-        <meta name=\"twitter:card\" content=\"summary_large_image\">
-        <meta name=\"fb:app_id\" content=\"#{Rails.application.secrets[:fb_app_id]}\">
       "
+    end
+
+    item.each {|k, v| item[k] = CGI::escapeHTML(v || '')}
+
+    "
+      #{seo_meta}
+      <meta property=\"og:url\" content=\"#{@url}\">
+      <meta property=\"og:title\" content=\"#{item[:name]}\">
+      <meta property=\"og:description\" content=\"#{item[:description]}\">
+      <meta property=\"og:image\" content=\"#{item[:image]}\">
+      <meta property=\"og:image:secure_url\" content=\"#{item[:image]}\">
+      <meta property=\"og:image:width\" content=\"#{item[:image_width]}\">
+      <meta property=\"og:image:height\" content=\"#{item[:image_height]}\">
+      <meta property=\"og:site_name\" content=\"EthicalTree\">
+      <meta name=\"twitter:card\" content=\"summary_large_image\">
+      <meta name=\"fb:app_id\" content=\"#{Rails.application.secrets[:fb_app_id]}\">
+    "
   end
 end

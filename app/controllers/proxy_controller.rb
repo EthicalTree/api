@@ -9,7 +9,7 @@ class ProxyController < APIController
 
     body = response.body.gsub(
       '<meta name="et:opengraph">',
-      Meta.get_meta_tags("#{protocol}://#{webhost}/#{path}")
+      Meta.get_meta_tags(protocol, webhost, path)
     )
 
     render html: body.html_safe

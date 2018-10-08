@@ -21,6 +21,7 @@ class AccessPolicy
       can :manage, Tag
       can :manage, Collection
       can :manage, DirectoryLocation
+      can :manage, SeoPath
     end
 
     role :member, proc { |user| !!user } do
