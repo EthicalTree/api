@@ -33,6 +33,7 @@ gem 'sidekiq-scheduler'
 
 # For data migration
 gem 'php-serialize'
+gem 'ruby-progressbar'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
@@ -46,7 +47,6 @@ group :development, :test do
   gem 'byebug'
   gem 'pry-byebug', require: false
   gem 'simplecov'
-  gem 'ruby-progressbar'
 end
 
 group :development do
