@@ -182,6 +182,8 @@ ActiveRecord::Schema.define(version: 2018_10_04_234955) do
     t.integer "listing_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.time "open_time"
+    t.time "close_time"
     t.index ["listing_id"], name: "fk_rails_dc4815c034"
   end
 

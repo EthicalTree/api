@@ -246,6 +246,7 @@ GEM
     rb-inotify (0.9.10)
       ffi (>= 0.5.0, < 2)
     redis (4.0.1)
+    ruby-progressbar (1.10.0)
     ruby_parser (3.11.0)
       sexp_processor (~> 4.9)
     rufus-scheduler (3.5.0)
@@ -341,6 +342,7 @@ DEPENDENCIES
   rails (= 5.2.0)
   rails-controller-testing
   redis
+  ruby-progressbar
   shoulda
   sidekiq
   sidekiq-scheduler
