@@ -76,8 +76,7 @@ class Meta
   end
 
   def self.generate_meta item, path
-
-    if seo_match = match_seo_path(path)
+    if path.present? && seo_match = match_seo_path(path)
       seo_meta = "
         <title>#{seo_match.title}</title>
         <meta name=\"description\" content=\"#{seo_match.description}\">
