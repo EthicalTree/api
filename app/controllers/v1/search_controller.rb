@@ -19,7 +19,7 @@ module V1
         }
       end
 
-      @query = search_params[:query].downcase
+      @query = search_params[:query].strip.downcase
       @ethicalities = search_params[:ethicalities].split(',')
       @open_now = JSON.parse(search_params[:open_now])
 
