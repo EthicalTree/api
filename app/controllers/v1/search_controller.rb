@@ -36,6 +36,7 @@ module V1
         'listings.bio',
         build_hashtag_statement,
         build_ethicality_statement,
+        build_exact_likeness_statement,
         build_likeness_statement
       ].compact
 
@@ -43,7 +44,6 @@ module V1
         'LEFT JOIN operating_hours ON operating_hours.listing_id = locations.listing_id',
         "LEFT JOIN plans ON plans.listing_id = locations.listing_id",
         build_tag_join,
-        build_ethicality_join,
       ].compact
 
       results = Location.listings.select(fields).joins(joins).where.not(
@@ -56,10 +56,11 @@ module V1
       ).distinct(
         'listings.id'
       ).order(
+        'exact_likeness DESC',
         'eth_total DESC',
         'likeness DESC',
         'hashtag_count DESC',
-        'isnull(plans.listing_id) ASC'
+        'isnull(plans.listing_id) ASC',
       )
 
       located_results = Search::by_location({
@@ -117,50 +118,65 @@ module V1
       )
     end
 
-    def build_ethicality_join
-      ethicalities = @ethicalities.map do |e|
-        e = Ethicality.connection.quote(e)
-      end.join(',')
-
-      if @ethicalities.present?
-        "INNER JOIN listing_ethicalities ON listing_ethicalities.listing_id = listings.id
-         INNER JOIN ethicalities
-          ON listing_ethicalities.ethicality_id = ethicalities.id
-          AND ethicalities.slug IN (#{ethicalities})
-        "
-      end
-    end
-
     def build_tag_join
       if @query.present? and @regex_query.present?
-        query = Listing.connection.quote(@regex_query)
+        query = Listing.connection.quote(@query)
 
         "LEFT JOIN listing_tags ON listing_tags.listing_id = listings.id
          LEFT JOIN tags ON tags.id = listing_tags.tag_id AND
-          tags.hashtag RLIKE #{query}
+          tags.hashtag LIKE #{query}
         "
       end
     end
 
     def build_ethicality_statement
+      ethicalities = @ethicalities.map do |e|
+        e = Ethicality.connection.quote(e)
+      end.join(',')
+
       if @ethicalities.present?
-        "COUNT(ethicalities.slug) as 'eth_total'"
+        "(
+          SELECT COUNT(*)
+          FROM listing_ethicalities
+          INNER JOIN ethicalities
+            ON listing_ethicalities.ethicality_id = ethicalities.id
+            AND ethicalities.slug IN (#{ethicalities})
+          WHERE listing_ethicalities.listing_id = listings.id
+         ) as 'eth_total'"
       else
         "1 as 'eth_total'"
       end
     end
 
-    def build_likeness_statement
-      if @query.present? and @regex_query.present?
-        query = Listing.connection.quote(@regex_query)
+    def build_exact_likeness_statement
+      if @query.present?
+        query = Listing.connection.quote("%#{@query}%")
 
         "CASE
           WHEN (
-            LOWER(listings.title) RLIKE #{query} OR
-            LOWER(listings.bio) RLIKE #{query}
-          ) AND plans.listing_id IS NOT NULL THEN 4
-          WHEN LOWER(listings.title) RLIKE #{query} THEN 3
-          WHEN LOWER(listings.bio) RLIKE #{query} THEN 2
+            LOWER(listings.title) LIKE #{query} OR
+            LOWER(listings.bio) LIKE #{query}
+          ) AND plans.listing_id IS NOT NULL THEN 6
+          WHEN LOWER(listings.title) LIKE #{query} THEN 2
+          WHEN LOWER(listings.bio) LIKE #{query} THEN 1
+          ELSE 0
+        END as 'exact_likeness'"
+      else
+        "1 as 'exact_likeness'"
+      end
+    end
+
+    def build_likeness_statement
+      if @regex_query.present?
+        regex_query = Listing.connection.quote(@regex_query)
+
+        "CASE
+          WHEN (
+            LOWER(listings.title) RLIKE #{regex_query} OR
+            LOWER(listings.bio) RLIKE #{regex_query}
+          ) AND plans.listing_id IS NOT NULL THEN 5
+          WHEN LOWER(listings.title) RLIKE #{regex_query} THEN 2
+          WHEN LOWER(listings.bio) RLIKE #{regex_query} THEN 1
           ELSE 0
         END as 'likeness'"
       else
