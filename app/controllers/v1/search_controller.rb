@@ -201,7 +201,7 @@ module V1
             operating_hours.open_time <= :now AND
             operating_hours.close_time > :now",
         today: Timezone.now('America/New_York').strftime('%A').downcase,
-        now: Timezone.now('America/New_York')
+        now: Timezone.now('America/New_York').time
       )
     end
 
