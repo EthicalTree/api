@@ -6,7 +6,7 @@ class ProxyController < APIController
 
     path = params[:url]
 
-    if path.first != '/'
+    if path.present? && path.first != '/'
       path = "/#{path}"
     end
 
