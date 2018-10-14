@@ -63,6 +63,10 @@ class Meta
   def self.match_seo_path path
     base_path = path.gsub(/\?.*/, '').downcase
 
+    if base_path.first != '/'
+      base_path = "/#{base_path}"
+    end
+
     seo_path = (
       SeoPath.where('lower(path) = ?', base_path).first ||
       SeoPath.where('lower(path) = ?', base_path.chomp('/')).first

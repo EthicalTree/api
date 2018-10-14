@@ -5,6 +5,11 @@ class ProxyController < APIController
     webhost = Rails.application.secrets[:webhost]
 
     path = params[:url]
+
+    if path.first != '/'
+      path = "/#{path}"
+    end
+
     response = HTTParty.get("#{protocol}://#{proxyhost}")
 
     body = response.body.gsub(
