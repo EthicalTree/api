@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_04_234955) do
+ActiveRecord::Schema.define(version: 2018_10_14_190231) do
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "slug"
@@ -80,6 +80,7 @@ ActiveRecord::Schema.define(version: 2018_10_04_234955) do
     t.string "icon_key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["slug"], name: "ETHICALITY_SLUG"
   end
 
   create_table "images", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -142,6 +143,8 @@ ActiveRecord::Schema.define(version: 2018_10_04_234955) do
     t.string "facebook_uri"
     t.string "claim_id"
     t.integer "claim_status", default: 0
+    t.index ["bio"], name: "index_listings_on_bio", type: :fulltext
+    t.index ["title"], name: "index_listings_on_title", type: :fulltext
   end
 
   create_table "locations", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
@@ -210,6 +213,7 @@ ActiveRecord::Schema.define(version: 2018_10_04_234955) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "use_type", default: 0
+    t.index ["hashtag"], name: "index_tags_on_hashtag", type: :fulltext
   end
 
   create_table "users", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

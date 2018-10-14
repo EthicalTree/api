@@ -1,7 +1,6 @@
 class Listing < ApplicationRecord
   include Accessible
   include HasImages
-
   enum visibility: [:published, :unpublished]
   enum claim_status: [:unclaimed, :pending_verification, :claimed]
 
@@ -177,7 +176,6 @@ class Listing < ApplicationRecord
       ]
     })
   end
-
 
   private
 

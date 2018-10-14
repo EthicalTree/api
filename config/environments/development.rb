@@ -55,4 +55,9 @@ Rails.application.configure do
       resource '*', :headers => :any, :methods => [:get, :post, :patch, :put, :delete, :options]
     end
   end
+
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.bullet_logger = true
+  end
 end

@@ -17,8 +17,6 @@ module V1
         render json: {
           listings: listings.map {|l| l.as_json_search},
         }
-      else
-
       end
     end
 

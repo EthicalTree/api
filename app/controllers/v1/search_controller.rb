@@ -42,11 +42,13 @@ module V1
 
       joins = [
         'LEFT JOIN operating_hours ON operating_hours.listing_id = locations.listing_id',
-        "LEFT JOIN plans ON plans.listing_id = locations.listing_id",
+        'LEFT JOIN plans ON plans.listing_id = locations.listing_id',
         build_tag_join,
       ].compact
 
-      results = Location.listings.select(fields).joins(joins).where.not(
+      results = Location.listings.select(
+        fields
+      ).joins(joins).where.not(
         'locations.lat': nil,
         'locations.lng': nil,
         'locations.listing_id': nil
@@ -92,7 +94,7 @@ module V1
       results = results.page(page).per(12)
 
       result_json = {
-        listings: results.map{|l| l.listing.as_json_search},
+        listings: results.map {|l| l.listing.as_json_search},
         located: located,
         current_page: page,
         matches: results_that_match.length,
@@ -120,11 +122,11 @@ module V1
 
     def build_tag_join
       if @query.present? and @regex_query.present?
-        query = Listing.connection.quote(@query)
+        regex_query = Listing.connection.quote(@regex_query)
 
         "LEFT JOIN listing_tags ON listing_tags.listing_id = listings.id
          LEFT JOIN tags ON tags.id = listing_tags.tag_id AND
-          tags.hashtag LIKE #{query}
+          tags.hashtag RLIKE #{regex_query}
         "
       end
     end
@@ -156,7 +158,7 @@ module V1
           WHEN (
             LOWER(listings.title) LIKE #{query} OR
             LOWER(listings.bio) LIKE #{query}
-          ) AND plans.listing_id IS NOT NULL THEN 6
+          ) AND plans.listing_id IS NOT NULL THEN 3
           WHEN LOWER(listings.title) LIKE #{query} THEN 2
           WHEN LOWER(listings.bio) LIKE #{query} THEN 1
           ELSE 0
@@ -167,16 +169,16 @@ module V1
     end
 
     def build_likeness_statement
-      if @regex_query.present?
-        regex_query = Listing.connection.quote(@regex_query)
+      if @query.present?
+        query = Listing.connection.quote(@query)
 
         "CASE
           WHEN (
-            LOWER(listings.title) RLIKE #{regex_query} OR
-            LOWER(listings.bio) RLIKE #{regex_query}
-          ) AND plans.listing_id IS NOT NULL THEN 5
-          WHEN LOWER(listings.title) RLIKE #{regex_query} THEN 2
-          WHEN LOWER(listings.bio) RLIKE #{regex_query} THEN 1
+            MATCH (listings.title) AGAINST (#{query}) OR
+            MATCH (listings.bio) AGAINST (#{query})
+          ) AND plans.listing_id IS NOT NULL THEN 3
+          WHEN MATCH (listings.title) AGAINST (#{query}) THEN 2
+          WHEN MATCH (listings.bio) AGAINST (#{query}) THEN 1
           ELSE 0
         END as 'likeness'"
       else
