@@ -1,11 +1,26 @@
 module V1
   class CollectionsController < APIController
     def index
-      location = params[:location]
+      location_id = params[:location]
       page = params[:page] || 1
       where = params[:where] || ''
 
       results = Collection.where({ hidden: false }).order(:order)
+
+      if location_id.present?
+        directory_location, _ = Search.find_directory_location(
+          location_id,
+          is_city_scope: true
+        )
+
+        results = results.joins([
+          'INNER JOIN listing_tags ON listing_tags.tag_id = collections.tag_id',
+          "INNER JOIN listings ON (
+            listing_tags.listing_id = listings.id AND
+            listings.directory_location_id = #{directory_location.id}
+          )",
+        ])
+      end
 
       if where.present?
         results = results.where({ location: where })
@@ -25,12 +40,12 @@ module V1
           if cl.featured
             json[:listings] = Plan.featured_listings({
               count: 6,
-              location: location,
+              location: location_id,
               is_city_scope: true
             }).map {|l| l.as_json_search}
           else
             json[:listings] = cl._listings({
-              location: location,
+              location: location_id,
               is_city_scope: true
             }).map {|l| l.listing.as_json_search}
           end
@@ -77,7 +92,7 @@ module V1
         listings = search_listings
       end
 
-      listings = listings.distinct.page(page).per(18)
+      listings = listings.distinct.page(page).per(24)
 
       render json: {
         name: collection.name,

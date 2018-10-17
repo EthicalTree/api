@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_14_190231) do
+ActiveRecord::Schema.define(version: 2018_10_16_234810) do
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "slug"
@@ -143,7 +143,9 @@ ActiveRecord::Schema.define(version: 2018_10_14_190231) do
     t.string "facebook_uri"
     t.string "claim_id"
     t.integer "claim_status", default: 0
+    t.bigint "directory_location_id"
     t.index ["bio"], name: "index_listings_on_bio", type: :fulltext
+    t.index ["directory_location_id"], name: "index_listings_on_directory_location_id"
     t.index ["title"], name: "index_listings_on_title", type: :fulltext
   end
 
@@ -238,6 +240,7 @@ ActiveRecord::Schema.define(version: 2018_10_14_190231) do
   add_foreign_key "listing_images", "listings"
   add_foreign_key "listing_tags", "listings"
   add_foreign_key "listing_tags", "tags"
+  add_foreign_key "listings", "directory_locations"
   add_foreign_key "locations", "listings"
   add_foreign_key "menu_images", "images"
   add_foreign_key "menu_images", "menus"

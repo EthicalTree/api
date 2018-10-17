@@ -18,6 +18,7 @@ class Listing < ApplicationRecord
   has_many :operating_hours, class_name: 'OperatingHours'
 
   belongs_to :owner, foreign_key: :owner_id, class_name: 'User', optional: true
+  belongs_to :directory_location, foreign_key: :directory_location_id, class_name: 'DirectoryLocation', optional: true
 
   before_validation :ensure_slug
   before_save :lower_website
@@ -78,20 +79,12 @@ class Listing < ApplicationRecord
   end
 
   def city
-    location = locations.first
-
-    if location
-      city = location.city || ''
-      city.downcase
-    else
-      ''
-    end
+    if directory_location then directory_location.city else "" end
   end
 
   def location
     locations.first
   end
-
 
   def as_json_full
     # make sure a menu is created if it doesn't exist
