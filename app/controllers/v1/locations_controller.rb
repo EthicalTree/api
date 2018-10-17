@@ -16,7 +16,17 @@ module V1
         DirectoryLocation.create_locations location.lat, location.lng
         location.determine_location_details
 
+        if location.city.present?
+          directory_location, _ = Search.find_directory_location(
+            location.city,
+            is_city_scope: true
+          )
+
+          @listing.directory_location = directory_location
+        end
+
         @listing.locations = [location]
+        @listing.save
 
         render json: { locations: @listing.locations.as_json }, status: :ok
       else
