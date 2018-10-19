@@ -1,6 +1,8 @@
 module V1
   class CollectionsController < APIController
     def index
+      location_join = ""
+
       location_id = params[:location]
       page = params[:page] || 1
       where = params[:where] || ''
@@ -13,14 +15,14 @@ module V1
           is_city_scope: true
         )
 
-        results = results.joins([
-          'INNER JOIN listing_tags ON listing_tags.tag_id = collections.tag_id',
-          "INNER JOIN listings ON (
-            listing_tags.listing_id = listings.id AND
-            listings.directory_location_id = #{directory_location.id}
-          )",
-        ])
+        location_join = "AND listings.directory_location_id = #{directory_location.id}"
       end
+
+      # Filter for collections that actually have listings assigned
+      results = results.joins([
+        'INNER JOIN listing_tags ON listing_tags.tag_id = collections.tag_id',
+        "INNER JOIN listings ON listing_tags.listing_id = listings.id #{location_join}",
+      ])
 
       if where.present?
         results = results.where({ location: where })
@@ -68,18 +70,17 @@ module V1
       end
 
       if collection.featured
-        listings = Location.listings.joins(
-          'JOIN plans ON plans.listing_id = listings.id'
-        ).where(
-          'plans.listing_id IS NOT NULL'
-        )
+        joins = ['INNER JOIN plans p ON p.listing_id = listings.id']
       else
-        listings = Location.listings.joins(
-          "INNER JOIN listing_tags ON listings.id = listing_tags.listing_id"
-        ).where(
-          'listing_tags.tag_id': collection.tag.id
-        )
+        joins = ["
+          INNER JOIN
+            listing_tags ON listings.id = listing_tags.listing_id AND
+            listing_tags.tag_id = #{collection.tag.id}
+          LEFT JOIN plans p ON p.listing_id = listings.id
+        "]
       end
+
+      listings = Location.listings.joins(joins)
 
       search_listings = Search::by_location({
         is_city_scope: true,
@@ -92,7 +93,16 @@ module V1
         listings = search_listings
       end
 
-      listings = listings.distinct.page(page).per(24)
+      listings = listings.group(
+        :id,
+        :listing_id
+      ).order(
+        'isnull(p.listing_id) ASC',
+      ).page(
+        page
+      ).per(24)
+
+      listings.each {|l| puts l.listing_id}
 
       render json: {
         name: collection.name,
