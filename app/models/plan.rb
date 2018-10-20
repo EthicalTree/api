@@ -23,15 +23,7 @@ class Plan < ApplicationRecord
     is_city_scope = options[:is_city_scope]
     location = options[:location]
 
-    listings = Location.includes(
-      listing: [
-        :ethicalities,
-        :images,
-        :locations,
-        :operating_hours,
-        :plan,
-      ]
-    ).listings
+    listings = Location.listings
 
     search_listings = Search::by_location({
       is_city_scope: is_city_scope,
