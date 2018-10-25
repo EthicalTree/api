@@ -26,7 +26,6 @@ class Plan < ApplicationRecord
     listings = Location.includes(
       listing: [
         :ethicalities,
-        :images,
         :locations,
         :operating_hours,
         :plan,
