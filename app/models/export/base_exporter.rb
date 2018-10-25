@@ -1,8 +1,9 @@
 module Export
   class BaseExporter
-    def initialize format, fields
-      @format = format
-      @fields = fields
+    def initialize options
+      @fields = options[:fields]
+      @format = options[:format]
+      @update_progress = options[:update_progress]
       @possible_fields = get_possible_fields
     end
 
@@ -25,8 +26,14 @@ module Export
     def generate_csv fd
       CSV(fd) do |csv|
         csv << get_headers
-        get_items.each do |item|
+        items = get_items
+
+        items.each_with_index do |item, i|
           csv << get_row(item)
+
+          if @update_progress.present?
+            @update_progress.call(i+1, items.length)
+          end
         end
       end
     end

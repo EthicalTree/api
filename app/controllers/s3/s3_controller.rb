@@ -26,7 +26,7 @@ module S3
       end
 
       url = $fog.put_object_url(
-        $s3_images_bucket,
+        $s3_ethicaltree_bucket,
         key,
         15.minutes.from_now.to_time.to_i,
         headers,
