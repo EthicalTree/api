@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_16_234810) do
+ActiveRecord::Schema.define(version: 2018_10_20_154655) do
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "slug"
@@ -92,6 +92,19 @@ ActiveRecord::Schema.define(version: 2018_10_16_234810) do
     t.integer "cover_offset_y", default: 0
     t.integer "width"
     t.integer "height"
+  end
+
+  create_table "jobs", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "job_type"
+    t.integer "status"
+    t.integer "progress"
+    t.text "payload"
+    t.text "error_msg"
+    t.text "error_stack_trace"
+    t.datetime "started_at"
+    t.datetime "finished_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "listing_categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|

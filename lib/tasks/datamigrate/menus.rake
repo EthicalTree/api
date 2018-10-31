@@ -53,7 +53,7 @@ namespace :datamigrate do
       key = "listings/#{listing.slug}/menus/#{listing.menu.id}/images/#{img}"
 
       if !image = Image.find_by(key: key)
-        $fog_images.files.create({
+        $fog_ethicaltree.files.create({
           key: key,
           body: image_file.read,
           public: true
@@ -95,7 +95,7 @@ namespace :datamigrate do
       key = "listings/#{listing.title.parameterize}/menus/#{listing.menu.id}/images/#{img}"
 
       if !image = Image.find_by(key: key)
-        $fog_images.files.create({
+        $fog_ethicaltree.files.create({
           key: key,
           body: image_file.read,
           public: true

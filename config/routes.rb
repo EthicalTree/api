@@ -45,6 +45,7 @@ Rails.application.routes.draw do
       resources :seo_paths
       resources :exports, only: %i{index}
       resources :imports, only: %i{create}
+      resources :jobs, only: %i{show}
     end
   end
 
