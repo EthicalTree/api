@@ -86,6 +86,23 @@ class Listing < ApplicationRecord
     locations.first
   end
 
+  def set_location lat, lng
+    location = Location.new lat: lat, lng: lng
+    DirectoryLocation.create_locations lat, lng
+    location.determine_location_details
+
+    if location.city.present?
+      directory_location, _ = Search.find_directory_location(
+        location.city,
+        is_city_scope: true
+      )
+
+      self.directory_location = directory_location
+    end
+
+    self.locations = [location]
+  end
+
   def as_json_full
     # make sure a menu is created if it doesn't exist
     self.menu

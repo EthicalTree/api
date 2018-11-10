@@ -6,8 +6,11 @@ class JobWorker
     job.started_at = Time.now
 
     begin
+      update_progress = lambda {|count, total| job.update_progress(count, total)}
+      update_progress.call(0, 1)
+
       Job.transaction do
-        self.perform_job(job, *args)
+        self.perform_job(job, update_progress, *args)
         job.status = :complete
         job.finished_at = Time.now
       end

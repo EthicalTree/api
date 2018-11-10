@@ -8,8 +8,9 @@ module V1
       def create
         fields = params[:fields].split(',')
         csv = params[:csv]
+        type = params[:type]
 
-        job = Job.start_job(ImportWorker, csv.read(), fields)
+        job = Job.start_job(ImportWorker, csv.read.bytes, fields, type)
 
         render json: job, status: :ok
       end

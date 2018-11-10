@@ -1,11 +1,10 @@
 class ExportWorker < JobWorker
 
-  def perform_job(job, format, fields, type)
-    exporter = Export::Listing.new({
+  def perform_job(job, update_progress, format, fields, type)
+    exporter = Export::new_by_type(type, {
       format: format,
       fields: fields,
-      type: type,
-      update_progress: lambda {|count, total| job.update_progress(count, total)}
+      update_progress: update_progress
     })
 
     file_prefix = "#{type}"

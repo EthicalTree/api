@@ -61,6 +61,7 @@ GEM
       activesupport (>= 3.0.0)
       uniform_notifier (~> 1.11.0)
     byebug (10.0.2)
+    charlock_holmes (0.7.6)
     coderay (1.1.2)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
@@ -315,6 +316,7 @@ DEPENDENCIES
   bcrypt (~> 3.1.7)
   bullet
   byebug
+  charlock_holmes
   daemons
   dalli
   dogapi (~> 1.23.0)

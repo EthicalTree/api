@@ -88,11 +88,11 @@ module Export
     end
 
     def images item
-      item.images.count
+      item.images.map {|i| i.url}.join('|')
     end
 
     def menu_images item
-      item.menu.images.count
+      item.menu.images.map {|i| i.url}.join('|')
     end
 
     def facebook_uri item

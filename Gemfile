@@ -25,6 +25,7 @@ gem 'kaminari'
 gem 'password_strength'
 gem 'access-granted', '~> 1.1.0'
 gem 'olive_branch'
+gem 'charlock_holmes'
 
 gem 'redis'
 gem 'hiredis'
