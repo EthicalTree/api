@@ -1,6 +1,7 @@
 # Defines a location that a user can search for (ie. city, province, county, etc)
 class DirectoryLocation < ApplicationRecord
   validates :name, uniqueness: true
+  has_many :listings
 
   acts_as_mappable
 
@@ -41,6 +42,13 @@ class DirectoryLocation < ApplicationRecord
     end
 
     [directory_location, latlng_location]
+  end
+
+  def self.get_neighborhoods_for_city city
+    DirectoryLocation.where(
+      "city = ? AND location_type = 'neighbourhood'",
+      city
+    ).includes(:listings)
   end
 
   def self.build_location address, type, details

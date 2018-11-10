@@ -1,18 +1,43 @@
+# frozen_string_literal: true
+
 module V1
   class DirectoryLocationsController < APIController
+    def include_neighbourhoods(location)
+      # pass in location hash to populate it with neighbourhoods
+      city = location["city"]
+      results = DirectoryLocation.get_neighborhoods_for_city(city)
+      city_id = DirectoryLocation.find_by(city: city, location_type: 'city').id
+      city_listings = Location.listings.where('directory_location_id = ?', city_id)
+
+      location["neighbourhoods"] = results.map do |location|
+        {
+          id: location.id,
+          name: location.name,
+          listings_count: Search.by_location(
+            results: city_listings,
+            location: location.name
+          ).count
+        }
+      end
+
+      location
+    end
 
     def index
       query = params[:query]
       name = params[:name]
+      with_neighbourhoods = params[:withNeighbourhoods].present?
 
       if name.present?
-        directory_location, _ = Search.find_directory_location(name)
-        render json: directory_location, status: :ok
+        location, = Search.find_directory_location(name)
+        location = location.as_json
+        location = include_neighbourhoods(location) if with_neighbourhoods
+        render json: location, status: :ok
       else
         results = DirectoryLocation.select(:name, :city, :id)
 
         results = results.where(
-          "name LIKE :query",
+          'name LIKE :query',
           query: "%#{query}%"
         ).order(
           "CASE
@@ -27,24 +52,22 @@ module V1
       end
     end
 
-    def create
-
-    end
+    def create; end
 
     def show
       id = params[:id]
-      render json: DirectoryLocation.find(id), status: :ok
+      with_neighbourhoods = params[:withNeighbourhoods].present?
+
+      location = DirectoryLocation.find(id).as_json
+      location = include_neighbourhoods(location) if with_neighbourhoods
+
+      render json: location, status: :ok
     end
 
-    def update
+    def update; end
 
-    end
-
-    def destroy
-
-    end
+    def destroy; end
 
     private
-
   end
 end
