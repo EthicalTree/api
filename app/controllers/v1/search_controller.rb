@@ -1,6 +1,5 @@
 module V1
   class SearchController < APIController
-
     def search
       page = search_params[:page].to_i
       location = search_params[:location]
@@ -10,7 +9,7 @@ module V1
       nelat = search_params[:nelat]
       nelng = search_params[:nelng]
 
-      if [swlat, swlng, nelat, nelng].all? {|p| p.present?}
+      if [swlat, swlng, nelat, nelng].all? { |p| p.present? }
         location = {
           swlat: swlat.to_f,
           swlng: swlng.to_f,
@@ -66,9 +65,9 @@ module V1
       )
 
       located_results = Search::by_location({
-        results: results,
-        location: location,
-      })
+                                              results: results,
+                                              location: location,
+                                            })
 
       if located_results
         located = true
@@ -94,7 +93,7 @@ module V1
       results = results.page(page).per(12)
 
       result_json = {
-        listings: results.map {|l| l.listing.as_json_search},
+        listings: results.map { |l| l.listing.as_json_search },
         located: located,
         current_page: page,
         matches: results_that_match.length,

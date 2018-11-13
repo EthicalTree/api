@@ -1,7 +1,6 @@
 module V1
   module Admin
     class ExportsController < APIController
-
       before_action :authenticate_user
       before_action :ensure_admin
 
@@ -14,7 +13,6 @@ module V1
 
         render json: job, status: :ok
       end
-
     end
   end
 end

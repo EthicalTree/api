@@ -1,7 +1,6 @@
 module V1
   module Admin
     class ListingsController < APIController
-
       before_action :authenticate_user
 
       def index
@@ -28,18 +27,16 @@ module V1
         results = results.order('title').page(page).per(25)
 
         render json: {
-          listings: results.map {|l| l.as_json_admin},
+          listings: results.map { |l| l.as_json_admin },
           current_page: page,
           total_pages: results.total_pages
         }
       end
 
       def create
-
       end
 
       def show
-
       end
 
       def update
@@ -64,8 +61,8 @@ module V1
 
           if listing_params[:visibility].present?
             @listing.assign_attributes({
-              visibility: listing_params[:visibility]
-            })
+                                         visibility: listing_params[:visibility]
+                                       })
           end
 
           if listing_params[:plan_type].present?
@@ -77,10 +74,10 @@ module V1
 
             plan = Plan.find_or_create_by listing_id: @listing.id
             plan.assign_attributes({
-              listing_id: @listing.id,
-              plan_type: listing_params[:plan_type],
-              price: price
-            })
+                                     listing_id: @listing.id,
+                                     plan_type: listing_params[:plan_type],
+                                     price: price
+                                   })
 
             plan.save
           elsif @listing.plan.present?
@@ -96,7 +93,6 @@ module V1
       end
 
       def destroy
-
       end
 
       private

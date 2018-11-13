@@ -2,8 +2,7 @@ require_dependency 'latlng'
 
 module Search
   class << self
-
-    def find_directory_location location, options={}
+    def find_directory_location location, options = {}
       if location.is_a?(Hash)
         return [nil, nil]
       end
@@ -35,15 +34,15 @@ module Search
       [directory_location, latlng_location]
     end
 
-    def by_location options={}
+    def by_location options = {}
       is_city_scope = options[:is_city_scope]
       location = options[:location]
       radius = options[:radius] || 50
       results = options[:results]
 
       directory_location, latlng_location = Search::find_directory_location(location, {
-        is_city_scope: is_city_scope
-      })
+                                                                              is_city_scope: is_city_scope
+                                                                            })
 
       if latlng_location.present?
         coords = [latlng_location[:lat], latlng_location[:lng]]

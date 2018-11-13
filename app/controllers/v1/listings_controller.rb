@@ -10,12 +10,12 @@ module V1
 
       if is_featured
         listings = Plan.featured_listings({
-          count: count,
-          location: location,
-        })
+                                            count: count,
+                                            location: location,
+                                          })
 
         render json: {
-          listings: listings.map {|l| l.as_json_search},
+          listings: listings.map { |l| l.as_json_search },
         }
       end
     end
@@ -71,7 +71,6 @@ module V1
     end
 
     def destroy
-
     end
 
     private

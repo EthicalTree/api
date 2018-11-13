@@ -1,5 +1,4 @@
 class Meta
-
   def self.get_meta_tags protocol, webhost, path
     @url = "#{protocol}://#{webhost}/#{path}"
 
@@ -30,18 +29,18 @@ class Meta
         cover_image = listing.cover_image
 
         meta.merge!({
-          name: listing.title,
-          description: listing.bio
-        })
+                      name: listing.title,
+                      description: listing.bio
+                    })
       end
     elsif collection_slug.present?
       if collection = Collection.find_by(slug: collection_slug[0][1])
         cover_image = collection.cover_image
 
         meta.merge!({
-          name: collection.name,
-          description: collection.description,
-        })
+                      name: collection.name,
+                      description: collection.description,
+                    })
       end
     end
 
@@ -49,10 +48,10 @@ class Meta
       details = cover_image.image_details
 
       meta.merge!({
-        image: details[:url],
-        image_width: details[:width].to_s,
-        image_height: details[:height].to_s
-      })
+                    image: details[:url],
+                    image_width: details[:width].to_s,
+                    image_height: details[:height].to_s
+                  })
     end
 
     generate_meta(meta, path)
@@ -91,7 +90,7 @@ class Meta
       "
     end
 
-    item.each {|k, v| item[k] = CGI::escapeHTML(v || '')}
+    item.each { |k, v| item[k] = CGI::escapeHTML(v || '') }
 
     "
       #{seo_meta}

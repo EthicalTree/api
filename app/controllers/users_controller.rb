@@ -7,7 +7,7 @@ class UsersController < APIController
     errors = []
 
     if @user = User.where(email: user_params[:email]).first
-      @user.attributes = {password: '', password_confirmation: '', password_digest: ''}
+      @user.attributes = { password: '', password_confirmation: '', password_digest: '' }
       @user.attributes = user_params
       @user.regenerate_token
     else
@@ -43,9 +43,9 @@ class UsersController < APIController
 
   def confirm_email
     @user = User.find_by({
-      email: params[:email].gsub(' ', '+'),
-      confirm_token: params[:token]
-    })
+                           email: params[:email].gsub(' ', '+'),
+                           confirm_token: params[:token]
+                         })
 
     if @user
       @user.update confirmed_at: DateTime.current

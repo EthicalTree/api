@@ -22,7 +22,7 @@ module Import
     end
 
     def import
-      converter = lambda {|header| header.downcase}
+      converter = lambda { |header| header.downcase }
 
       csv = CSV.parse(
         @csv,
@@ -34,7 +34,7 @@ module Import
         create_or_edit_row(row)
 
         if @update_progress.present?
-          @update_progress.call(i+1, csv.length)
+          @update_progress.call(i + 1, csv.length)
         end
       end
     end

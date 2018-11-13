@@ -20,4 +20,3 @@ class JobWorker
     job.save!
   end
 end
-

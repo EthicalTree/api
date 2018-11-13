@@ -12,4 +12,3 @@ class SeoPath < ApplicationRecord
     uri.path.downcase
   end
 end
-

@@ -5,13 +5,13 @@ class Job < ApplicationRecord
 
   def self.start_job worker, *args
     job = Job.create({
-      job_type: worker.to_s,
-      status: :starting,
-      progress: 0,
-      payload: '',
-      error_msg: '',
-      error_stack_trace: '',
-    })
+                       job_type: worker.to_s,
+                       status: :starting,
+                       progress: 0,
+                       payload: '',
+                       error_msg: '',
+                       error_stack_trace: '',
+                     })
 
     worker.perform_async(job.id, *args)
 

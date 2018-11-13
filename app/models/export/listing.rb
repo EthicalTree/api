@@ -1,6 +1,5 @@
 module Export
   class Listing < Export::BaseExporter
-
     def get_possible_fields
       {
         id: 'ID',
@@ -72,11 +71,11 @@ module Export
     end
 
     def ethicalities item
-      item.ethicalities.map {|e| e.slug }.join(',')
+      item.ethicalities.map { |e| e.slug }.join(',')
     end
 
     def tags item
-      item.tags.map {|t| t.hashtag}.join(',')
+      item.tags.map { |t| t.hashtag }.join(',')
     end
 
     def address item
@@ -98,6 +97,5 @@ module Export
     def facebook_uri item
       item.facebook_uri
     end
-
   end
 end

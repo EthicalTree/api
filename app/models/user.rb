@@ -8,21 +8,21 @@ class User < ApplicationRecord
   validates :email, presence: true, email: true, uniqueness: true
   validate :password_cannot_be_present_without_confirmation
   validates_strength_of :password, with: :email,
-    if: Proc.new { |m| m.password && m.password_confirmation }
+                                   if: Proc.new { |m| m.password && m.password_confirmation }
 
   def confirm!
     update!(confirmed_at: DateTime.current)
   end
 
   def confirmed?
-    !! confirmed_at
+    !!confirmed_at
   end
 
   def display_name
     "#{first_name} #{last_name}"
   end
 
-  def as_json_basic options=nil
+  def as_json_basic options = nil
     as_json(only: [:id, :first_name, :last_name, :email, :admin])
   end
 
@@ -47,7 +47,7 @@ class User < ApplicationRecord
     "#{first_name} #{last_name}".strip
   end
 
-  def display_name options={}
+  def display_name options = {}
     only_first = options[:only_first]
 
     if only_first && first_name.present?
@@ -67,17 +67,17 @@ class User < ApplicationRecord
     end
   end
 
-  def serializable_hash options={}
+  def serializable_hash options = {}
     super((options || {}).merge({
-      except: [:password_digest, :confirm_token],
-      methods: [
-        :display_name,
-        :display_name_with_email
-      ]
-    }))
+                                  except: [:password_digest, :confirm_token],
+                                  methods: [
+                                    :display_name,
+                                    :display_name_with_email
+                                  ]
+                                }))
   end
 
-private
+  private
 
   def confirmation_token
     if self.confirm_token.blank?
@@ -90,5 +90,4 @@ private
       errors.add(:password_confirmation, "You must confirm your password")
     end
   end
-
 end

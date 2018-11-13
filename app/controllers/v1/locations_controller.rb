@@ -1,10 +1,8 @@
 module V1
   class LocationsController < APIController
-
     before_action :require_listing
 
     def index
-
     end
 
     def create
@@ -35,15 +33,12 @@ module V1
     end
 
     def show
-
     end
 
     def update
-
     end
 
     def destroy
-
     end
 
     private
@@ -58,6 +53,5 @@ module V1
     def require_listing
       @listing = Listing.published.find_by!(slug: params[:listing_id])
     end
-
   end
 end

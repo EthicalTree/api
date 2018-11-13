@@ -18,7 +18,7 @@ class Plan < ApplicationRecord
     }
   end
 
-  def self.featured_listings(options={})
+  def self.featured_listings(options = {})
     count = options[:count]
     is_city_scope = options[:is_city_scope]
     location = options[:location]
@@ -33,10 +33,10 @@ class Plan < ApplicationRecord
     ).listings
 
     search_listings = Search::by_location({
-      is_city_scope: is_city_scope,
-      results: listings,
-      location: location,
-    })
+                                            is_city_scope: is_city_scope,
+                                            results: listings,
+                                            location: location,
+                                          })
 
     if search_listings
       listings = search_listings
@@ -46,7 +46,7 @@ class Plan < ApplicationRecord
       'JOIN plans ON plans.listing_id = listings.id'
     )
 
-    cases = Plan.Types.map {|k,p| "WHEN plan_type='#{k}' THEN (RAND() * #{p[:weight]})"}
+    cases = Plan.Types.map { |k, p| "WHEN plan_type='#{k}' THEN (RAND() * #{p[:weight]})" }
 
     listings = listings.order(
       "CASE
@@ -68,7 +68,7 @@ class Plan < ApplicationRecord
 
   validates :listing_id, presence: true
   validates :plan_type, presence: true, inclusion: {
-    in: Plan.Types.keys.map {|k| k.to_s}
+    in: Plan.Types.keys.map { |k| k.to_s }
   }
 
   def type

@@ -1,7 +1,6 @@
 module V1
   module Admin
     class SeoPathsController < APIController
-
       before_action :authenticate_user
 
       def index
@@ -18,7 +17,7 @@ module V1
 
         results = results.order(:path).page(page).per(25)
         render json: {
-          seo_paths: results.map {|t| t.as_json},
+          seo_paths: results.map { |t| t.as_json },
           current_page: page,
           total_pages: results.total_pages
         }
@@ -37,7 +36,6 @@ module V1
       end
 
       def show
-
       end
 
       def update

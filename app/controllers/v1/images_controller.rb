@@ -1,7 +1,6 @@
 module V1
   class ImagesController < APIController
     def index
-
     end
 
     def create
@@ -14,12 +13,11 @@ module V1
       @source.rebuild_image_order
 
       render(json: {
-        images: @source.images.reload
-      }, status: :ok)
+               images: @source.images.reload
+             }, status: :ok)
     end
 
     def show
-
     end
 
     def update

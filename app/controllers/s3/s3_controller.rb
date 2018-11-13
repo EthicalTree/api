@@ -3,8 +3,8 @@ module S3
     before_action :authenticate_user
 
     def sign
-      options = {path_style: true}
-      headers = {"Content-Type" => params[:contentType], "x-amz-acl" => "public-read"}
+      options = { path_style: true }
+      headers = { "Content-Type" => params[:contentType], "x-amz-acl" => "public-read" }
 
       type = params[:type]
       slug = params[:slug]
@@ -33,10 +33,7 @@ module S3
         options
       )
 
-      render json: { key: key, signedUrl: url}
+      render json: { key: key, signedUrl: url }
     end
   end
-
 end
-
-

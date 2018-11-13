@@ -2,7 +2,7 @@ module HasImages
   extend ActiveSupport::Concern
 
   def make_cover_image img
-    self.images.each {|i| i.update_column(:order, i.order + 1)}
+    self.images.each { |i| i.update_column(:order, i.order + 1) }
     img.update_column(:order, 0)
     self.rebuild_image_order
   end
