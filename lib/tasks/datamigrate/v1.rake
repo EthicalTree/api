@@ -368,14 +368,14 @@ namespace :datamigrate do
       is_menu_broken = false
 
       listing.images.each do |image|
-        thing = $fog_images.files.head(image.key)
+        thing = $fog_ethicaltree.files.head(image.key)
         if !thing || thing.content_length == 162
           is_broken = true
         end
       end
 
       listing.menu.images.each do |image|
-        thing = $fog_images.files.head(image.key)
+        thing = $fog_ethicaltree.files.head(image.key)
         if !thing || thing.content_length == 162
           is_menu_broken = true
         end
@@ -557,7 +557,7 @@ namespace :datamigrate do
           next
         end
 
-        $fog_images.files.create({
+        $fog_ethicaltree.files.create({
           key: key,
           body: res.body,
           public: true
@@ -610,7 +610,7 @@ namespace :datamigrate do
       return nil
     end
 
-    $fog_images.files.create({
+    $fog_ethicaltree.files.create({
       key: key,
       body: res.body,
       public: true

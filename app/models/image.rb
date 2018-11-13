@@ -2,7 +2,7 @@ class Image < ApplicationRecord
   default_scope { order(order: :asc) }
 
   def url
-    "https://#{$s3_images_bucket}.s3.amazonaws.com/#{self.key}"
+    "https://#{$s3_ethicaltree_bucket}.s3.amazonaws.com/#{self.key}"
   end
 
   def thumbnail_url
@@ -17,7 +17,7 @@ class Image < ApplicationRecord
 
   def image_details
     if !self.width || !self.height
-      file = $fog_images.files.get(self.key)
+      file = $fog_ethicaltree.files.get(self.key)
       metadata = file.metadata
 
       self.width = metadata["x-amz-meta-width"]

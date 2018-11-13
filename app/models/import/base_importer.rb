@@ -1,8 +1,9 @@
 module Import
   class BaseImporter
-    def initialize csv, fields
-      @csv = csv.read.strip
-      @fields = fields
+    def initialize options
+      @csv = options[:csv].strip
+      @fields = options[:fields]
+      @update_progress = options[:update_progress]
       @possible_fields = get_possible_fields
     end
 
@@ -23,12 +24,18 @@ module Import
     def import
       converter = lambda {|header| header.downcase}
 
-      CSV.parse(
+      csv = CSV.parse(
         @csv,
         headers: true,
         header_converters: converter
-      ).each do |row|
+      )
+
+      csv.each_with_index do |row, i|
         create_or_edit_row(row)
+
+        if @update_progress.present?
+          @update_progress.call(i+1, csv.length)
+        end
       end
     end
   end

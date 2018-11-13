@@ -9,8 +9,9 @@ module V1
         fields = params[:fields].split(',')
         csv = params[:csv]
 
-        importer = Import::SeoPath.new csv, fields
-        importer.import()
+        job = Job.start_job(ImportWorker, csv.read(), fields)
+
+        render json: job, status: :ok
       end
     end
   end

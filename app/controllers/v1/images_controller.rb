@@ -56,7 +56,7 @@ module V1
       key = image.key
       @source.images.delete(image)
 
-      s3_image = $fog_images.files.get(key)
+      s3_image = $fog_ethicaltree.files.get(key)
       if s3_image
         s3_image.destroy
       end

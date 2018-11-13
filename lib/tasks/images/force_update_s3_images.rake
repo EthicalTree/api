@@ -5,7 +5,7 @@ namespace :images do
     puts 'Starting force update...'
     puts ''
 
-    $fog_images.files.each do |f|
+    $fog_ethicaltree.files.each do |f|
       print('.')
       f.save
     end

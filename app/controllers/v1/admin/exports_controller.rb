@@ -10,14 +10,9 @@ module V1
         fields = params[:fields].split(',')
         type = params[:type]
 
-        exporter = Export::Listing.new format, fields
-        file_prefix = "#{type}"
+        job = Job.start_job(ExportWorker, format, fields, type)
 
-        Tempfile.open(file_prefix, Rails.root.join('tmp')) do |fd|
-          exporter.generate(fd)
-          fd.rewind
-          send_data fd.read, filename: "#{file_prefix}.#{format}"
-        end
+        render json: job, status: :ok
       end
 
     end
