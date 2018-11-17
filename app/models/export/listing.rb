@@ -19,7 +19,8 @@ module Export
         city: 'City',
         images: 'Images',
         menu_images: 'Menu Images',
-        facebook_uri: 'Facebook URI'
+        facebook_uri: 'Facebook URI',
+        operating_hours: 'Operating Hours',
       }
     end
 
@@ -102,6 +103,10 @@ module Export
 
     def facebook_uri item
       item.facebook_uri
+    end
+
+    def operating_hours item
+      item.operating_hours.to_json
     end
 
   end
