@@ -26,4 +26,8 @@ class Location < ApplicationRecord
     "#{address}, #{city}, #{region}"
   end
 
+  def latlng
+    "#{lat},#{lng}"
+  end
+
 end

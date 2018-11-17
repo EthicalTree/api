@@ -24,6 +24,11 @@ class Job < ApplicationRecord
 
   def update_progress count, total
     self.progress = (count.to_f / total.to_f * 100.0).to_i
+    Rails.cache.write("jobs_#{self.id}_progress", self.progress)
+  end
+
+  def realtime_progress
+    Rails.cache.read("jobs_#{self.id}_progress")
   end
 
   def payload_object

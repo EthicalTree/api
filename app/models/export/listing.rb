@@ -15,6 +15,7 @@ module Export
         ethicalities: 'Ethicalities',
         tags: 'Tags',
         address: 'Address',
+        latlng: 'LatLng',
         city: 'City',
         images: 'Images',
         menu_images: 'Menu Images',
@@ -83,16 +84,20 @@ module Export
       item.address
     end
 
+    def latlng item
+      item.location.latlng if item.location
+    end
+
     def city item
       item.city
     end
 
     def images item
-      item.images.count
+      item.images.map {|i| i.url}.join('|')
     end
 
     def menu_images item
-      item.menu.images.count
+      item.menu.images.map {|i| i.url}.join('|')
     end
 
     def facebook_uri item
