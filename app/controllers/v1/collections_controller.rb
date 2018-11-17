@@ -35,8 +35,8 @@ module V1
         total_pages: results.total_pages,
         collections: results.map do |cl|
           json = cl.as_json(
-            only: [ :name, :id, :slug ],
-            include: {tag: { only: :hashtag }}
+            only: [:name, :id, :slug],
+            include: { tag: { only: :hashtag } }
           )
 
           if cl.featured
@@ -44,12 +44,12 @@ module V1
               count: 6,
               location: location_id,
               is_city_scope: true
-            }).map {|l| l.as_json_search}
+            }).map { |l| l.as_json_search }
           else
             json[:listings] = cl._listings({
               location: location_id,
               is_city_scope: true
-            }).map {|l| l.listing.as_json_search}
+            }).map { |l| l.listing.as_json_search }
           end
 
           json
@@ -102,14 +102,14 @@ module V1
         page
       ).per(24)
 
-      listings.each {|l| puts l.listing_id}
+      listings.each { |l| puts l.listing_id }
 
       render json: {
         name: collection.name,
         description: collection.description,
         slug: collection.slug,
         cover_image: collection.cover_image,
-        listings: listings.map {|l| l.listing.as_json_search},
+        listings: listings.map { |l| l.listing.as_json_search },
         current_page: page,
         total_pages: listings.total_pages
       }
@@ -120,6 +120,5 @@ module V1
 
     def destroy
     end
-
   end
 end

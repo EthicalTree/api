@@ -7,7 +7,7 @@ class UsersController < APIController
     errors = []
 
     if @user = User.where(email: user_params[:email]).first
-      @user.attributes = {password: '', password_confirmation: '', password_digest: ''}
+      @user.attributes = { password: '', password_confirmation: '', password_digest: '' }
       @user.attributes = user_params
       @user.regenerate_token
     else

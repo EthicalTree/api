@@ -1,5 +1,4 @@
 class AccountMailer < ApplicationMailer
-
   def confirm_email user
     @user = user
     mail(to: @user.email, subject: 'Confirm your email')
@@ -23,5 +22,4 @@ class AccountMailer < ApplicationMailer
 
     mail(to: @user.email, subject: subject)
   end
-
 end

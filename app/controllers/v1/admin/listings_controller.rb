@@ -1,7 +1,6 @@
 module V1
   module Admin
     class ListingsController < APIController
-
       before_action :authenticate_user
 
       def index
@@ -28,18 +27,16 @@ module V1
         results = results.order('title').page(page).per(25)
 
         render json: {
-          listings: results.map {|l| l.as_json_admin},
+          listings: results.map { |l| l.as_json_admin },
           current_page: page,
           total_pages: results.total_pages
         }
       end
 
       def create
-
       end
 
       def show
-
       end
 
       def update
@@ -96,7 +93,6 @@ module V1
       end
 
       def destroy
-
       end
 
       private

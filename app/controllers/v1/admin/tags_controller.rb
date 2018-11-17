@@ -1,7 +1,6 @@
 module V1
   module Admin
     class TagsController < APIController
-
       before_action :authenticate_user
 
       def index
@@ -18,7 +17,7 @@ module V1
 
         results = results.order('hashtag').page(page).per(25)
         render json: {
-          tags: results.map {|t| t.as_json_admin},
+          tags: results.map { |t| t.as_json_admin },
           current_page: page,
           total_pages: results.total_pages
         }
@@ -36,7 +35,6 @@ module V1
       end
 
       def show
-
       end
 
       def update

@@ -41,7 +41,7 @@ module Export
           csv << get_row(item)
 
           if @update_progress.present?
-            @update_progress.call(i+1, items.length)
+            @update_progress.call(i + 1, items.length)
           end
         end
       end

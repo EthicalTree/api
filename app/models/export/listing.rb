@@ -1,6 +1,5 @@
 module Export
   class Listing < Export::BaseExporter
-
     def get_possible_fields
       {
         id: 'ID',
@@ -74,11 +73,11 @@ module Export
     end
 
     def ethicalities item
-      item.ethicalities.map {|e| e.slug }.join(',')
+      item.ethicalities.map { |e| e.slug }.join(',')
     end
 
     def tags item
-      item.tags.map {|t| t.hashtag}.join(',')
+      item.tags.map { |t| t.hashtag }.join(',')
     end
 
     def address item
@@ -94,11 +93,11 @@ module Export
     end
 
     def images item
-      item.images.map {|i| i.url}.join('|')
+      item.images.map { |i| i.url }.join('|')
     end
 
     def menu_images item
-      item.menu.images.map {|i| i.url}.join('|')
+      item.menu.images.map { |i| i.url }.join('|')
     end
 
     def facebook_uri item
@@ -108,6 +107,5 @@ module Export
     def operating_hours item
       item.operating_hours.to_json
     end
-
   end
 end

@@ -28,4 +28,3 @@ class ETDbBackup
     File.delete(output_file) if File.exist?(output_file)
   end
 end
-

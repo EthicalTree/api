@@ -34,6 +34,5 @@ class AccessPolicy
     role :guest do
       can :read, Listing
     end
-
   end
 end

@@ -1,7 +1,6 @@
 module V1
   module Admin
     class ImportsController < APIController
-
       before_action :authenticate_user
       before_action :ensure_admin
 

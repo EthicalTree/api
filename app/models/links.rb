@@ -1,5 +1,4 @@
 class Links
-
   @@protocol = Rails.application.secrets[:protocol]
   @@webhost = Rails.application.secrets[:webhost]
 
@@ -26,5 +25,4 @@ class Links
 
     "https://www.google-analytics.com/collect?#{query.to_query}"
   end
-
 end

@@ -1,5 +1,4 @@
 class Meta
-
   def self.get_meta_tags protocol, webhost, path
     @url = "#{protocol}://#{webhost}/#{path}"
 
@@ -91,7 +90,7 @@ class Meta
       "
     end
 
-    item.each {|k, v| item[k] = CGI::escapeHTML(v || '')}
+    item.each { |k, v| item[k] = CGI::escapeHTML(v || '') }
 
     "
       #{seo_meta}

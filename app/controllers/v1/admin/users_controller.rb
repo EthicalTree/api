@@ -1,7 +1,6 @@
 module V1
   module Admin
     class UsersController < APIController
-
       before_action :authenticate_user
 
       def index
@@ -29,7 +28,6 @@ module V1
       end
 
       def show
-
       end
 
       def update

@@ -11,10 +11,15 @@ module ExceptionHandler
     rescue_from Exceptions::Conflict,         with: :conflict
 
     def bad_request(e)                      error e, 400 end
+
     def unauthorized(e)                     error e, 401 end
+
     def payment_required(e)                 error e, 402 end
+
     def forbidden(e)                        error e, 403 end
+
     def not_found(e)                        error e, 404 end
+
     def conflict(e)                         error e, 409 end
 
     def error e, status
