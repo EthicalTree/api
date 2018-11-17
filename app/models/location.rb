@@ -24,4 +24,9 @@ class Location < ApplicationRecord
   def formatted_address
     "#{address}, #{city}, #{region}"
   end
+
+  def latlng
+    "#{lat},#{lng}"
+  end
+
 end

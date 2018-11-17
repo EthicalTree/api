@@ -7,7 +7,7 @@ module V1
       def show
         job = Job.find(params[:id])
 
-        render json: job.as_json(methods: :payload_object), status: 200
+        render json: job.as_json(methods: [:payload_object, :realtime_progress]), status: 200
       end
     end
   end

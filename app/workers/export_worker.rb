@@ -1,11 +1,11 @@
 class ExportWorker < JobWorker
-  def perform_job(job, format, fields, type)
-    exporter = Export::Listing.new({
-                                     format: format,
-                                     fields: fields,
-                                     type: type,
-                                     update_progress: lambda { |count, total| job.update_progress(count, total) }
-                                   })
+  def perform_job(job, update_progress, format, fields, type)
+
+    exporter = Export::new_by_type(type, {
+      format: format,
+      fields: fields,
+      update_progress: update_progress
+    })
 
     file_prefix = "#{type}"
     key = "admin/exports/#{type}/#{file_prefix}_#{Time.now.to_s}.#{format}"

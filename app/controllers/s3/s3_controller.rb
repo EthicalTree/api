@@ -13,17 +13,20 @@ module S3
 
       if type == 'listing'
         authorize! :update, Listing
-        key = "listings/#{slug}/images/#{name}"
       elsif type == 'menu'
         authorize! :update, Listing
-        menu_id = params[:menuId]
-        key = "listings/#{slug}/menu/#{menu_id}/#{name}"
       elsif type == 'collection'
         authorize! :update, Collection
-        key = "collections/#{slug}/images/#{name}"
       else
         return render json: {}, status: :not_found
       end
+
+      key = Image.get_key_for_type({
+        slug: slug,
+        name: name,
+        menu_id: params[:menuId],
+        type: type
+      })
 
       url = $fog.put_object_url(
         $s3_ethicaltree_bucket,

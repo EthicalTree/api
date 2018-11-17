@@ -14,10 +14,12 @@ module Export
         ethicalities: 'Ethicalities',
         tags: 'Tags',
         address: 'Address',
+        latlng: 'LatLng',
         city: 'City',
         images: 'Images',
         menu_images: 'Menu Images',
-        facebook_uri: 'Facebook URI'
+        facebook_uri: 'Facebook URI',
+        operating_hours: 'Operating Hours',
       }
     end
 
@@ -82,20 +84,29 @@ module Export
       item.address
     end
 
+    def latlng item
+      item.location.latlng if item.location
+    end
+
     def city item
       item.city
     end
 
     def images item
-      item.images.count
+      item.images.map {|i| i.url}.join('|')
     end
 
     def menu_images item
-      item.menu.images.count
+      item.menu.images.map {|i| i.url}.join('|')
     end
 
     def facebook_uri item
       item.facebook_uri
     end
+
+    def operating_hours item
+      item.operating_hours.to_json
+    end
+
   end
 end

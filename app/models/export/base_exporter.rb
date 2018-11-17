@@ -1,4 +1,13 @@
 module Export
+  def self.new_by_type type, options
+    model = {
+      listings: Export::Listing,
+      seo_paths: Export::SeoPath,
+    }[type.to_sym]
+
+    model.new(options)
+  end
+
   class BaseExporter
     def initialize options
       @fields = options[:fields]
