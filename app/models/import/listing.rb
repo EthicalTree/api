@@ -13,6 +13,9 @@ module Import
         :ethicalities,
         :tags,
         :address,
+        :latlng,
+        :facebook_hours,
+        :google_hours,
         :images,
         :menu_images,
         :facebook_uri,
@@ -95,7 +98,17 @@ module Import
     end
 
     def address item, value
-      location = MapApi.build_from_address(value)
+      location = MapApi.build_from_address(value) if value.present?
+
+      if location
+        latlng = location[:latlng]
+        item.set_location latlng[:lat], latlng[:lng]
+      end
+    end
+
+    def latlng item, value
+      lat, lng = value.split(',') if value.present?
+      location = MapApi.build_from_coordinates(lat, lng) if lat.present? && lng.present?
 
       if location
         latlng = location[:latlng]
@@ -130,6 +143,31 @@ module Import
           item.menu.images.push image
         end
       end
+    end
+
+    def facebook_hours item, value
+      value = value.gsub("'", '"')
+      hours = OperatingHours.from_facebook(JSON.parse(value))
+
+      if hours.present?
+        item.operating_hours.delete_all
+        item.operating_hours = hours
+      end
+    end
+
+    def google_hours item, value
+      # Script has data with single quotes instead of double quotes
+      value = value.gsub("'", '"').downcase
+      hours = OperatingHours.from_google(JSON.parse(value))
+
+      if hours.present?
+        item.operating_hours.delete_all
+        item.operating_hours = hours
+      end
+    end
+
+    def operating_hours item, value
+
     end
 
     def facebook_uri item, value

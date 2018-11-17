@@ -15,6 +15,7 @@ module Export
         ethicalities: 'Ethicalities',
         tags: 'Tags',
         address: 'Address',
+        latlng: 'LatLng',
         city: 'City',
         images: 'Images',
         menu_images: 'Menu Images',
@@ -81,6 +82,10 @@ module Export
 
     def address item
       item.address
+    end
+
+    def latlng item
+      item.location.latlng if item.location
     end
 
     def city item

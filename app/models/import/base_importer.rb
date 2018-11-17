@@ -28,7 +28,10 @@ module Import
         begin
           @fields.each do |field|
             if @possible_fields.include?(field.to_sym)
-              self.send(field, item, row[field.gsub('_', ' ')])
+              value = row[field.gsub('_', ' ')]
+              if value.present?
+                self.send(field, item, value)
+              end
             end
           end
 
