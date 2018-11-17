@@ -108,83 +108,83 @@ class Listing < ApplicationRecord
     self.menu
 
     as_json({
-              except: [:claim_id],
-              include: [
-                :categories,
-                :ethicalities,
-                :tags,
-                :images,
-                { locations: { methods: [:formatted_address] } },
-                { plan: { methods: [:type] } },
-                { menus: { include: [:images] } },
-                { operating_hours: {
-                  methods: [
-                    :label,
-                    :open_at_24_hour,
-                    :closed_at_24_hour,
-                    :hours
-                  ]
-                } },
-              ],
-              methods: [
-                :address,
-                :city,
-                :location,
-                :timezone
-              ]
-            })
+      except: [:claim_id],
+      include: [
+        :categories,
+        :ethicalities,
+        :tags,
+        :images,
+        { locations: { methods: [:formatted_address] } },
+        { plan: { methods: [:type] } },
+        { menus: { include: [:images] } },
+        { operating_hours: {
+          methods: [
+            :label,
+            :open_at_24_hour,
+            :closed_at_24_hour,
+            :hours
+          ]
+        } },
+      ],
+      methods: [
+        :address,
+        :city,
+        :location,
+        :timezone
+      ]
+    })
   end
 
   def as_json_search
     as_json({
-              only: [
-                :id,
-                :slug,
-                :title
-              ],
-              except: [:claim_id],
-              methods: [:city, :location, :timezone],
-              include: [
-                { ethicalities: { only: [
-                  :icon_key,
-                  :slug
-                ] } },
-                { images: { only: [
-                  :id,
-                  :key,
-                  :order
-                ] } },
-                { locations: { only: [
-                  :id,
-                  :lat,
-                  :lng
-                ] } },
-                { plan: { only: [
-                  :id
-                ] } },
-                { operating_hours: {
-                  only: [
-                    :day,
-                  ],
-                  methods: [
-                    :open_at_24_hour,
-                    :closed_at_24_hour
-                  ]
-                } }
-              ]
-            })
+      only: [
+        :id,
+        :slug,
+        :title
+      ],
+      except: [:claim_id],
+      methods: [:city, :location, :timezone],
+      include: [
+        { ethicalities: { only: [
+          :icon_key,
+          :slug
+        ] } },
+        { images: { only: [
+          :id,
+          :key,
+          :order
+        ] } },
+        { locations: { only: [
+          :id,
+          :lat,
+          :lng
+        ] } },
+        { plan: { only: [
+          :id
+        ] } },
+        { operating_hours: {
+          only: [
+            :day,
+          ],
+          methods: [
+            :open_at_24_hour,
+            :closed_at_24_hour
+          ]
+        } }
+      ]
+    })
   end
 
   def as_json_admin
     as_json({
-              include: [
-                { plan: { methods: [:type] } },
-                :owner
-              ],
-              methods: [
-                :claim_url
-              ]
-            })
+      include: [
+        { plan: { methods: [:type] } },
+        :owner
+      ],
+      methods: [
+        :claim_url
+      ]
+    })
   end
 
   private

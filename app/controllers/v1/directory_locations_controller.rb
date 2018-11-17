@@ -4,18 +4,21 @@ module V1
   class DirectoryLocationsController < APIController
     def include_neighbourhoods(location)
       # pass in location hash to populate it with neighbourhoods
-      city = location["city"]
+      city = location['city']
       results = DirectoryLocation.get_neighborhoods_for_city(city)
       city_id = DirectoryLocation.find_by(city: city, location_type: 'city').id
-      city_listings = Location.listings.where('directory_location_id = ?', city_id)
+      city_listings = Location.listings.where(
+        'directory_location_id = ?',
+        city_id
+      )
 
-      location["neighbourhoods"] = results.map do |location|
+      location['neighbourhoods'] = results.map do |loc|
         {
-          id: location.id,
-          name: location.name,
+          id: loc.id,
+          name: loc.name,
           listings_count: Search.by_location(
             results: city_listings,
-            location: location.name
+            location: loc.name
           ).count
         }
       end
@@ -67,7 +70,5 @@ module V1
     def update; end
 
     def destroy; end
-
-    private
   end
 end

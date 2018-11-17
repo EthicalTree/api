@@ -20,10 +20,10 @@ class ETDbBackup
     system(cmd)
 
     $fog_db_backups.files.create({
-                                   key: "ethicaltree/#{backup_filename}",
-                                   body: File.read(output_file),
-                                   public: false
-                                 })
+      key: "ethicaltree/#{backup_filename}",
+      body: File.read(output_file),
+      public: false
+    })
 
     File.delete(output_file) if File.exist?(output_file)
   end

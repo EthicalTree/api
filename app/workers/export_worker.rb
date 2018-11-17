@@ -1,6 +1,5 @@
 class ExportWorker < JobWorker
   def perform_job(job, update_progress, format, fields, type)
-
     exporter = Export::new_by_type(type, {
       format: format,
       fields: fields,
@@ -15,10 +14,10 @@ class ExportWorker < JobWorker
       fd.rewind
 
       $fog_ethicaltree.files.create({
-                                      key: key,
-                                      body: fd.read,
-                                      public: false
-                                    })
+        key: key,
+        body: fd.read,
+        public: false
+      })
     end
 
     job.payload = { s3_key: key }.to_json

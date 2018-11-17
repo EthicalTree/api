@@ -91,13 +91,13 @@ class OperatingHours < ApplicationRecord
 
   def as_json_full
     as_json({
-              methods: [
-                :label,
-                :open_at_24_hour,
-                :closed_at_24_hour,
-                :hours
-              ]
-            })
+      methods: [
+        :label,
+        :open_at_24_hour,
+        :closed_at_24_hour,
+        :hours
+      ]
+    })
   end
 
   def label

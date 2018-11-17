@@ -93,11 +93,11 @@ module Export
     end
 
     def images item
-      item.images.map {|i| i.url}.join('|')
+      item.images.map { |i| i.url }.join('|')
     end
 
     def menu_images item
-      item.menu.images.map {|i| i.url}.join('|')
+      item.menu.images.map { |i| i.url }.join('|')
     end
 
     def facebook_uri item
@@ -107,6 +107,5 @@ module Export
     def operating_hours item
       item.operating_hours.to_json
     end
-
   end
 end

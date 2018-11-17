@@ -13,8 +13,8 @@ module V1
       @source.rebuild_image_order
 
       render(json: {
-               images: @source.images.reload
-             }, status: :ok)
+        images: @source.images.reload
+      }, status: :ok)
     end
 
     def show

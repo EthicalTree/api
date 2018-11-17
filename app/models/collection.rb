@@ -26,10 +26,10 @@ class Collection < ApplicationRecord
     )
 
     search_listings = Search::by_location({
-                                            is_city_scope: is_city_scope,
-                                            results: listings,
-                                            location: location,
-                                          })
+      is_city_scope: is_city_scope,
+      results: listings,
+      location: location,
+    })
 
     if search_listings
       listings = search_listings
@@ -66,11 +66,11 @@ class Collection < ApplicationRecord
 
   def as_json_full
     as_json({
-              include: [
-                :tag,
-                :images
-              ],
-            })
+      include: [
+        :tag,
+        :images
+      ],
+    })
   end
 
   private

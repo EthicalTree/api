@@ -11,13 +11,13 @@ class Tag < ApplicationRecord
 
   def as_json_admin
     as_json({
-              only: [
-                :id,
-                :hashtag,
-                :use_type
-              ],
-              methods: :listing_count
-            })
+      only: [
+        :id,
+        :hashtag,
+        :use_type
+      ],
+      methods: :listing_count
+    })
   end
 
   def listing_count

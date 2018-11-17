@@ -15,10 +15,10 @@ class AccountMailer < ApplicationMailer
     subject = "Claim Success - #{listing.title}"
 
     @ga_link = Links.ga({
-                          uid: @user.id,
-                          ec: 'ClaimSuccessEmail',
-                          dt: subject,
-                        })
+      uid: @user.id,
+      ec: 'ClaimSuccessEmail',
+      dt: subject,
+    })
 
     mail(to: @user.email, subject: subject)
   end

@@ -61,8 +61,8 @@ module V1
 
           if listing_params[:visibility].present?
             @listing.assign_attributes({
-                                         visibility: listing_params[:visibility]
-                                       })
+              visibility: listing_params[:visibility]
+            })
           end
 
           if listing_params[:plan_type].present?
@@ -74,10 +74,10 @@ module V1
 
             plan = Plan.find_or_create_by listing_id: @listing.id
             plan.assign_attributes({
-                                     listing_id: @listing.id,
-                                     plan_type: listing_params[:plan_type],
-                                     price: price
-                                   })
+              listing_id: @listing.id,
+              plan_type: listing_params[:plan_type],
+              price: price
+            })
 
             plan.save
           elsif @listing.plan.present?

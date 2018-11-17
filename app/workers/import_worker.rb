@@ -1,6 +1,5 @@
 class ImportWorker < JobWorker
   def perform_job(job, update_progress, csv_content, fields, type)
-
     # Convert csv bytes into a string
     csv_content = csv_content.pack('c*')
 

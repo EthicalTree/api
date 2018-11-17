@@ -1,6 +1,5 @@
 module Import
   class Listing < Import::BaseImporter
-
     def get_possible_fields
       [
         :id,
@@ -167,7 +166,6 @@ module Import
     end
 
     def operating_hours item, value
-
     end
 
     def facebook_uri item, value
@@ -177,6 +175,5 @@ module Import
 
       item.facebook_uri = value
     end
-
   end
 end

@@ -20,9 +20,9 @@ module V1
 
       # Filter for collections that actually have listings assigned
       results = results.joins([
-                                'INNER JOIN listing_tags ON listing_tags.tag_id = collections.tag_id',
-                                "INNER JOIN listings ON listing_tags.listing_id = listings.id #{location_join}",
-                              ])
+        'INNER JOIN listing_tags ON listing_tags.tag_id = collections.tag_id',
+        "INNER JOIN listings ON listing_tags.listing_id = listings.id #{location_join}",
+      ])
 
       if where.present?
         results = results.where({ location: where })
@@ -41,15 +41,15 @@ module V1
 
           if cl.featured
             json[:listings] = Plan.featured_listings({
-                                                       count: 6,
-                                                       location: location_id,
-                                                       is_city_scope: true
-                                                     }).map { |l| l.as_json_search }
+              count: 6,
+              location: location_id,
+              is_city_scope: true
+            }).map { |l| l.as_json_search }
           else
             json[:listings] = cl._listings({
-                                             location: location_id,
-                                             is_city_scope: true
-                                           }).map { |l| l.listing.as_json_search }
+              location: location_id,
+              is_city_scope: true
+            }).map { |l| l.listing.as_json_search }
           end
 
           json
@@ -83,11 +83,11 @@ module V1
       listings = Location.listings.joins(joins)
 
       search_listings = Search::by_location({
-                                              is_city_scope: true,
-                                              location: location,
-                                              radius: 50,
-                                              results: listings,
-                                            })
+        is_city_scope: true,
+        location: location,
+        radius: 50,
+        results: listings,
+      })
 
       if search_listings
         listings = search_listings

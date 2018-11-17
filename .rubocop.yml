@@ -1,3 +1,11 @@
+Layout/IndentHash:
+  Enabled: true
+  EnforcedStyle: consistent
+
+Layout/IndentArray:
+  Enabled: true
+  EnforcedStyle: consistent
+
 Style/Documentation:
   Enabled: false
 

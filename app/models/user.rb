@@ -69,12 +69,12 @@ class User < ApplicationRecord
 
   def serializable_hash options = {}
     super((options || {}).merge({
-                                  except: [:password_digest, :confirm_token],
-                                  methods: [
-                                    :display_name,
-                                    :display_name_with_email
-                                  ]
-                                }))
+      except: [:password_digest, :confirm_token],
+      methods: [
+        :display_name,
+        :display_name_with_email
+      ]
+    }))
   end
 
   private

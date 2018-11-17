@@ -41,8 +41,8 @@ module Search
       results = options[:results]
 
       directory_location, latlng_location = Search::find_directory_location(location, {
-                                                                              is_city_scope: is_city_scope
-                                                                            })
+        is_city_scope: is_city_scope
+      })
 
       if latlng_location.present?
         coords = [latlng_location[:lat], latlng_location[:lng]]

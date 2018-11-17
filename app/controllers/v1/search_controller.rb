@@ -65,9 +65,9 @@ module V1
       )
 
       located_results = Search::by_location({
-                                              results: results,
-                                              location: location,
-                                            })
+        results: results,
+        location: location,
+      })
 
       if located_results
         located = true

@@ -42,9 +42,9 @@ module V1
 
     def tag_params
       params.require(:tag).permit([
-                                    :hashtag,
-                                    :use_type
-                                  ])
+        :hashtag,
+        :use_type
+      ])
     end
 
     def require_listing
