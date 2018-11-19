@@ -54,7 +54,7 @@ module V1
 
       def destroy
         authorize! :destroy, DirectoryLocation
-        @location = DirectionLocation.find params[:id]
+        @location = DirectoryLocation.find params[:id]
         @location.delete
         render json: {}
       end
