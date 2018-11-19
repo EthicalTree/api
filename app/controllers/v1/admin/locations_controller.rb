@@ -1,7 +1,8 @@
+# frozen_string_literal: true
+
 module V1
   module Admin
     class LocationsController < APIController
-
       before_action :authenticate_user
 
       def index
@@ -11,26 +12,32 @@ module V1
         page = params[:page] || 1
 
         if query.present?
-          results = DirectoryLocation.where("name LIKE :query", query: "%#{query.downcase}%")
+          results = DirectoryLocation.where('name LIKE :query', query: "%#{query.downcase}%")
         else
           results = DirectoryLocation.all
         end
 
         results = results.order(:name).page(page).per(25)
         render json: {
-          locations: results.map {|t| t.as_json},
+          locations: results.map(&:as_json),
           current_page: page,
           total_pages: results.total_pages
         }
       end
 
       def create
+        authorize! :create, DirectoryLocation
+        lat = params[:lat]
+        lng = params[:lng]
 
+        locations = DirectoryLocation.create_locations(lat, lng)
+
+        render json: {
+          location: locations.first
+        }
       end
 
-      def show
-
-      end
+      def show; end
 
       def update
         authorize! :update, DirectoryLocation
