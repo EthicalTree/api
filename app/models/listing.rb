@@ -21,7 +21,7 @@ class Listing < ApplicationRecord
   belongs_to :directory_location, foreign_key: :directory_location_id, class_name: 'DirectoryLocation', optional: true
 
   before_validation :ensure_slug
-  before_save :lower_website
+  before_save :format_website
   before_save :ensure_claim_id
 
   validates :title, presence: true
@@ -190,20 +190,24 @@ class Listing < ApplicationRecord
   private
 
   def ensure_slug
-    if not self.slug
-      self.slug = self.title.parameterize
+    unless slug
+      self.slug = title.parameterize
     end
   end
 
   def ensure_claim_id
-    if not self.claim_id
-      self.regenerate_claim_id
+    unless claim_id
+      regenerate_claim_id
     end
   end
 
-  def lower_website
-    if self.website.present?
-      self.website = self.website.downcase
+  def format_website
+    if website.present?
+      unless website.start_with?('http://', 'https://')
+        self.website = "http://#{website}"
+      end
+
+      self.website = website.downcase
     end
   end
 end
