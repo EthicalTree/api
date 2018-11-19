@@ -16,28 +16,25 @@ module V1
         @listing.save
         render json: { tag: tag }, status: :ok
       else
-        render json: { }, status: :conflict
+        render json: {}, status: :conflict
       end
-
     end
 
     def show
-
     end
 
     def update
-
     end
 
     def destroy
       authorize! :update, @listing
       tag = Tag.find_by id: params[:id]
       if tag.present?
-        @listing.tags = @listing.tags.reject {|t| t.id == tag.id}
+        @listing.tags = @listing.tags.reject { |t| t.id == tag.id }
         @listing.save
         render json: { tag: tag }, status: :ok
       else
-        render json: { }, status: :notfound
+        render json: {}, status: :notfound
       end
     end
 
@@ -53,7 +50,5 @@ module V1
     def require_listing
       @listing = Listing.published.find_by!(slug: params[:listing_id])
     end
-
   end
-
 end

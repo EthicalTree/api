@@ -1,5 +1,4 @@
 class ExportWorker < JobWorker
-
   def perform_job(job, update_progress, format, fields, type)
     exporter = Export::new_by_type(type, {
       format: format,
@@ -8,7 +7,7 @@ class ExportWorker < JobWorker
     })
 
     file_prefix = "#{type}"
-    key ="admin/exports/#{type}/#{file_prefix}_#{Time.now.to_s}.#{format}"
+    key = "admin/exports/#{type}/#{file_prefix}_#{Time.now.to_s}.#{format}"
 
     Tempfile.open(file_prefix, Rails.root.join('tmp')) do |fd|
       exporter.generate(fd)
@@ -24,4 +23,3 @@ class ExportWorker < JobWorker
     job.payload = { s3_key: key }.to_json
   end
 end
-

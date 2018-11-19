@@ -19,7 +19,7 @@ module V1
 
         results = results.order(:name).page(page).per(25)
         render json: {
-          locations: results.map(&:as_json),
+          locations: results.map { |t| t.as_json },
           current_page: page,
           total_pages: results.total_pages
         }

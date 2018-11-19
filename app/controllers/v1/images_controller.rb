@@ -1,7 +1,6 @@
 module V1
   class ImagesController < APIController
     def index
-
     end
 
     def create
@@ -19,7 +18,6 @@ module V1
     end
 
     def show
-
     end
 
     def update

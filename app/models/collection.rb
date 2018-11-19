@@ -14,7 +14,7 @@ class Collection < ApplicationRecord
   validates :tag, presence: true
   validates :slug, uniqueness: true
 
-  def _listings(options={})
+  def _listings(options = {})
     count = options[:count] || 6
     is_city_scope = options[:is_city_scope]
     location = options[:location]
@@ -52,10 +52,10 @@ class Collection < ApplicationRecord
 
   def listings
     listings, _ = self._listings
-    listings.map {|l| l.as_json_search}
+    listings.map { |l| l.as_json_search }
   end
 
-  def serializable_hash options={}
+  def serializable_hash options = {}
     super({
       methods: [
         :cover_image,
@@ -77,7 +77,7 @@ class Collection < ApplicationRecord
 
   def ensure_unique_order
     Collection.all.order(:order).each_with_index do |cl, i|
-      cl.update_column(:order, i+1)
+      cl.update_column(:order, i + 1)
     end
   end
 
@@ -90,5 +90,3 @@ class CollectionImage < ApplicationRecord
   belongs_to :collection
   belongs_to :image
 end
-
-

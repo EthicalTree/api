@@ -19,7 +19,6 @@ class Location < ApplicationRecord
       region: location_info[:state],
       timezone: location_info[:timezone]
     })
-
   end
 
   def formatted_address
@@ -29,5 +28,4 @@ class Location < ApplicationRecord
   def latlng
     "#{lat},#{lng}"
   end
-
 end

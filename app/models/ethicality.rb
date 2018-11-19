@@ -15,7 +15,7 @@ class Ethicality < ApplicationRecord
       'woman-owned': 'woman_owned',
       'organic options': 'organic',
       'organic': 'organic'
-    }[name.to_s.downcase.to_sym]
+    }[name.to_s.downcase.to_sym] || name
 
     Ethicality.find_by(slug: slug)
   end

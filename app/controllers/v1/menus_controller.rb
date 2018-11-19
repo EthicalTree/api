@@ -1,6 +1,5 @@
 module V1
   class MenusController < APIController
-
     def index
     end
 

@@ -15,7 +15,7 @@ module V1
         })
 
         render json: {
-          listings: listings.map {|l| l.as_json_search},
+          listings: listings.map { |l| l.as_json_search },
         }
       end
     end
@@ -71,7 +71,6 @@ module V1
     end
 
     def destroy
-
     end
 
     private

@@ -57,7 +57,7 @@ class Image < ApplicationRecord
     "https://#{$s3_thumbnails_bucket}.s3.amazonaws.com/#{self.key}"
   end
 
-  def serializable_hash options={}
+  def serializable_hash options = {}
     super({
       methods: [:url, :thumbnail_url]
     }.merge(options))
@@ -81,4 +81,3 @@ class Image < ApplicationRecord
     }
   end
 end
-

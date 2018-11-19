@@ -49,7 +49,7 @@ module Import
     end
 
     def import
-      converter = lambda {|header| header.downcase}
+      converter = lambda { |header| header.downcase }
 
       detection = CharlockHolmes::EncodingDetector.detect(@csv)
       csv_content = CharlockHolmes::Converter.convert @csv, detection[:encoding], 'UTF-8'
@@ -65,7 +65,7 @@ module Import
         create_or_edit_row(row)
 
         if @update_progress.present?
-          @update_progress.call(i+1, parsed_csv.length)
+          @update_progress.call(i + 1, parsed_csv.length)
         end
       end
     end

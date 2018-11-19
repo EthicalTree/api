@@ -1,6 +1,5 @@
 module Export
   class SeoPath < Export::BaseExporter
-
     def get_possible_fields
       {
         path: 'Path',
@@ -31,6 +30,5 @@ module Export
     def header item
       item.header
     end
-
   end
 end

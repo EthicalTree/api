@@ -1,6 +1,5 @@
 module V1
   class ListingEthicalitiesController < APIController
-
     before_action :require_listing
     before_action :authenticate_user, only: %i{update create destroy}
 
@@ -19,15 +18,12 @@ module V1
     end
 
     def show
-
     end
 
     def update
-
     end
 
     def destroy
-
     end
 
     private
@@ -39,7 +35,5 @@ module V1
     def require_listing
       @listing = Listing.published.find_by!(slug: params[:listing_id])
     end
-
   end
-
 end

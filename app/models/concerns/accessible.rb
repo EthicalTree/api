@@ -1,7 +1,7 @@
 module Accessible
   extend ActiveSupport::Concern
 
-  def permissions user=nil
+  def permissions user = nil
     policy = AccessPolicy.new(user)
 
     def create_permission policy, perm

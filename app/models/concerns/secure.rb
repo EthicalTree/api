@@ -1,7 +1,7 @@
 module Secure
   extend ActiveSupport::Concern
 
-  def permissions user=nil
+  def permissions user = nil
     policy = AccessPolicy.new(user)
 
     def create_permission policy, perm
@@ -12,6 +12,4 @@ module Secure
 
     Hash[perms.collect { |k| [k, create_permission(policy, k)] }]
   end
-
 end
-

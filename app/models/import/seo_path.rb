@@ -1,6 +1,5 @@
 module Import
   class SeoPath < Import::BaseImporter
-
     def get_possible_fields
       [
         :path,

@@ -1,5 +1,4 @@
 class MapApi
-
   FromCoordinatesUrl = "https://maps.googleapis.com/maps/api/geocode/json"
   FromAddressUrl = "https://maps.googleapis.com/maps/api/geocode/json"
   TimezoneUrl = "https://maps.googleapis.com/maps/api/timezone/json"
@@ -13,7 +12,7 @@ class MapApi
     location = details["geometry"]["location"]
 
     extracted = details["address_components"].reduce({}) do |a, c|
-      c["types"].each {|t| a[t.to_sym] = c}
+      c["types"].each { |t| a[t.to_sym] = c }
       a
     end
 
@@ -58,5 +57,4 @@ class MapApi
     details = JSON.parse(res.body)["results"][0]
     MapApi.parse_results details
   end
-
 end

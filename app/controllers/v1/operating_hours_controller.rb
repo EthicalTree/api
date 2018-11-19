@@ -4,7 +4,6 @@ module V1
     before_action :authenticate_user, only: %i{update create destroy}
 
     def index
-
     end
 
     def create
@@ -26,19 +25,16 @@ module V1
         end
       end
 
-      render json: { operating_hours: @listing.operating_hours.map{|o| o.as_json_full} }, status: :ok
+      render json: { operating_hours: @listing.operating_hours.map { |o| o.as_json_full } }, status: :ok
     end
 
     def show
-
     end
 
     def update
-
     end
 
     def destroy
-
     end
 
     private

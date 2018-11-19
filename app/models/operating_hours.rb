@@ -111,5 +111,4 @@ class OperatingHours < ApplicationRecord
       saturday: 'Saturday'
     }[day.to_sym]
   end
-
 end

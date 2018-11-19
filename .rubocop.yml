@@ -1,0 +1,28 @@
+Layout/IndentHash:
+  Enabled: true
+  EnforcedStyle: consistent
+
+Layout/IndentArray:
+  Enabled: true
+  EnforcedStyle: consistent
+
+Style/Documentation:
+  Enabled: false
+
+Style/GlobalVars:
+  Enabled: false
+
+Style/DateTime:
+  Enabled: false
+
+Metrics/MethodLength:
+  Enabled: false
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
+Naming/UncommunicativeMethodParamName:
+  Enabled: false

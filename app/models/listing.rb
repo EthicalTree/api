@@ -46,7 +46,7 @@ class Listing < ApplicationRecord
   end
 
   def ethicalities_string
-    ethicalities.map {|e| e.titleize}.join(', ')
+    ethicalities.map { |e| e.titleize }.join(', ')
   end
 
   def timezone
@@ -124,7 +124,7 @@ class Listing < ApplicationRecord
             :closed_at_24_hour,
             :hours
           ]
-        }},
+        } },
       ],
       methods: [
         :address,
@@ -145,24 +145,24 @@ class Listing < ApplicationRecord
       except: [:claim_id],
       methods: [:city, :location, :timezone],
       include: [
-        {ethicalities: {only: [
+        { ethicalities: { only: [
           :icon_key,
           :slug
-        ]}},
-        {images: {only: [
+        ] } },
+        { images: { only: [
           :id,
           :key,
           :order
-        ]}},
-        {locations: {only: [
+        ] } },
+        { locations: { only: [
           :id,
           :lat,
           :lng
-        ]}},
-        {plan: {only: [
+        ] } },
+        { plan: { only: [
           :id
-        ]}},
-        {operating_hours: {
+        ] } },
+        { operating_hours: {
           only: [
             :day,
           ],
@@ -170,7 +170,7 @@ class Listing < ApplicationRecord
             :open_at_24_hour,
             :closed_at_24_hour
           ]
-        }}
+        } }
       ]
     })
   end
@@ -227,4 +227,3 @@ class ListingCategory < ApplicationRecord
   belongs_to :listing
   belongs_to :category
 end
-

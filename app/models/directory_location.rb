@@ -116,7 +116,7 @@ class DirectoryLocation < ApplicationRecord
 
   def self.create_locations lat, lng
     locations = self.build_locations_for_lat_lng(lat, lng).compact
-    locations.each {|l| l.save}
+    locations.each { |l| l.save }
   end
 
   def coordinates
@@ -129,5 +129,4 @@ class DirectoryLocation < ApplicationRecord
       Geokit::LatLng.new(boundlat1, boundlng1)
     )
   end
-
 end
