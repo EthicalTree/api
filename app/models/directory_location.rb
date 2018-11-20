@@ -36,9 +36,9 @@ class DirectoryLocation < ApplicationRecord
     if latlng_location = LatLng::parse(location)
       directory_location = DirectoryLocation.by_distance(origin: [latlng_location[:lat], latlng_location[:lng]]).first
     elsif directory_location = DirectoryLocation.find_by(id: location)
-    elsif directory_location = DirectoryLocation.find_by('lower(name)=?', location)
     elsif directory_location = DirectoryLocation.find_by('lower(city)=? AND location_type="city"', location)
     elsif directory_location = DirectoryLocation.find_by('lower(neighbourhood)=? AND location_type="neighbourhood"', location)
+    elsif directory_location = DirectoryLocation.find_by('lower(name)=?', location)
     end
 
     [directory_location, latlng_location]
