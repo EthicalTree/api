@@ -31,6 +31,7 @@ gem 'redis'
 gem 'hiredis'
 gem 'sidekiq'
 gem 'sidekiq-scheduler'
+gem 'prometheus-client'
 
 # For data migration
 gem 'php-serialize'

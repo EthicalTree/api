@@ -199,6 +199,8 @@ GEM
     password_strength (1.1.4)
       activemodel
     php-serialize (1.2.0)
+    prometheus-client (0.8.0)
+      quantile (~> 0.2.1)
     pry (0.11.3)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
@@ -209,6 +211,7 @@ GEM
       pry (>= 0.10.4)
     public_suffix (3.0.2)
     puma (3.6.2)
+    quantile (0.2.1)
     raabro (1.1.6)
     rack (2.0.4)
     rack-cors (1.0.2)
@@ -341,6 +344,7 @@ DEPENDENCIES
   olive_branch
   password_strength
   php-serialize
+  prometheus-client
   pry
   pry-byebug
   pry-rails
