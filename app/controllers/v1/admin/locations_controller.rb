@@ -9,17 +9,28 @@ module V1
         authorize! :read, DirectoryLocation
 
         query = params[:query]
+        location_type = params[:locationType]
         page = params[:page] || 1
 
         if query.present?
-          results = DirectoryLocation.where('name LIKE :query', query: "%#{query.downcase}%")
+          results = DirectoryLocation.where(
+            'name LIKE :query',
+            query: "%#{query.downcase}%"
+          )
         else
           results = DirectoryLocation.all
         end
 
+        if location_type
+          results = results.where(
+            'location_type = :location_type',
+            location_type: location_type
+          )
+        end
+
         results = results.order(:name).page(page).per(25)
         render json: {
-          locations: results.map { |t| t.as_json },
+          locations: results.map(&:as_json),
           current_page: page,
           total_pages: results.total_pages
         }
