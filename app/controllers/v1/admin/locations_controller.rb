@@ -75,6 +75,12 @@ module V1
       def location_params
         params.require(:location).permit(
           :name,
+          :timezone,
+          :city,
+          :state,
+          :country,
+          :neighbourhood,
+          :location_type,
           :boundlat1,
           :boundlng1,
           :boundlat2,
