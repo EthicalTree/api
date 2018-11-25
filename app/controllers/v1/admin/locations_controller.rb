@@ -12,16 +12,56 @@ module V1
         location_type = params[:locationType]
         page = params[:page] || 1
 
+        # this flag will return the "best guess" new
+        # location information to create a new location
+        recommended_location_latlng = params[:recommendedLocationLatlng]
+
+        if recommended_location_latlng.present?
+          lat, lng = recommended_location_latlng.split(',').map(&:to_f)
+
+          details = MapApi.build_from_coordinates lat, lng
+
+          if details[:city].present? && details[:state].present?
+            name = "#{details[:city]}, #{details[:state]}"
+            type = 'city'
+          end
+
+          if details[:sublocality].present? && details[:city].present?
+            name = "#{details[:sublocality]}, #{details[:city]}"
+            type = 'neighbourhood'
+          end
+
+          details = MapApi.build_from_address(name)
+
+          return render json: {
+            location: {
+              name: name,
+              timezone: details[:timezone],
+              city: details[:city],
+              neighbourhood: details[:sublocality],
+              state: details[:state],
+              country: details[:country],
+              location_type: type,
+              lat: details[:location]['lat'],
+              lng: details[:location]['lng'],
+              boundlat1: details[:bounds][:northeast]['lat'],
+              boundlng1: details[:bounds][:northeast]['lng'],
+              boundlat2: details[:bounds][:southwest]['lat'],
+              boundlng2: details[:bounds][:southwest]['lng']
+            }
+          }
+        end
+
+        results = DirectoryLocation.all
+
         if query.present?
-          results = DirectoryLocation.where(
+          results = results.where(
             'name LIKE :query',
             query: "%#{query.downcase}%"
           )
-        else
-          results = DirectoryLocation.all
         end
 
-        if location_type
+        if location_type.present?
           results = results.where(
             'location_type = :location_type',
             location_type: location_type
@@ -38,14 +78,14 @@ module V1
 
       def create
         authorize! :create, DirectoryLocation
-        lat = params[:lat]
-        lng = params[:lng]
 
-        locations = DirectoryLocation.create_locations(lat, lng)
+        location = DirectoryLocation.new(location_params)
 
-        render json: {
-          location: locations.first
-        }
+        if location.save
+          render json: { location: location }
+        else
+          render json: { errors: location.errors.full_messages }
+        end
       end
 
       def show; end
