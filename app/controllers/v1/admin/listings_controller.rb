@@ -58,10 +58,15 @@ module V1
             @listing.claim_status = :unclaimed
           end
         else
-
           if listing_params[:visibility].present?
             @listing.assign_attributes({
               visibility: listing_params[:visibility]
+            })
+          end
+
+          if listing_params[:slug].present?
+            @listing.assign_attributes({
+              slug: listing_params[:slug]
             })
           end
 
@@ -104,6 +109,7 @@ module V1
           :plan_type,
           :price,
           :regenerate_claim_id,
+          :slug,
           :visibility,
         )
       end
