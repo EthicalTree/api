@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class APIController < ActionController::API
   include Response
   include ExceptionHandler
@@ -14,20 +16,18 @@ class APIController < ActionController::API
   end
 
   def session_get(key)
-    if current_user
-      Rails.cache.fetch("#{current_user.id}_#{key}")
-    end
+    Rails.cache.fetch("#{current_user.id}_#{key}") if current_user
   end
 
   def session_set(key, value)
-    if current_user
-      Rails.cache.write("#{current_user.id}_#{key}", value)
-    end
+    Rails.cache.write("#{current_user.id}_#{key}", value) if current_user
+  end
+
+  def ip_location_information
+    Session.session_location(remote_ip)
   end
 
   def ensure_admin
-    if !current_user || !current_user.admin?
-      raise Exceptions::NotAuthorized
-    end
+    raise Exceptions::NotAuthorized if !current_user || !current_user.admin?
   end
 end

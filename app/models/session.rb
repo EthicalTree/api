@@ -12,7 +12,7 @@ class Session
     end
 
     r = JSON.parse(location_json)
-    city = r['city'] || ''
+    city = r['city'] || 'Toronto'
     directory_location, _ = Search::find_directory_location(city)
 
     {
