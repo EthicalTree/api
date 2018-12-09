@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Plan < ApplicationRecord
   belongs_to :listing
 
@@ -23,55 +25,75 @@ class Plan < ApplicationRecord
     is_city_scope = options[:is_city_scope]
     location = options[:location]
 
-    listings = Location.includes(
-      listing: [
-        :ethicalities,
-        :locations,
-        :operating_hours,
-        :plan,
+    all_listings = Location.includes(
+      listing: %i[
+        ethicalities
+        locations
+        operating_hours
+        plan
       ]
     ).listings
 
-    search_listings = Search::by_location({
+    search_listings = Search.by_location(
       is_city_scope: is_city_scope,
-      results: listings,
-      location: location,
-    })
+      results: all_listings,
+      location: location
+    )
 
-    if search_listings
-      listings = search_listings
-    end
-
-    listings = listings.joins(
+    search_listings = search_listings.joins(
       'JOIN plans ON plans.listing_id = listings.id'
     )
 
-    cases = Plan.Types.map { |k, p| "WHEN plan_type='#{k}' THEN (RAND() * #{p[:weight]})" }
+    if search_listings.length >= count.to_i
+      # if there are enough featured listings withing the city already
+      # then order them by weight
+      listings = search_listings
 
-    listings = listings.order(
-      "CASE
-        #{cases.join("\n")}
-        ELSE 100
-      END DESC"
-    )
+      cases = Plan.Types.map { |k, p| "WHEN plan_type='#{k}' THEN (RAND() * #{p[:weight]})" }
 
-    if count.present?
-      listings = listings.limit(count)
+      listings = listings.order(
+        "CASE
+          #{cases.join("\n")}
+          ELSE 100
+        END DESC"
+      )
+
+      listings = listings.limit(count) if count.present?
+
+      listings = listings.shuffle
+
+    else
+      # if there aren't enough featured listings within the city
+      # yet, then just find the closest ones on a plan
+      directory_location, = Search::find_directory_location(location, {
+        is_city_scope: is_city_scope
+      })
+
+      coords = [directory_location['lat'], directory_location['lng']]
+
+      listings = all_listings.joins(
+        'JOIN plans ON plans.listing_id = listings.id'
+      )
+
+      listings = listings.within(
+        200,
+        units: :kms,
+        origin: coords
+      ).reorder('distance ASC')
+
+      listings = listings.limit(count) if count.present?
+
     end
 
-    listings = listings.map do |l|
-      l.listing
-    end.shuffle
-
-    listings
+    listings.map(&:listing)
   end
 
   validates :listing_id, presence: true
   validates :plan_type, presence: true, inclusion: {
-    in: Plan.Types.keys.map { |k| k.to_s }
+    in: Plan.Types.keys.map(&:to_s)
   }
 
   def type
-    Plan.Types[self.plan_type.to_sym]
+    Plan.Types[plan_type.to_sym]
   end
 end
