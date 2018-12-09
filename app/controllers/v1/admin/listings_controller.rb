@@ -42,6 +42,7 @@ module V1
       def update
         authorize! :update, Listing
         owner_id = listing_params[:owner_id]
+        slug = listing_params[:slug]
 
         @listing = Listing.find params[:id]
 
@@ -58,11 +59,20 @@ module V1
             @listing.claim_status = :unclaimed
           end
         else
-
           if listing_params[:visibility].present?
             @listing.assign_attributes({
               visibility: listing_params[:visibility]
             })
+          end
+
+          if slug.present?
+            if Listing.where.not(id: @listing.id).find_by(slug: slug).present?
+              @listing.errors.add(:slug, "already exists")
+            else
+              @listing.assign_attributes({
+                slug: listing_params[:slug]
+              })
+            end
           end
 
           if listing_params[:plan_type].present?
@@ -85,7 +95,7 @@ module V1
           end
         end
 
-        if @listing.save
+        if @listing.errors.full_messages.length == 0 && @listing.save
           render json: {}
         else
           render json: { errors: @listing.errors.full_messages }
@@ -104,6 +114,7 @@ module V1
           :plan_type,
           :price,
           :regenerate_claim_id,
+          :slug,
           :visibility,
         )
       end

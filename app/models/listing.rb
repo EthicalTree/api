@@ -193,6 +193,11 @@ class Listing < ApplicationRecord
     unless slug
       self.slug = title.parameterize
     end
+
+    # Check if listing other than this one already has the new slug
+    if Listing.where.not(id: id).find_by(slug: slug).present?
+      self.slug = "#{slug}-#{SecureRandom.hex(5)}"
+    end
   end
 
   def ensure_claim_id
