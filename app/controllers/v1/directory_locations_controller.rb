@@ -31,7 +31,10 @@ module V1
       name = params[:name]
       with_neighbourhoods = params[:withNeighbourhoods].present?
 
-      if name.present?
+      if name == 'Near Me'
+        location = ip_location_information
+        render json: location, status: :ok
+      elsif name.present?
         location, = Search.find_directory_location(name)
         location = location.as_json
         location = include_neighbourhoods(location) if with_neighbourhoods
