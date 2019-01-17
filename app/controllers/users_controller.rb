@@ -1,9 +1,12 @@
+# frozen_string_literal: true
+
 class UsersController < APIController
   before_action :authenticate_user, only: :show
 
   def create
     claim_listing_slug = params[:claim_listing_slug]
     claim_id = params[:claim_id]
+    ethicalities = params[:ethicalities]
     errors = []
 
     if @user = User.where(email: user_params[:email]).first
@@ -16,8 +19,8 @@ class UsersController < APIController
 
     if claim_listing_slug.present?
       if listing = Listing.find_by(slug: claim_listing_slug)
-        if ['pending_verification', 'claimed'].include? listing.claim_status
-          raise Exceptions::BadRequest.new('Sorry, this listing has already been claimed.')
+        if %w[pending_verification claimed].include? listing.claim_status
+          raise Exceptions::BadRequest, 'Sorry, this listing has already been claimed.'
         elsif !user_params[:contact_number].present?
           errors.push('Contact Number must be present')
         elsif listing.claim_id == claim_id
@@ -27,12 +30,12 @@ class UsersController < APIController
       end
     end
 
+    @user.ethicalities = Ethicality.where('slug IN (?)', ethicalities)
+
     if @user.valid? && !errors.present?
       @user.save
 
-      if !@user.confirmed_at
-        AccountMailer.confirm_email(@user).deliver_later
-      end
+      AccountMailer.confirm_email(@user).deliver_later unless @user.confirmed_at
 
       render json: {}, status: :ok
     else
@@ -42,10 +45,10 @@ class UsersController < APIController
   end
 
   def confirm_email
-    @user = User.find_by({
-      email: params[:email].gsub(' ', '+'),
+    @user = User.find_by(
+      email: params[:email].tr(' ', '+'),
       confirm_token: params[:token]
-    })
+    )
 
     if @user
       @user.update confirmed_at: DateTime.current
@@ -62,7 +65,7 @@ class UsersController < APIController
       if @user && params[:check]
         render json: { email: @user.email }, status: :ok
       elsif !@user
-        render json: { errors: ["Not a valid confirmation token!"] }
+        render json: { errors: ['Not a valid confirmation token!'] }
       elsif @user.update_attributes(change_password_params)
         render json: {}, status: :ok
       else
@@ -83,8 +86,11 @@ class UsersController < APIController
 
   def show
     if params[:id] == 'current'
+      user = current_user.as_json_basic
+      user[:ethicalities] = current_user.ethicalities.map(&:slug)
+
       render json: {
-        user: current_user.as_json_basic
+        user: user
       }
     end
   end
@@ -95,7 +101,7 @@ class UsersController < APIController
 
       # Don't let user change password without providing user password first
       if (user_params[:password_confirmation] || user_params[:password]) && !@user.authenticate(params[:user][:current_password])
-        render json: { errors: ["Specified password for current user is incorrect"] }
+        render json: { errors: ['Specified password for current user is incorrect'] }
       else
         @user.update_attributes user_params
 

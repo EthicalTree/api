@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_20_154655) do
+ActiveRecord::Schema.define(version: 2019_01_17_180005) do
 
   create_table "categories", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
     t.string "slug"
@@ -80,7 +80,13 @@ ActiveRecord::Schema.define(version: 2018_10_20_154655) do
     t.string "icon_key"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["slug"], name: "ETHICALITY_SLUG"
+  end
+
+  create_table "ethicalities_users", id: false, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.bigint "ethicality_id", null: false
+    t.bigint "user_id", null: false
+    t.index ["ethicality_id"], name: "index_ethicalities_users_on_ethicality_id"
+    t.index ["user_id"], name: "index_ethicalities_users_on_user_id"
   end
 
   create_table "images", id: :integer, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
