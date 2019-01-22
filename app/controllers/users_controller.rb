@@ -6,7 +6,7 @@ class UsersController < APIController
   def create
     claim_listing_slug = params[:claim_listing_slug]
     claim_id = params[:claim_id]
-    ethicalities = params[:ethicalities]
+    ethicalities = params[:ethicalities] || []
     errors = []
 
     if @user = User.where(email: user_params[:email]).first
@@ -96,6 +96,7 @@ class UsersController < APIController
   end
 
   def update
+    ethicalities = params[:ethicalities] || []
     if params[:id] == 'current'
       @user = User.find_by(id: current_user.id)
 
@@ -104,6 +105,7 @@ class UsersController < APIController
         render json: { errors: ['Specified password for current user is incorrect'] }
       else
         @user.update_attributes user_params
+        @user.ethicalities = Ethicality.where('slug IN (?)', ethicalities)
 
         if @user.save
           render json: {}, status: :ok
