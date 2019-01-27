@@ -4,6 +4,8 @@ class User < ApplicationRecord
   before_create :confirmation_token
 
   has_many :owned_listings, foreign_key: :owner_id, class_name: "Listing"
+  has_and_belongs_to_many :ethicalities
+
 
   validates :email, presence: true, email: true, uniqueness: true
   validate :password_cannot_be_present_without_confirmation

@@ -1,5 +1,6 @@
 class Ethicality < ApplicationRecord
   before_save :ensure_slug
+  has_many :users
 
   def as_tag_json
   end
